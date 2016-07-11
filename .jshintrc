@@ -1,0 +1,13 @@
+{
+  "browser" : true, /* Allow browser items like document, window, etc */
+  "camelcase" : true, /* Variables and object properties must be camelCased */
+  "esversion": 6, /* Allow ES6 syntax */
+  "globals" : {
+    "curly" : true, /* Force curly braces where optional */
+    "jquery" : true, /* Make jQuery globals available */
+    "console" : true, /* Make console object global available */
+    "module" : true /* Make module object global available */
+  },
+  "node" : true, /* Allow node stuff like `require()` */
+  "strict" : "global" /* Require global strictness */
+}

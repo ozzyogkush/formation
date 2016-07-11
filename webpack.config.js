@@ -2,6 +2,7 @@
 
 // We specify the exposed modules/objects/classes here as it is the WebPacker's
 // concern as to what needs to be exposed to the browser, NOT the module itself's job.
+// TODO - use chunking options to split this up into `dependencies` and `formation`?
 module.exports = {
   entry: './src/formation.js',
   output: {
