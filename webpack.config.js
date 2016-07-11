@@ -11,7 +11,8 @@ module.exports = {
   module : {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
-      { test: require.resolve('jquery'), loader : 'expose?$!expose?jQuery' }
+      { test: require.resolve('jquery'), loader : 'expose?$!expose?jQuery' },
+      { test: require.resolve('./src/formation'), loader : 'expose?Formation' }
     ]
   }
 };
