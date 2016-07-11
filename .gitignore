@@ -93,3 +93,9 @@ crashlytics.properties
 crashlytics-build.properties
 
 # Created by .ignore support plugin (hsz.mobi)
+
+# Grunt, Bower, or NPM generated output files
+[0-9]*\.[0-9]*
+
+# Folders to ignore
+node_modules/
