@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Formation - Text Inputs</title>
+    <script type="text/javascript" src="../dist/formation.js"></script>
+  </head>
+  <body>
+    <h1>Formation - Text Inputs and TextAreas</h1>
+    <em>input[type="text"], textarea</em>
+
+    <h2>View Source To See DOM Code</h2>
+    <form role="form" data-formation="1">
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-required = 1</li>
+      </ul>
+      <div>
+        <label for="textTest">Input 1 - text</label> -
+        <input
+          type="text"
+          name="textTest"
+          id="textTest"
+          data-required="1" />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-required = 1</li>
+        <li>data-validate-min-length = 5</li>
+        <li>data-validate-max-length = 15</li>
+      </ul>
+      <div>
+        <label for="textTest2">Input 2 - text</label> -
+        <input
+          type="text"
+          name="textTest2"
+          id="textTest2"
+          data-required="1"
+          data-validate-min-length="5"
+          data-validate-max-length="15" />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-required = 1</li>
+        <li>data-validate-format = email</li>
+      </ul>
+      <div>
+        <label for="textTest3">Input 3 - text</label> -
+        <input
+          type="text"
+          name="textTest3"
+          id="textTest3"
+          data-required="1"
+          data-validate-format="email" />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-required = 1</li>
+        <li>data-validate-format = phone</li>
+      </ul>
+      <div>
+        <label for="textTest4">Input 4 - text</label> -
+        <input
+          type="text"
+          name="textTest4"
+          id="textTest4"
+          data-required="1"
+          data-validate-format="phone" />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-required = 1</li>
+        <li>data-validate-format = zip</li>
+      </ul>
+      <div>
+        <label for="textTest5">Input 5 - format for ZIP code</label> -
+        <input
+          type="text"
+          name="textTest5"
+          id="textTest5"
+          data-required="1"
+          data-validate-format="zip" />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-required = 1</li>
+        <li>data-validate-match-field = elementID</li>
+      </ul>
+      <div>
+        <label for="textTest6">Input 6 - must match Input 7's value</label> -
+        <input
+          type="text"
+          name="textTest6"
+          id="textTest6"
+          data-required="1"
+          data-validate-match-field="textTest7" /><br />
+        <label for="textTest7">Input 7 - must match Input 6's value</label> -
+        <input
+          type="text"
+          name="textTest7"
+          id="textTest7"
+          data-required="1"
+          data-validate-match-field="textTest6" /><br />
+      </div>
+
+      <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
+      <div>
+        <button type="submit" data-form-submit="1" disabled="disabled">Submit</button>
+      </div>
+    </form>
+  </body>
+  <script type="text/javascript">
+    Formation.setDebug(true);
+  </script>
+</html>
