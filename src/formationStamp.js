@@ -10,6 +10,10 @@ const jQuery = $;
  *
  * @copyright     Copyright (c) 2016, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @class         formationStamp
+ * @name          formationStamp
+ * @package       Formation
+ * @version
  */
 const formationStamp = stampit()
   .refs({
