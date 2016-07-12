@@ -6,25 +6,28 @@ let stampit = require('stampit');
 // be set based on any arbitrary reason (e.g. environment, existence of a module, etc).
 // TODO: refactor methods() to do a loop over a set of method names to wrap (DRY it up).
 const toggleableConsoleStamp = stampit()
+  .refs({
+    console: console
+  })
   .methods({
     error(message) {
       if (this.getLogConsole()) {
-        console.error(message);
+        this.console.error(message);
       }
     },
     info(message) {
       if (this.getLogConsole()) {
-        console.info(message);
+        this.console.info(message);
       }
     },
     log(message) {
       if (this.getLogConsole()) {
-        console.log(message);
+        this.console.log(message);
       }
     },
     warn(message) {
       if (this.getLogConsole()) {
-        console.warn(message);
+        this.console.warn(message);
       }
     }
   })
@@ -72,15 +75,7 @@ const toggleableConsoleStamp = stampit()
         throw new TypeError(callStackCurrent + '() - Expected `newVal` param to be a Boolean, but is `' + typeof(newVal) + '`.');
       }
 
-      if (logConsole && ! newVal) {
-        this.info('Formation logging is being turned off');
-      }
-
       logConsole = newVal;
-
-      if (logConsole) {
-        this.info('Formation logging enabled');
-      }
 
       // So we can chain methods.
       return this;

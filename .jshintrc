@@ -9,5 +9,6 @@
     "module" : true /* Make module object global available */
   },
   "node" : true, /* Allow node stuff like `require()` */
+  "mocha" : true, /* Allow mocha methods like `describe()`, `it()`, etc */
   "strict" : "global" /* Require global strictness */
 }
