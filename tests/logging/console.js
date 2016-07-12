@@ -31,14 +31,15 @@ describe('Objects created using the `consoleLoggerStamp`', function() {
         'Expected `newVal` param to be a Boolean, but is `string`'
       );
     });
-    it('should log an info message post to enabling logging, and again prior to disabling logging', function() {
+    it('should not throw a `TypeError` when the `newVal` param is a Boolean', function() {
+      assert.doesNotThrow(() => consoleLogger.setLogConsole(false), TypeError);
       assert.equal(consoleLogger, consoleLogger.setLogConsole(true));
       assert.isTrue(consoleLogger.getLogConsole());
     });
   });
 
   describe('when logging is disabled', function() {
-    it('the various console methods should be called', function() {
+    it('the various console methods (`error()`, `info()`, `log()`, `warn()`) should never be called', function() {
       consoleLogger.setLogConsole(false);
       let consoleMock = sinon.mock(consoleLogger.console);
 
@@ -57,7 +58,7 @@ describe('Objects created using the `consoleLoggerStamp`', function() {
   });
 
   describe('when logging is enabled', function() {
-    it('the various console methods should be called', function() {
+    it('the various console methods (`error()`, `info()`, `log()`, `warn()`) should be called', function() {
       consoleLogger.setLogConsole(true);
       let consoleMock = sinon.mock(consoleLogger.console);
 
