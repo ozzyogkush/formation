@@ -1,6 +1,6 @@
 'use strict';
 
-const formationLoggerStamp = require('./formationStamp.js');
+const formationLoggerStamp = require('./formation-stamp.js');
 const $ = require('jquery');
 const jQuery = $;
 

@@ -64,7 +64,7 @@ module.exports = function(grunt) {
         options : {
           timeout : 7000,
           reporter : 'spec',
-          require: ['babel-register']
+          require: ['babel-register', 'jsdom-global/register']
         }
       }
     },
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
           coverageFolder: 'test-results',
           nodeExec: require.resolve('./node_modules/.bin/babel-node.cmd'),
           scriptPath: require.resolve('isparta/bin/isparta'),
-          mochaOptions: ['--compilers', 'js:babel-register'],
+          mochaOptions: ['--compilers', 'js:babel-register', '--require', 'jsdom-global/register'],
           reportFormats: ['html']
         }
       }
