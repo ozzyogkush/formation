@@ -1,22 +1,15 @@
 'use strict';
 
-const formationLoggerStamp = require('./formationStamp.js');
+const formationLoggerStamp = require('./formation-stamp.js');
 const $ = require('jquery');
 const jQuery = $;
 
 const Formation = formationLoggerStamp();
 
 /**
- * Set the `$forms` property on the Formation object when the DOM is ready, and initialize
- * the plugin for the form elements that are being managed by Formation.
+ * Add a document.ready event handler and set Formation to handle the
+ * event so it can initialize the DOM.
  */
-$(document).ready(function() {
-  Formation.setLogConsole(Formation.getDebug());
-  Formation.$forms = $('form').filter(function() {
-    return $(this).attr('data-formation') && parseInt($(this).attr('data-formation')) == 1;
-  });
-
-  Formation.enterFormation();
-});
+jQuery(document).ready($.proxy(Formation.readyDocument, Formation));
 
 module.exports = Formation;

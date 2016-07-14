@@ -40,3 +40,15 @@ Requirements for Development
 - [`Grunt`](http://gruntjs.com) - to run tests and create builds.
 
 After installing NodeJS (and its package manager NPM), run `npm install` to install dependencies.
+
+Tools Used in Development and Testing
+-------------------------------------
+
+The below tools will be installed as dependencies:
+
+- JSHint/JSLint - used for ensuring JS files are syntactically correct
+- Mocha - testing framework
+- Chai - provides `assert`, `expect`, `should` functionality for Mocha
+- Istanbul - works with Mocha to provides code coverage for testing results
+- Sinon - used for spies, stubs, mocks, etc. 
+- Webpack - used for generating builds
