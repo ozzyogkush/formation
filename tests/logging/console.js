@@ -33,7 +33,7 @@ describe('Objects created using the `consoleLoggerStamp`', function() {
     });
     it('should not throw a `TypeError` when the `newVal` param is a Boolean', function() {
       assert.doesNotThrow(() => consoleLogger.setLogConsole(false), TypeError);
-      assert.equal(consoleLogger, consoleLogger.setLogConsole(true));
+      assert.equal(consoleLogger.setLogConsole(true), consoleLogger);
       assert.isTrue(consoleLogger.getLogConsole());
     });
   });

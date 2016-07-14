@@ -16,20 +16,26 @@ const jQuery = $;
  * @version
  */
 const formationStamp = stampit()
-  .refs({
+  .methods({
 
     /**
-     * A set of jQuery extended `form` elements.
+     * When the DOM is ready, set console logging based on the debug setting and
+     * initialize Formation.
      *
      * @access      public
-     * @type        jQuery
      * @memberOf    {formationStamp}
      * @since       0.1.0
-     * @default     $()
+     *
+     * @returns     this            Return the instance of the generated object so we can chain methods.
      */
-    $forms : $()
-  })
-  .methods({
+    readyDocument() {
+      this.setLogConsole(this.getDebug());
+
+      // DOM is ready, so Enter Formation!
+      this.enterFormation();
+
+      return this;
+    },
 
     /**
      * Initialization of the Formation forms.
@@ -42,6 +48,9 @@ const formationStamp = stampit()
      */
     enterFormation() {
       this.log('Initializing Formation...');
+
+      // First find out which forms should be initialized.
+      this.detectForms();
 
       return this;
     }
@@ -94,6 +103,52 @@ const formationStamp = stampit()
 
       // So we can chain methods.
       return this;
+    };
+
+    /**
+     * A set of jQuery extended `form` elements.
+     *
+     * @access      private
+     * @type        jQuery
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     * @default     $()
+     */
+    let $forms = $();
+
+    /**
+     * Find all the `form` elements in the DOM that are to be managed/validated by Formation, and set the private
+     * `$forms` property.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @returns     {formationStamp}  this            Return the instance of the generated object so we can chain methods.
+     */
+    this.detectForms = () => {
+      $forms = $('form').filter(this.formFilter);
+
+      // So we can chain methods.
+      return this;
+    };
+
+    /**
+     * Helper function to filter a jQuery set to return only forms to be managed
+     * by Formation.
+     *
+     * @param {int} index     The index of the element in the jQuery set.
+     * @param {jQuery}  element   The DOM element to check.
+     *
+     * @returns {boolean}
+     */
+    this.formFilter = (index, element) => {
+      let $element = $(element);
+      return (
+        $element.prop('tagName').toLowerCase() == 'form' &&
+        $element.attr('data-formation') !== undefined &&
+        parseInt($element.attr('data-formation')) == 1
+      );
     };
   });
 
