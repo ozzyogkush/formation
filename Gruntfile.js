@@ -77,7 +77,7 @@ module.exports = function(grunt) {
           nodeExec: require.resolve('./node_modules/.bin/babel-node.cmd'),
           scriptPath: require.resolve('isparta/bin/isparta'),
           mochaOptions: ['--compilers', 'js:babel-register', '--require', 'jsdom-global/register'],
-          reportFormats: ['html']
+          reportFormats: ['lcov', 'html']
         }
       }
     },
@@ -103,7 +103,8 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', ['jshint:all', 'webpack:dev']);
 
   // Just run unit tests without re-building the development source each time.
-  grunt.registerTask('unitTests', ['mochaTest', 'mocha_istanbul']);
+  grunt.registerTask('unitTests', ['mocha_istanbul']);
+  grunt.registerTask('unitTests:mocha', ['mochaTest']);
 
   // The test build will build the development source and unit test that.
   grunt.registerTask('test', ['dev', 'unitTests']);

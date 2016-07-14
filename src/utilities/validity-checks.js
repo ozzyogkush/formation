@@ -16,22 +16,6 @@ let stampit = require('stampit');
 const validityCheckStamp = stampit()
   .methods({
     /**
-     * Test the filter against the string and return if it passes. Wrapper for RegExp.test().
-     *
-     * @access      public
-     * @memberOf    {validityCheckStamp}
-     * @since
-     *
-     * @param       {RegExp}      filter        Regular expression to parse the test string. Required.
-     * @param       {String}      testStr       The string to check for validity to the filter pattern supplied. Required.
-     *
-     * @returns     {boolean|*}
-     */
-    isValid(filter, testStr) {
-      return filter.test(testStr);
-    },
-
-    /**
      * Returns true iff the string only contains numeric values.
      *
      * @access      public
@@ -43,7 +27,9 @@ const validityCheckStamp = stampit()
      * @returns     {Boolean}                   Flag indicating whether the string only contains numbers.
      */
     isValidNumeric(strToTest) {
-      return this.isValid(/^(\d*)$/, strToTest);
+      let filter = /^(\d*)$/;
+
+      return filter.test(strToTest);
     },
 
     /**
@@ -58,10 +44,9 @@ const validityCheckStamp = stampit()
      * @returns     {Boolean}                   Flag indicating whether the string is a valid email address.
      */
     isValidEmail(strToTest) {
-      return this.isValid(
-        /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
-        strToTest
-      );
+      let filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+      return filter.test(strToTest);
     },
 
     /**
@@ -77,7 +62,9 @@ const validityCheckStamp = stampit()
      * @returns     {Boolean}                   Flag indicating whether the string is a valid phone number.
      */
     isValidPhone(strToTest) {
-      return this.isValid(/^\((\d){3}\)(\s)(\d){3}-(\d){4}$/, strToTest);
+      let filter = /^\((\d){3}\)(\s)(\d){3}-(\d){4}$/;
+
+      return filter.test(strToTest);
     }
   });
 
