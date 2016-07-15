@@ -52,7 +52,24 @@ const formationStamp = stampit()
       // First find out which forms should be initialized.
       this.detectForms();
 
+      const $forms = this.get$forms();
+      if ($forms.length === 0) {
+        this.info('No Formation forms present, exiting.');
+        return this;
+      }
+
+      this.initBodyEvents();
+      this.initForms();
+
       return this;
+    },
+
+    initBodyEvents() {
+
+    },
+
+    initForms() {
+
     }
   })
   .init(function() {
@@ -106,7 +123,7 @@ const formationStamp = stampit()
     };
 
     /**
-     * A set of jQuery extended `form` elements.
+     * A set of jQuery extended `form` elements to be managed by Formation.
      *
      * @access      private
      * @type        jQuery
@@ -115,6 +132,19 @@ const formationStamp = stampit()
      * @default     $()
      */
     let $forms = $();
+
+    /**
+     * Return the value of the private `$forms` object.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @returns    {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
+     */
+    this.get$forms = () => {
+      return $forms;
+    };
 
     /**
      * Find all the `form` elements in the DOM that are to be managed/validated by Formation, and set the private

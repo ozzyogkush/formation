@@ -40,15 +40,34 @@ describe('Objects created using the `formationStamp`', function() {
   });
 
   describe('`enterFormation()`', function() {
-    it('should log initialization and return itself', function() {
-      let formationMock = sinon.mock(formation);
+    describe('when zero Formation forms are present on the page', function() {
+      it('should log initialization, log that there are no forms, and return itself', function() {
+        let formationMock = sinon.mock(formation);
 
-      formationMock.expects('log').once().withArgs('Initializing Formation...');
-      formationMock.expects('detectForms').once();
+        formationMock.expects('log').once().withArgs('Initializing Formation...');
+        formationMock.expects('get$forms').once().returns($());
+        formationMock.expects('info').once().withArgs('No Formation forms present, exiting.');
+        formationMock.expects('initBodyEvents').never();
+        formationMock.expects('initForms').never();
 
-      assert.equal(formation.enterFormation(), formation);
+        assert.equal(formation.enterFormation(), formation);
 
-      formationMock.verify();
+        formationMock.verify();
+      });
+    });
+    describe('when one or more Formation forms are present on the page', function() {
+      it('should log initialization, call the initialization methods, and return itself', function() {
+        let formationMock = sinon.mock(formation);
+
+        formationMock.expects('log').once().withArgs('Initializing Formation...');
+        formationMock.expects('get$forms').once().returns($('<form data-formation="1"></form>'));
+        formationMock.expects('initBodyEvents').once().returns(formation);
+        formationMock.expects('initForms').once().returns(formation);
+
+        assert.equal(formation.enterFormation(), formation);
+
+        formationMock.verify();
+      });
     });
   });
 
@@ -82,8 +101,15 @@ describe('Objects created using the `formationStamp`', function() {
     });
   });
 
+  describe('`get$forms()`', function() {
+    it('returns an empty `jQuery` object by default', function() {
+      assert.equal(formation.get$forms().length, 0);
+      //assert.strictEqual(formation.get$forms(), $());
+    });
+  });
+
   describe('`detectForms()`', function() {
-    it('look for `form` elements in the DOM, filter them, and return itself', function() {
+    it('looks for `form` elements in the DOM, filter them, and return itself', function() {
       let jQueryMock = sinon.mock($.fn);
       jQueryMock.expects('filter').once().withArgs(formation.formFilter).returns($);
 
