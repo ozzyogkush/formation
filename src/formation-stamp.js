@@ -1,6 +1,9 @@
 'use strict';
 
-const consoleLoggerStamp = require('./logging/console.js');
+const bodyEventsHandlerStamp = require('./event-handlers/body-events-handler');
+const consoleLoggerStamp = require('./logging/console');
+const formComponentStamp = require('./components/form');
+
 const stampit = require('stampit');
 const $ = require('jquery');
 const jQuery = $;
@@ -16,6 +19,9 @@ const jQuery = $;
  * @version
  */
 const formationStamp = stampit()
+  .refs({
+    formationDataAttrKey : 'data-formation'
+  })
   .methods({
 
     /**
@@ -29,6 +35,7 @@ const formationStamp = stampit()
      * @returns     this            Return the instance of the generated object so we can chain methods.
      */
     readyDocument() {
+      // TODO - refactor setDebug() to emit an event instead that this object listens to in order to call setLogConsole()!
       this.setLogConsole(this.getDebug());
 
       // DOM is ready, so Enter Formation!
@@ -52,20 +59,19 @@ const formationStamp = stampit()
       // First find out which forms should be initialized.
       this.detectForms();
 
-      const $forms = this.get$forms();
-      if ($forms.length === 0) {
+      if (this.get$forms().length === 0) {
         this.info('No Formation forms present, exiting.');
         return this;
       }
 
-      this.initBodyEvents();
+      let bodyEventsHandler = bodyEventsHandlerStamp({
+        $body: $(document.body),
+        formationSelector: `[${this.formationDataAttrKey}="1"]`
+      });
+      this.initBodyEvents(bodyEventsHandler);
       this.initForms();
 
       return this;
-    },
-
-    initBodyEvents() {
-
     },
 
     initForms() {
@@ -167,21 +173,62 @@ const formationStamp = stampit()
      * Helper function to filter a jQuery set to return only forms to be managed
      * by Formation.
      *
-     * @param {int} index     The index of the element in the jQuery set.
-     * @param {jQuery}  element   The DOM element to check.
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
      *
-     * @returns {boolean}
+     * @param       {int}           index         The index of the element in the jQuery set.
+     * @param       {jQuery}        element       The DOM element to check.
+     *
+     * @returns     {boolean}
      */
     this.formFilter = (index, element) => {
       let $element = $(element);
       return (
         $element.prop('tagName').toLowerCase() == 'form' &&
-        $element.attr('data-formation') !== undefined &&
-        parseInt($element.attr('data-formation')) == 1
+        $element.attr(this.formationDataAttrKey) !== undefined &&
+        parseInt($element.attr(this.formationDataAttrKey)) == 1
       );
+    };
+
+    /**
+     * Object composed of a {bodyEventsHandlerStamp} which handles body events.
+     *
+     * @access      public
+     * @type        {Object}
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    let __bodyEventsHandler = null;
+
+    /**
+     * Add the default event handlers for the `body` element, iff that has not already taken place.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @returns     {formationStamp}
+     */
+    this.initBodyEvents = (bodyEventsHandler) => {
+      this.log('Initializing body events...');
+
+      __bodyEventsHandler = bodyEventsHandler;
+      __bodyEventsHandler.setLogConsole(this.getLogConsole());
+
+      if (__bodyEventsHandler.getBodyEventsInitialized()) {
+        this.info('Body events previously initialized, skipping.');
+        return this;
+      }
+
+      // The events have not yet been added, so do so now.
+      __bodyEventsHandler.addDefaultEventHandlers();
+
+      return this;
     };
   });
 
-const formationLoggerStamp = stampit().compose(formationStamp, consoleLoggerStamp);
+const formationLoggerStamp = formationStamp.compose(consoleLoggerStamp);
 
 module.exports = formationLoggerStamp;

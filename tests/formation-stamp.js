@@ -7,6 +7,7 @@ const assert = require('chai').assert;
 const sinon = require('sinon');
 
 const formationStamp = require('../src/formation-stamp');
+const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
 
 describe('Objects created using the `formationStamp`', function() {
   let formation;
@@ -104,7 +105,6 @@ describe('Objects created using the `formationStamp`', function() {
   describe('`get$forms()`', function() {
     it('returns an empty `jQuery` object by default', function() {
       assert.equal(formation.get$forms().length, 0);
-      //assert.strictEqual(formation.get$forms(), $());
     });
   });
 
@@ -120,8 +120,14 @@ describe('Objects created using the `formationStamp`', function() {
   });
 
   describe('`formFilter()`', function() {
+    let jQueryMock;
+    beforeEach(function() {
+      jQueryMock = sinon.mock($.fn);
+    });
+    afterEach(function() {
+      jQueryMock.restore();
+    });
     it('returns false when the DOM element is not a `form` node', function() {
-      let jQueryMock = sinon.mock($.fn);
       jQueryMock.expects('prop').once().withArgs('tagName').returns('div');
       jQueryMock.expects('attr').never();
 
@@ -132,7 +138,6 @@ describe('Objects created using the `formationStamp`', function() {
       jQueryMock.verify();
     });
     it('returns false when the DOM element is a `form` node, but has no `data-formation` attribute', function() {
-      let jQueryMock = sinon.mock($.fn);
       jQueryMock.expects('prop').once().withArgs('tagName').returns('form');
       jQueryMock.expects('attr').once().withArgs('data-formation').returns(undefined);
 
@@ -143,7 +148,6 @@ describe('Objects created using the `formationStamp`', function() {
       jQueryMock.verify();
     });
     it('returns false when the DOM element is a `form` node, has a `data-formation` attribute, but the value is not `1`', function() {
-      let jQueryMock = sinon.mock($.fn);
       jQueryMock.expects('prop').once().withArgs('tagName').returns('form');
       jQueryMock.expects('attr').twice().withArgs('data-formation').returns('0');
 
@@ -154,7 +158,6 @@ describe('Objects created using the `formationStamp`', function() {
       jQueryMock.verify();
     });
     it('returns true when the DOM element is a `form` node, has a `data-formation` attribute, and the value is `1`', function() {
-      let jQueryMock = sinon.mock($.fn);
       jQueryMock.expects('prop').once().withArgs('tagName').returns('form');
       jQueryMock.expects('attr').twice().withArgs('data-formation').returns('1');
 
@@ -163,6 +166,46 @@ describe('Objects created using the `formationStamp`', function() {
       assert.isTrue(formation.formFilter(0, $form.get(0)));
 
       jQueryMock.verify();
+    });
+  });
+
+  describe('`initBodyEvents()`', function() {
+    describe('when the body events have not yet been initialized', function() {
+      it('logs initialization, and calls `setLogConsole()` and `addDefaultEventHandlers()` on the new instance', function() {
+        let formationMock = sinon.mock(formation);
+        let bodyEventsHandler = bodyEventsHandlerStamp();
+        let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+
+        formationMock.expects('log').once().withArgs('Initializing body events...');
+        formationMock.expects('getLogConsole').once().returns(true);
+        bodyEventsHandlerMock.expects('setLogConsole').once().withArgs(true).returns(bodyEventsHandler);
+        bodyEventsHandlerMock.expects('getBodyEventsInitialized').once().returns(false);
+        bodyEventsHandlerMock.expects('addDefaultEventHandlers').once().returns(bodyEventsHandler);
+
+        assert.equal(formation.initBodyEvents(bodyEventsHandler), formation);
+
+        formationMock.verify();
+        bodyEventsHandlerMock.verify();
+      });
+    });
+    describe('when the body events have been initialized', function() {
+      it('logs initialization, calls `setLogConsole()`, but does not call `addDefaultEventHandlers()` on the new instance', function() {
+        let formationMock = sinon.mock(formation);
+        let bodyEventsHandler = bodyEventsHandlerStamp();
+        let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+
+        formationMock.expects('log').once().withArgs('Initializing body events...');
+        formationMock.expects('info').once().withArgs('Body events previously initialized, skipping.');
+        formationMock.expects('getLogConsole').once().returns(true);
+        bodyEventsHandlerMock.expects('setLogConsole').once().withArgs(true).returns(bodyEventsHandler);
+        bodyEventsHandlerMock.expects('getBodyEventsInitialized').once().returns(true);
+        bodyEventsHandlerMock.expects('addDefaultEventHandlers').never();
+
+        assert.equal(formation.initBodyEvents(bodyEventsHandler), formation);
+
+        formationMock.verify();
+        bodyEventsHandlerMock.verify();
+      });
     });
   });
 });

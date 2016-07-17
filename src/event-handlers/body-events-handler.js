@@ -96,6 +96,8 @@ const bodyEventsHandlerStamp = stampit()
      * @since       0.1.0
      *
      * @param       {Event}       event       jQuery `keypress` event object. Required.
+     *
+     * @returns     {Boolean}     allowKeyEventToProgress
      */
     bodyKeyPressHandler(event) {
       const $target = $(event.target);
