@@ -8,6 +8,7 @@ const sinon = require('sinon');
 
 const keyCodes = require('../../src/utilities/key-code-set');
 const bodyEventsHandlerStamp = require('../../src/event-handlers/body-events-handler');
+const formComponentStamp = require('../../src/components/form');
 
 describe('Objects created using the `bodyEventsHandlerStamp`', function() {
   let bodyEventsHandler;
@@ -130,9 +131,16 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
           });
           describe('when the input is inside a Formation `form`', function() {
             let $form;
+            let $formMock;
             let event;
+            let formComponent;
+            let formComponentMock;
             beforeEach(function() {
-              $form = $('<form data-formation="1"></form>');
+              bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
+              formComponent = formComponentStamp();
+              formComponentMock = sinon.mock(formComponent);
+              $form = $('<form data-formation="1"></form>').data(bodyEventsHandler.formationDataKey, formComponent);
+              $formMock = sinon.mock($form);
               event = {target: $('<input type="text" />').get(0), which: keyCodes.ENTER};
             });
             describe('when the Form decides the key press event should progress', function() {
@@ -141,26 +149,32 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 $fnMock.expects('prop').once().withArgs('tagName').returns('input');
                 $fnMock.expects('prop').once().withArgs('type').returns('text');
                 $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($form);
+                $formMock.expects('data').once().withArgs(bodyEventsHandler.formationDataKey).returns(formComponent);
+                formComponentMock.expects('shouldBodyKeyPressEventsProgress').once().returns(true);
 
-                bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
                 assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
 
                 $fnMock.verify();
                 $Mock.verify();
+                $formMock.verify();
+                formComponentMock.verify();
               });
             });
             describe('when the Form decides the key press event should not progress', function() {
-              it.skip('should return false', function() {
+              it('should return false', function() {
                 $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
                 $fnMock.expects('prop').once().withArgs('tagName').returns('input');
                 $fnMock.expects('prop').once().withArgs('type').returns('text');
                 $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($form);
+                $formMock.expects('data').once().withArgs(bodyEventsHandler.formationDataKey).returns(formComponent);
+                formComponentMock.expects('shouldBodyKeyPressEventsProgress').once().returns(false);
 
-                bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
                 assert.isFalse(bodyEventsHandler.bodyKeyPressHandler(event));
 
                 $fnMock.verify();
                 $Mock.verify();
+                $formMock.verify();
+                formComponentMock.verify();
               });
             });
           });

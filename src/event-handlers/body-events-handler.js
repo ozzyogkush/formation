@@ -110,10 +110,11 @@ const bodyEventsHandlerStamp = stampit()
       if (userPressedEnterInInputField) {
         let $currentForm = $target.closest(this.formationSelector);
         if ($currentForm.length) {
-          //let formationForm = $currentForm.data(this.formationDataKey);
-          //if (formationForm instanceof formStamp) {
-          //allowKeyEventToProgress = formationForm.shouldBodyKeyPressEventsProgress($currentForm, $target);
-          //}
+          let formationForm = $currentForm.data(this.formationDataKey);
+          allowKeyEventToProgress = (
+            typeof formationForm.shouldBodyKeyPressEventsProgress === 'function' &&
+            formationForm.shouldBodyKeyPressEventsProgress()
+          );
         }
       }
 
