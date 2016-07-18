@@ -1,9 +1,10 @@
 'use strict';
 
 const consoleLoggerStamp = require('../logging/console');
+const domNavigationStamp = require('../utilities/dom-navigation');
+const keyCodes = require('../utilities/key-code-set');
 const stampit = require('stampit');
 const $ = require('jquery');
-const keyCodes = require('../utilities/key-code-set');
 
 const bodyEventsHandlerStamp = stampit()
   .refs({
@@ -18,28 +19,6 @@ const bodyEventsHandlerStamp = stampit()
      * @default     null
      */
     $body : null,
-
-    /**
-     * The selector used to find a Formation `form`.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     null
-     */
-    formationSelector : null,
-
-    /**
-     * The data key used to to store a FormationForm object on the `form` object.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     formation-form
-     */
-    formationDataKey : 'formation-form',
 
     /**
      * The `keypress` event name specific to Formation.
@@ -87,7 +66,7 @@ const bodyEventsHandlerStamp = stampit()
 
     /**
      * When the user presses the ENTER key inside an `input` element of a Formation `form`,
-     * return whether the `form` should allow the body key press event to progress.
+     * return whether the `formComponent` should allow the body key press event to progress.
      *
      * The `this` object is expected to refer to an instance of this class.
      *
@@ -110,13 +89,9 @@ const bodyEventsHandlerStamp = stampit()
       let allowKeyEventToProgress = true;
 
       if (userPressedEnterInInputField) {
-        let $currentForm = $target.closest(this.formationSelector);
-        if ($currentForm.length) {
-          let formationForm = $currentForm.data(this.formationDataKey);
-          allowKeyEventToProgress = (
-            typeof formationForm.shouldBodyKeyPressEventsProgress === 'function' &&
-            formationForm.shouldBodyKeyPressEventsProgress()
-          );
+        let formComponent = this.getFormComponentOfCurrentElement($target);
+        if (formComponent !== null) {
+          allowKeyEventToProgress = formComponent.shouldBodyKeyPressEventsProgress();
         }
       }
 
@@ -142,10 +117,8 @@ const bodyEventsHandlerStamp = stampit()
         return false;
       }
       let $target = $(event.target);
-      if ($target.closest(this.formationSelector).length) {
-        if ($target.hasClass('btn-checkbox') || $target.hasClass('btn-radio')) {
-          $target.trigger('click');
-        }
+      if (this.elementIsCustomRadioOrCheckboxWidget($target)) {
+        $target.trigger('click');
       }
     }
   })
@@ -200,4 +173,4 @@ const bodyEventsHandlerStamp = stampit()
     };
   });
 
-module.exports = bodyEventsHandlerStamp.compose(consoleLoggerStamp);
+module.exports = bodyEventsHandlerStamp.compose(domNavigationStamp, consoleLoggerStamp);

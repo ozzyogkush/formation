@@ -111,20 +111,21 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
           });
         });
         describe('when the input is neither a radio nor a checkbox', function() {
-          describe('when the input is not inside a Formation `form`', function() {
+          describe('when the Formation `formComponent` is null', function() {
             it('should allow the keypress event to continue', function() {
-              let $empty = $();
               let event = {target: $('<input type="text" />').get(0), which: keyCodes.ENTER};
 
               $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
-
               $fnMock.expects('prop').once().withArgs('tagName').returns('input');
               $fnMock.expects('prop').once().withArgs('type').returns('text');
-              $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($empty);
 
               bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
+              let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+
+              bodyEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($(event.target)).returns(null);
               assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
 
+              bodyEventsHandlerMock.verify();
               $fnMock.verify();
               $Mock.verify();
             });
@@ -135,8 +136,10 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
             let event;
             let formComponent;
             let formComponentMock;
+            let bodyEventsHandlerMock;
             beforeEach(function() {
               bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
+              bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
               formComponent = formComponentStamp();
               formComponentMock = sinon.mock(formComponent);
               $form = $('<form data-formation="1"></form>').data(bodyEventsHandler.formationDataKey, formComponent);
@@ -148,8 +151,7 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
                 $fnMock.expects('prop').once().withArgs('tagName').returns('input');
                 $fnMock.expects('prop').once().withArgs('type').returns('text');
-                $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($form);
-                $formMock.expects('data').once().withArgs(bodyEventsHandler.formationDataKey).returns(formComponent);
+                bodyEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($(event.target)).returns(formComponent);
                 formComponentMock.expects('shouldBodyKeyPressEventsProgress').once().returns(true);
 
                 assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
@@ -157,6 +159,7 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 $fnMock.verify();
                 $Mock.verify();
                 $formMock.verify();
+                bodyEventsHandlerMock.verify();
                 formComponentMock.verify();
               });
             });
@@ -165,8 +168,7 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
                 $fnMock.expects('prop').once().withArgs('tagName').returns('input');
                 $fnMock.expects('prop').once().withArgs('type').returns('text');
-                $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($form);
-                $formMock.expects('data').once().withArgs(bodyEventsHandler.formationDataKey).returns(formComponent);
+                bodyEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($(event.target)).returns(formComponent);
                 formComponentMock.expects('shouldBodyKeyPressEventsProgress').once().returns(false);
 
                 assert.isFalse(bodyEventsHandler.bodyKeyPressHandler(event));
@@ -174,6 +176,7 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 $fnMock.verify();
                 $Mock.verify();
                 $formMock.verify();
+                bodyEventsHandlerMock.verify();
                 formComponentMock.verify();
               });
             });
