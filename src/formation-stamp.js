@@ -66,7 +66,7 @@ const formationStamp = stampit()
 
       let bodyEventsHandler = bodyEventsHandlerStamp({
         $body: $(document.body),
-        formationSelector: `[${this.formationDataAttrKey}="1"]`
+        formationSelector: this.getFormationSelector()
       });
       this.initBodyEvents(bodyEventsHandler);
       this.initForms();
@@ -74,8 +74,8 @@ const formationStamp = stampit()
       return this;
     },
 
-    initForms() {
-
+    getFormationSelector() {
+      return `[${this.formationDataAttrKey}="1"]`;
     }
   })
   .init(function() {
@@ -224,6 +224,26 @@ const formationStamp = stampit()
 
       // The events have not yet been added, so do so now.
       __bodyEventsHandler.addDefaultEventHandlers();
+
+      return this;
+    };
+
+    this.initForms = () => {
+      // Set up the individual forms.
+      $forms.each((index, form) => {
+        try {
+          let $form = $(form);
+          // Set up the Form but only if it has the proper DOM.
+          let formationComponent = formComponentStamp({
+            formationSelector: this.getFormationSelector()
+          }).setLogConsole(this.getLogConsole());
+
+          formationComponent.initForm($form);
+        }
+        catch (exception) {
+          this.error(exception);
+        }
+      });
 
       return this;
     };
