@@ -57,8 +57,8 @@ describe('Objects created using the `domNavigationStamp`', function() {
         formComponent = formComponentStamp();
         formComponentMock = sinon.mock(formComponent);
         $element = $('<div></div>');
-        $element.wrap($form);
         $form = $('<form data-formation="1"></form>');
+        $element.wrap($form);
         $formMock = sinon.mock($form);
       });
       describe('the `formation-form` data object is undefined (ie not set)', function() {
@@ -108,6 +108,43 @@ describe('Objects created using the `domNavigationStamp`', function() {
       });
     });
   });
+
+  describe('`findRequiredFields()`', function() {
+    describe('when there are no required fields inside the specified `form` node', function() {
+      it('should return an empty jQuery set');
+    });
+    describe('when there are required fields inside the specified `form` node', function() {
+      it('should return a non-empty jQuery set');
+    });
+  });
+
+  describe('`findOptionalFields()`', function() {
+    describe('when there are no optional fields inside the specified `form` node', function() {
+      it('should return an empty jQuery set');
+    });
+    describe('when there are optional fields inside the specified `form` node', function() {
+      it('should return a non-empty jQuery set');
+    });
+  });
+
+  describe('`findSubmitButton()`', function() {
+    describe('when there is no Formation submit button inside the specified `form` node', function() {
+      it('should return an empty jQuery set');
+    });
+    describe('when there is a Formation submit button inside the specified `form` node', function() {
+      it('should return a non-empty jQuery set');
+    });
+  });
+
+  describe('`findPreviewButton()`', function() {
+    describe('when there are no required fields inside the specified `form` node', function() {
+      it('should return an empty jQuery set');
+    });
+    describe('when there are required fields inside the specified `form` node', function() {
+      it('should return a non-empty jQuery set');
+    });
+  });
+
   describe('`elementIsCustomRadioOrCheckboxWidget()`', function() {
     describe('when the element is not inside a Formation `form`', function() {
       it('should return false');

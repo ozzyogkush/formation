@@ -2,19 +2,18 @@
 
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
+const buttonComponentStamp = require('./button');
 const stampit = require('stampit');
 const $ = require('jquery');
 
 const formComponentStamp = stampit()
   .methods({
     shouldBodyKeyPressEventsProgress() {
-      this.log(`shouldBodyKeyPressEventsProgress() called`);
       // Does the current form have a submit button?
       // If so, allow the event to proceed.
       // If not, stop the event from propagating.
       const allowKeyEventToProgress = (
-        typeof this.getSubmitButton().getButton === 'function' &&
-        this.getSubmitButton().getButton().length
+        this.getSubmitButton() !== null && this.getSubmitButton().exists()
       );
       return allowKeyEventToProgress;
     }
@@ -98,6 +97,7 @@ const formComponentStamp = stampit()
         );
       }
       catch (e) {
+        // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
         this.error(e);
       }
       return alreadyInit;
@@ -129,8 +129,8 @@ const formComponentStamp = stampit()
       // Get the required and optional fields, and the submit and preview buttons present in the form.
       __setRequiredFields();
       __setOptionalFields();
-      __setFormButtons();
       __initFields();
+      __initFormButtons();
 
       // There were no problems initializing the form, set the data and the private vars.
       __$form.data(this.formationDataKey, this);
@@ -195,27 +195,7 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * TODO - this is a stub
-     *
-     * @private
-     * @access      private
-     * @type        {Function}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
-     */
-    let __setFormButtons = () => {
-      /*this.__submitButton = new Button(
-        this.__formContainer.find(this.getSubmitButtonSelector()),
-        'Submitting, please wait...'
-      );
-      this.__previewButton = new Button(
-        this.__formContainer.find(this.getPreviewButtonSelector()),
-        'Rendering preview, please wait...'
-      );*/
-    };
-
-    /**
-     * TODO - this is a stub
+     * Initialize (or reset) the validity of the required and optional fields to `false` (0).
      *
      * @private
      * @access      private
@@ -224,8 +204,82 @@ const formComponentStamp = stampit()
      * @since       0.1.0
      */
     let __initFields = () => {
-      /*this.__requiredFields.attr(this.getValidAttrKey(), 0);
-      this.__optionalFields.attr(this.getValidAttrKey(), 0);*/
+      __$requiredFields.attr(this.validAttrKey, 0);
+      __$optionalFields.attr(this.validAttrKey, 0);
+    };
+
+    /**
+     * The jQuery object containing the form's submit button.
+     *
+     * @private
+     * @access      private
+     * @type        {buttonComponentStamp}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    let __submitButton = null;
+
+    /**
+     * Returns the `__submitButton`.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {buttonComponentStamp}       __submitButton
+     */
+    this.getSubmitButton = () => {
+      return __submitButton;
+    };
+
+    /**
+     * The jQuery object containing the form's optional preview button.
+     *
+     * @private
+     * @access      private
+     * @type        {buttonComponentStamp}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    let __previewButton = null;
+
+    /**
+     * Returns the `__previewButton`.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {buttonComponentStamp}       __previewButton
+     */
+    this.getPreviewButton = () => {
+      return __previewButton;
+    };
+
+    /**
+     * Create new `buttonComponents` to manage the Submit and Preview buttons
+     * for this form, and set them to the private `__submitButton` and
+     * `__previewButton` vars respectively.
+     *
+     * TODO - make `setLoadingHTML()` optional
+     *
+     * @private
+     * @access      private
+     * @type        {Function}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     */
+    let __initFormButtons = () => {
+      __submitButton = buttonComponentStamp({
+        $button : this.findSubmitButton(__$form),
+        loadingText : 'Submitting, please wait...'
+      }).setLoadingHTML();
+      __previewButton = buttonComponentStamp({
+        $button : this.findPreviewButton(__$form),
+        loadingText : 'Rendering preview, please wait...'
+      }).setLoadingHTML();
     };
   });
 

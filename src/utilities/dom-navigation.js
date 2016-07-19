@@ -17,6 +17,17 @@ const domNavigationStamp = stampit()
     formationSelector: null,
 
     /**
+     * The CSS selector used to find the form's submit button element.
+     *
+     * @access      private
+     * @type        {String}
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     * @default     'data-valid'
+     */
+    validAttrKey : 'data-valid',
+
+    /**
      * The data key used to to store a `formComponent` object on the `form` object.
      *
      * @access      public
@@ -123,6 +134,14 @@ const domNavigationStamp = stampit()
 
     findOptionalFields($form) {
       return $form.find(this.optionalFieldsSelector);
+    },
+
+    findSubmitButton($form) {
+      return $form.find(this.submitButtonSelector);
+    },
+
+    findPreviewButton($form) {
+      return $form.find(this.previewButtonSelector);
     },
 
     elementIsCustomRadioOrCheckboxWidget($element) {
