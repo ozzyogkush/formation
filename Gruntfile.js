@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         },
         plugins : [
           new webpack.BannerPlugin(
-            '<%= pkg.name %> Version <%= pkg.version %> built on <%= grunt.template.today("yyyy-mm-dd") %>',
+            '<%= pkg.description %>\r\nVersion <%= pkg.version %>\r\nAuthor: <%= pkg.author %>\r\nBuilt <%= grunt.template.today("yyyy-mm-dd HH:MM") %>',
             {
               entryOnly : true
             }
