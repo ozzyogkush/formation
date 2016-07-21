@@ -2,6 +2,9 @@
 
 const defaultWebpackConfig = require('./webpack.config.js');
 const webpack = require('webpack');
+const os = require('os');
+
+const isWindows = os.type().toLowerCase().match(/windows/);
 
 /**
  * Gruntfile for the web assets for the `formation` JS library. Automates and tests builds
@@ -74,7 +77,7 @@ module.exports = function(grunt) {
         src:['<%= paths.jsTestSrc %>/**/*.js'],
         options: {
           coverageFolder: 'test-results',
-          nodeExec: require.resolve('./node_modules/.bin/babel-node.cmd'),
+          nodeExec: isWindows ? require.resolve('./node_modules/.bin/babel-node.bat') : require.resolve('./node_modules/.bin/babel-node'),
           scriptPath: require.resolve('isparta/bin/isparta'),
           mochaOptions: ['--compilers', 'js:babel-register', '--require', 'jsdom-global/register'],
           reportFormats: ['lcov', 'html']
