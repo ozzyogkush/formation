@@ -48,6 +48,7 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
         assert.equal(bodyEventsHandler.addDefaultEventHandlers(), bodyEventsHandler);
 
         $bodyMock.verify();
+        bodyEventsHandlerMock.verify();
       });
     });
   });
