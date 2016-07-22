@@ -98,7 +98,7 @@ const formComponentStamp = stampit()
       }
       catch (e) {
         // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
-        this.error(e);
+        this.info(e);
       }
       return alreadyInit;
     };

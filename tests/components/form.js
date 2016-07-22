@@ -89,7 +89,7 @@ describe('Objects created using the `formComponentStamp`', function() {
             formComponentMock.expects('initialized').once().returns(false);
             formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).throws(err);
             formComponentMock.expects('findRequiredFields').once().withArgs($form).returns($());
-            formComponentMock.expects('error').once().withArgs(err);
+            formComponentMock.expects('info').once().withArgs(err);
 
             assert.throws(
               () => {formComponent.initForm($form);},
