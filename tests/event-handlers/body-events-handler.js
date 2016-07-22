@@ -32,17 +32,11 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
 
         // See http://stackoverflow.com/questions/38387222/mocking-a-method-which-is-called-using-an-arrow-function-as-a-parameter
         $bodyMock.expects('on').once()
-          .withArgs(
-            bodyEventsHandler.keyPressEventName,
-            sinon.match.func // this passes the test but does not fulfill code coverage
-          ).returns($body);
+          .withArgs('keypress.formation', sinon.match.func).returns($body);
         $bodyMock.expects('on').once()
-          .withArgs(
-            bodyEventsHandler.keyUpEventName,
-            sinon.match.func // this passes the test but does not fulfill code coverage
-          ).returns($body);
+          .withArgs('keyup.formation', sinon.match.func).returns($body);
 
-        bodyEventsHandlerMock.expects('setBodyEventsInitialized').once().withArgs(true).returns(bodyEventsHandler);
+        bodyEventsHandlerMock.expects('setEventsInitialized').once().withArgs(true).returns(bodyEventsHandler);
 
         // Call the SUT
         assert.equal(bodyEventsHandler.addDefaultEventHandlers(), bodyEventsHandler);
@@ -184,36 +178,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
           });
         });
       });
-    });
-  });
-
-  describe('`getBodyEventsInitialized()`', function() {
-    it('should return `false` when the body events have not yet been initialized (as it is by default)', function() {
-      assert.isFalse(bodyEventsHandler.getBodyEventsInitialized());
-    });
-    it('should return `true` when the body events have been initialized', function() {
-      bodyEventsHandler.setBodyEventsInitialized(true);
-      assert.isTrue(bodyEventsHandler.getBodyEventsInitialized());
-    });
-  });
-
-  describe('`setBodyEventsInitialized()`', function() {
-    it('should throw a `TypeError` when the `newVal` param is not a Boolean', function() {
-      assert.throws(
-        () => bodyEventsHandler.setBodyEventsInitialized(),
-        TypeError,
-        'Expected `newVal` param to be a Boolean, but is `undefined`'
-      );
-      assert.throws(
-        () => bodyEventsHandler.setBodyEventsInitialized('test string'),
-        TypeError,
-        'Expected `newVal` param to be a Boolean, but is `string`'
-      );
-    });
-    it('should not throw a `TypeError` when the `newVal` param is a Boolean', function() {
-      assert.doesNotThrow(() => bodyEventsHandler.setBodyEventsInitialized(false), TypeError);
-      assert.equal(bodyEventsHandler.setBodyEventsInitialized(true), bodyEventsHandler);
-      assert.isTrue(bodyEventsHandler.getBodyEventsInitialized());
     });
   });
 });

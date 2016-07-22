@@ -1,10 +1,9 @@
 'use strict';
 
 const consoleLoggerStamp = require('../logging/console');
-const keyCodes = require('../utilities/key-code-set');
+const eventDefinitionsStamp = require('./event-definitions-stamp');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
 const formEventsHandlerStamp = stampit()
   .refs({
@@ -76,280 +75,6 @@ const formEventsHandlerStamp = stampit()
   .init(function() {
 
     /**
-     * Flag indicating whether the form's event handlers have been added.
-     *
-     * @access      private
-     * @type        Boolean
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     false
-     */
-    let __formEventsInitialized = false;
-
-    /**
-     * Return the value of the private `__formEventsInitialized` flag.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {Boolean}        __formEventsInitialized           Flag indicating whether the form's event handlers have been added.
-     */
-    this.getFormEventsInitialized = () => {
-      return __formEventsInitialized;
-    };
-
-    /**
-     * Set the private `__formEventsInitialized` flag on the object.
-     *
-     * @throws      TypeError                               if the `newVal` param is not a boolean.
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @param       {Boolean}                   newVal      Flag indicating whether the form's event handlers have been added. Required.
-     *
-     * @returns     {formEventsHandlerStamp}    this        Return the instance of the generated object so we can chain methods.
-     */
-    this.setFormEventsInitialized = (newVal) => {
-      const callStackCurrent = 'formEventsHandlerStamp.setFormEventsInitialized';
-      if (typeof newVal !== 'boolean') {
-        throw new TypeError(callStackCurrent + '() - Expected `newVal` param to be a Boolean, but is `' + typeof(newVal) + '`.');
-      }
-
-      __formEventsInitialized = newVal;
-
-      // So we can chain methods.
-      return this;
-    };
-
-    /**
-     * The event name for checking validation of the entire `form`.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __checkFormValidityEventName = 'check-form-validity.formation';
-
-    /**
-     * Returns the private `__checkFormValidityEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __checkFormValidityEventName      The private `__checkFormValidityEventName` property.
-     */
-    this.getCheckFormValidityEventName = () => {
-      return __checkFormValidityEventName;
-    };
-
-    /**
-     * Element 'onchange' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __changeEventName = 'change.formation';
-
-    /**
-     * Returns the private `__changeEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __changeEventName       The private `__changeEventName` property.
-     */
-    this.getChangeEventName = () => {
-      return __changeEventName;
-    };
-
-    /**
-     * Element 'onkeyup' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __keyUpEventName = 'keyup.formation';
-
-    /**
-     * Returns the private `__keyUpEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __keyUpEventName        The private `__keyUpEventName` property.
-     */
-    this.getKeyUpEventName = () => {
-      return __keyUpEventName;
-    };
-
-    /**
-     * Element 'onfocus' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __focusEventName = 'focus.formation';
-
-    /**
-     * Returns the private `__focusEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __focusEventName        The private `__focusEventName` property.
-     */
-    this.getFocusEventName = () => {
-      return __focusEventName;
-    };
-
-    /**
-     * Element 'onblur' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __blurEventName = 'blur.formation';
-
-    /**
-     * Returns the private `__blurEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __blurEventName       The private `__blurEventName` property.
-     */
-    this.getBlurEventName = () => {
-      return __blurEventName;
-    };
-
-    /**
-     * Element 'onmouseenter' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __mouseEnterEventName = 'mouseenter.formation';
-
-    /**
-     * Returns the private `__mouseEnterEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __mouseEnterEventName       The private `__mouseEnterEventName` property.
-     */
-    this.getMouseEnterEventName = () => {
-      return __mouseEnterEventName;
-    };
-
-    /**
-     * Element 'onmouseleave' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __mouseLeaveEventName = 'mouseleave.formation';
-
-    /**
-     * Returns the private `__mouseLeaveEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __mouseLeaveEventName       The private `__mouseLeaveEventName` property.
-     */
-    this.getMouseLeaveEventName = () => {
-      return __mouseLeaveEventName;
-    };
-
-    /**
-     * Element 'ontouchstart' events specific to Formation.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __touchStartEventName = 'touchstart.formation';
-
-    /**
-     * Returns the private `__touchStartEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __touchStartEventName         The private `__touchStartEventName` property.
-     */
-    this.getTouchStartEventName = () => {
-      return __touchStartEventName;
-    };
-
-    /**
-     * All input events get a handler which can handle this event, which is
-     * for triggering validation checking on the target element.
-     *
-     * @private
-     * @access      private
-     * @const
-     * @type        {String}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     */
-    const __validationEventName = 'validation-handler.formation';
-
-    /**
-     * Returns the private `__validationEventName` property.
-     *
-     * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns     {String}      __validationEventName     The private `__validationEventName` property.
-     */
-    this.getValidationEventName = () => {
-      return __validationEventName;
-    };
-
-    /**
      * The form element types which get validated.
      *
      * @private
@@ -391,23 +116,27 @@ const formEventsHandlerStamp = stampit()
      */
     this.addDefaultEventHandlers = () => {
       const allInputElementsSelector = __inputElementTypesToValidate.join(', ');
-      const mouseMoveTouchEvents = [__mouseEnterEventName, __mouseLeaveEventName, __touchStartEventName].join(', ');
+      const mouseMoveTouchEvents = [
+        this.getMouseEnterEventName(),
+        this.getMouseLeaveEventName(),
+        this.getTouchStartEventName()
+      ].join(', ');
 
       this.$form
         .submit((event) => this.formSubmitHandler(event))
-        .on(__checkFormValidityEventName, (event) => this.checkFormValidityHandler(event))
-        .on(__changeEventName, 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
-        .on(__changeEventName, 'input:radio', (event) => this.radioChangeHandler(event))
-        .on(__changeEventName, 'select', (event) => this.selectChangeHandler(event))
-        .on(__keyUpEventName, 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
-        .on(__validationEventName, allInputElementsSelector, (event) => this.formValidationHandler(event))
-        .on(__focusEventName, allInputElementsSelector, (event) => this.inputFocusHandler(event))
+        .on(this.getCheckFormValidityEventName(), (event) => this.checkFormValidityHandler(event))
+        .on(this.getChangeEventName(), 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
+        .on(this.getChangeEventName(), 'input:radio', (event) => this.radioChangeHandler(event))
+        .on(this.getChangeEventName(), 'select', (event) => this.selectChangeHandler(event))
+        .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
+        .on(this.getValidationEventName(), allInputElementsSelector, (event) => this.formValidationHandler(event))
+        .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))
         .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
 
-      this.setFormEventsInitialized(true);
+      this.setEventsInitialized(true);
 
       return this;
     };
   });
 
-module.exports = formEventsHandlerStamp.compose(consoleLoggerStamp);
+module.exports = formEventsHandlerStamp.compose(eventDefinitionsStamp, consoleLoggerStamp);

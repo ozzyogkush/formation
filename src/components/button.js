@@ -2,7 +2,6 @@
 
 const domNavigationStamp = require('../utilities/dom-navigation');
 const stampit = require('stampit');
-const $ = require('jquery');
 
 const buttonComponentStamp = stampit()
   .refs({

@@ -6,7 +6,6 @@ const formComponentStamp = require('./components/form');
 
 const stampit = require('stampit');
 const $ = require('jquery');
-const jQuery = $;
 
 /**
  * This stamp lets you initialize Formation, and turn debug on or off.

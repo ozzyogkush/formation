@@ -1,8 +1,8 @@
 'use strict';
 
+const buttonComponentStamp = require('./button');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
-const buttonComponentStamp = require('./button');
 const stampit = require('stampit');
 const $ = require('jquery');
 
@@ -107,7 +107,7 @@ const formComponentStamp = stampit()
      * The meat of this Stamp. Will initialize a jQuery wrapped `form` and assign it internally,
      * setting all the required and optional fields, the form buttons (such as submit and preview),
      * and initializing the fields' current validation status. If everything went without error,
-     * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`
+     * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`.
      *
      * @access      public
      * @memberOf    {formComponentStamp}

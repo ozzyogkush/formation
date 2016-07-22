@@ -179,7 +179,7 @@ describe('Objects created using the `formationStamp`', function() {
         formationMock.expects('log').once().withArgs('Initializing body events...');
         formationMock.expects('getLogConsole').once().returns(true);
         bodyEventsHandlerMock.expects('setLogConsole').once().withArgs(true).returns(bodyEventsHandler);
-        bodyEventsHandlerMock.expects('getBodyEventsInitialized').once().returns(false);
+        bodyEventsHandlerMock.expects('getEventsInitialized').once().returns(false);
         bodyEventsHandlerMock.expects('addDefaultEventHandlers').once().returns(bodyEventsHandler);
 
         assert.equal(formation.initBodyEvents(bodyEventsHandler), formation);
@@ -198,7 +198,7 @@ describe('Objects created using the `formationStamp`', function() {
         formationMock.expects('info').once().withArgs('Body events previously initialized, skipping.');
         formationMock.expects('getLogConsole').once().returns(true);
         bodyEventsHandlerMock.expects('setLogConsole').once().withArgs(true).returns(bodyEventsHandler);
-        bodyEventsHandlerMock.expects('getBodyEventsInitialized').once().returns(true);
+        bodyEventsHandlerMock.expects('getEventsInitialized').once().returns(true);
         bodyEventsHandlerMock.expects('addDefaultEventHandlers').never();
 
         assert.equal(formation.initBodyEvents(bodyEventsHandler), formation);

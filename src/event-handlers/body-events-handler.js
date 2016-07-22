@@ -2,6 +2,7 @@
 
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
+const eventDefinitionsStamp = require('./event-definitions-stamp');
 const keyCodes = require('../utilities/key-code-set');
 const stampit = require('stampit');
 const $ = require('jquery');
@@ -18,29 +19,7 @@ const bodyEventsHandlerStamp = stampit()
      * @since       0.1.0
      * @default     null
      */
-    $body : null,
-
-    /**
-     * The `keypress` event name specific to Formation.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     keypress.formation
-     */
-    keyPressEventName : 'keypress.formation',
-
-    /**
-     * The `keyup` event name specific to Formation.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     keyup.formation
-     */
-    keyUpEventName : 'keyup.formation'
+    $body : null
   })
   .methods({
 
@@ -56,10 +35,10 @@ const bodyEventsHandlerStamp = stampit()
      */
     addDefaultEventHandlers() {
       this.$body
-        .on(this.keyPressEventName, (event) => this.bodyKeyPressHandler(event))
-        .on(this.keyUpEventName, (event) => this.bodyKeyUpHandler(event));
+        .on(this.getKeyPressEventName(), (event) => this.bodyKeyPressHandler(event))
+        .on(this.getKeyUpEventName(), (event) => this.bodyKeyUpHandler(event));
 
-      this.setBodyEventsInitialized(true);
+      this.setEventsInitialized(true);
 
       return this;
     },
@@ -121,56 +100,6 @@ const bodyEventsHandlerStamp = stampit()
         $target.trigger('click');
       }
     }
-  })
-  .init(function() {
-
-    /**
-     * Flag indicating whether the body event handlers have been added.
-     *
-     * @access      private
-     * @type        Boolean
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     false
-     */
-    let __bodyEventsInitialized = false;
-
-    /**
-     * Return the value of the private `__bodyEventsInitialized` flag.
-     *
-     * @access      public
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @returns    {Boolean}        __bodyEventsInitialized           Flag indicating whether the body event handlers have been added.
-     */
-    this.getBodyEventsInitialized = () => {
-      return __bodyEventsInitialized;
-    };
-
-    /**
-     * Set the private `__bodyEventsInitialized` flag on the object.
-     *
-     * @throws      TypeError                               if the `newVal` param is not a boolean.
-     * @access      public
-     * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
-     *
-     * @param       {Boolean}                   newVal      Flag indicating whether the body event handlers have been added. Required.
-     *
-     * @returns     {bodyEventsHandlerStamp}    this        Return the instance of the generated object so we can chain methods.
-     */
-    this.setBodyEventsInitialized = (newVal) => {
-      const callStackCurrent = 'bodyEventsHandlerStamp.setBodyEventsInitialized';
-      if (typeof newVal !== 'boolean') {
-        throw new TypeError(callStackCurrent + '() - Expected `newVal` param to be a Boolean, but is `' + typeof(newVal) + '`.');
-      }
-
-      __bodyEventsInitialized = newVal;
-
-      // So we can chain methods.
-      return this;
-    };
   });
 
-module.exports = bodyEventsHandlerStamp.compose(domNavigationStamp, consoleLoggerStamp);
+module.exports = bodyEventsHandlerStamp.compose(eventDefinitionsStamp, domNavigationStamp, consoleLoggerStamp);
