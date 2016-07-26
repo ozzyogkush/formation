@@ -1,5 +1,7 @@
 'use strict';
 
+const eventEmitterStamp = require('../utilities/node-event-emitter-stamp');
+
 let stampit = require('stampit');
 
 // A wrapper for the `console` log functions that takes into account a flag that can
@@ -7,7 +9,19 @@ let stampit = require('stampit');
 // TODO: refactor methods() to do a loop over a set of method names to wrap (DRY it up).
 const toggleableConsoleStamp = stampit()
   .refs({
-    console: console
+    console: console,
+
+    /**
+     * A singleton passed along so we have some semblance of
+     * a global Formation event emitter.
+     *
+     * @access      public
+     * @type        {eventEmitterStamp}
+     * @memberOf    {toggleableConsoleStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    nodeEvents : null
   })
   .methods({
     error(message) {
@@ -78,6 +92,25 @@ const toggleableConsoleStamp = stampit()
       logConsole = newVal;
 
       // So we can chain methods.
+      return this;
+    };
+
+    /**
+     * Helper function that sets initial console logging and listens for an
+     * event which can turn it on or off.
+     *
+     * @access      public
+     * @memberOf    {toggleableConsoleStamp}
+     * @since       0.1.0
+     *
+     * @param       {Boolean}                   initial     Initial console logging flag. Required.
+     *
+     * @returns     {toggleableConsoleStamp}    this        Return the instance of the generated object so we can chain methods.
+     */
+    this.initLogging = (initial) => {
+      this.setLogConsole(initial);
+      this.nodeEvents.on(this.nodeEvents.getNodeSetDebugEvent(), this.setLogConsole);
+
       return this;
     };
   });

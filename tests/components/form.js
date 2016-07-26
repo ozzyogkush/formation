@@ -6,13 +6,14 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const eventEmitterStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formComponentStamp = require('../../src/components/form');
 
 describe('Objects created using the `formComponentStamp`', function() {
   let formComponent;
   let formComponentMock;
   beforeEach(function() {
-    formComponent = formComponentStamp();
+    formComponent = formComponentStamp({ nodeEvents : eventEmitterStamp() });
     formComponentMock = sinon.mock(formComponent);
   });
 

@@ -3,10 +3,25 @@
 const buttonComponentStamp = require('./button');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
+
 const stampit = require('stampit');
 const $ = require('jquery');
 
 const formComponentStamp = stampit()
+  .refs({
+
+    /**
+     * A singleton passed along so we have some semblance of
+     * a global Formation event emitter.
+     *
+     * @access      public
+     * @type        {eventEmitterStamp}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    nodeEvents : null
+  })
   .methods({
     shouldBodyKeyPressEventsProgress() {
       // Does the current form have a submit button?
@@ -135,6 +150,46 @@ const formComponentStamp = stampit()
       // There were no problems initializing the form, set the data and the private vars.
       __$form.data(this.formationDataKey, this);
       __initialized = true;
+
+      return this;
+    };
+
+    /**
+     * Object composed of a {formEventsHandlerStamp} which handles form input element events.
+     *
+     * @access      public
+     * @type        {Object}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    let __formEventsHandler = null;
+
+    /**
+     * Add the default event handlers for a form's various input element,
+     * iff that has not already taken place.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @param       {formEventsHandlerStamp}        formEventsHandler     Object which is composed of a `formEventsHandlerStamp`. Required.
+     *
+     * @returns     {formComponentStamp}
+     */
+    this.initFormEvents = (formEventsHandler) => {
+      this.log('Initializing form events...');
+
+      if (formEventsHandler.getEventsInitialized()) {
+        this.info('Form events previously initialized for this form, skipping.');
+        return this;
+      }
+      __formEventsHandler = formEventsHandler;
+
+      __formEventsHandler
+        .initLogging(this.getLogConsole())
+        .addDefaultEventHandlers()
+        .triggerValidationCheck();
 
       return this;
     };
@@ -274,13 +329,22 @@ const formComponentStamp = stampit()
     let __initFormButtons = () => {
       __submitButton = buttonComponentStamp({
         $button : this.findSubmitButton(__$form),
-        loadingText : 'Submitting, please wait...'
-      }).setLoadingHTML();
+        loadingText : 'Submitting, please wait...',
+        nodeEvents : this.nodeEvents
+      }).initLogging(this.getLogConsole())
+        .addHandleFormSubmitListener()
+        .setLoadingHTML();
       __previewButton = buttonComponentStamp({
         $button : this.findPreviewButton(__$form),
-        loadingText : 'Rendering preview, please wait...'
-      }).setLoadingHTML();
+        loadingText : 'Rendering preview, please wait...',
+        nodeEvents : this.nodeEvents
+      }).initLogging(this.getLogConsole())
+        .addHandleFormSubmitListener()
+        .setLoadingHTML();
     };
   });
 
-module.exports = formComponentStamp.compose(domNavigationStamp, consoleLoggerStamp);
+module.exports = formComponentStamp.compose(
+  domNavigationStamp,
+  consoleLoggerStamp
+);

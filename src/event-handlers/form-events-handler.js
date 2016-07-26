@@ -17,11 +17,37 @@ const formEventsHandlerStamp = stampit()
      * @since       0.1.0
      * @default     null
      */
-    $form : null
+    $form : null,
+
+    /**
+     * A singleton passed along so we have some semblance of
+     * a global Formation event emitter.
+     *
+     * @access      public
+     * @type        {eventEmitterStamp}
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    nodeEvents : null
   })
   .methods({
-    formSubmitHandler(event) {
 
+    /**
+     * Emit a node event when the form is submitted.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event       jQuery `submit` event object. Required.
+     *
+     * @returns     {Boolean}     true
+     */
+    formSubmitHandler(event) {
+      this.nodeEvents.emit(this.nodeEvents.getNodeFormSubmitEvent(), event);
+
+      return true;
     },
 
     checkFormValidityHandler(event) {

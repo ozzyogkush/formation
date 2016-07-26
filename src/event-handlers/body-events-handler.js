@@ -19,7 +19,19 @@ const bodyEventsHandlerStamp = stampit()
      * @since       0.1.0
      * @default     null
      */
-    $body : null
+    $body : null,
+
+    /**
+     * A singleton passed along so we have some semblance of
+     * a global Formation event emitter.
+     *
+     * @access      public
+     * @type        {eventEmitterStamp}
+     * @memberOf    {bodyEventsHandlerStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    nodeEvents : null
   })
   .methods({
 
