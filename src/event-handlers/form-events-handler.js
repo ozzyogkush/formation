@@ -119,28 +119,92 @@ const formEventsHandlerStamp = stampit()
       $checkbox.trigger(this.getValidationEventName());
     },
 
+    /**
+     * Triggers a form validation check on the radio button whose value was just changed.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `change` event object. Required.
+     */
     radioChangeHandler(event) {
+      const $radio = $(event.target);
 
+      $radio.trigger(this.getValidationEventName());
     },
 
+    /**
+     * Triggers a form validation check on the select element whose value was just changed.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `change` event object. Required.
+     */
     selectChangeHandler(event) {
+      const $select = $(event.target);
 
+      $select.trigger(this.getValidationEventName());
     },
 
+    /**
+     * Triggers a form validation check on the input or textarea whose value has
+     * changed due to the user triggering a `keyup` event.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `keyup` event object. Required.
+     */
     inputTextareaKeyUpHandler(event) {
+      const $target = $(event.target);
 
+      $target.trigger(this.getValidationEventName());
     },
 
-    formValidationHandler(event) {
-
-    },
-
+    /**
+     * Trigger validation checks when the user focuses on a field.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `focus` event object. Required.
+     */
     inputFocusHandler(event) {
+      const $input = $(event.target);
 
+      $input.trigger(this.getValidationEventName());
     },
 
+    /**
+     * For each of the required and optional fields passed in with the event data,
+     * trigger the validation handler. This can be used to ensure that the form fields
+     * validation is checked even when the field doesn't know it's been changed, eg when
+     * a browser's autofill inputs values for known fields.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
+     */
     validateFormFields(event) {
-
+      let $fields = $().add(this.get$requiredFields()).add(this.get$optionalFields());
+      $fields.trigger(this.getValidationEventName()); // do we have to loop through these?
     },
 
     /**
@@ -157,6 +221,10 @@ const formEventsHandlerStamp = stampit()
       this.getAllInputElementsToValidate().trigger(this.getValidationEventName());
 
       return this;
+    },
+
+    formValidationHandler(event) {
+
     }
   })
   .init(function() {
