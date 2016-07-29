@@ -96,8 +96,27 @@ const formEventsHandlerStamp = stampit()
       continueButton.setEnabled(everythingValid);
     },
 
+    /**
+     * Checks for linked input elements and shows/hides them based on the status of the checkbox.
+     *
+     * Triggers a form validation check on the checkbox whose checked property was just changed.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `change` event object. Required.
+     */
     checkBoxChangeHandler(event) {
+      let $checkbox = $(event.target);
 
+      // Check for linked elements and show/hide them appropriately.
+      this.showOrHideLinkedElement($checkbox, $checkbox.is(':checked'));
+
+      // Trigger the form validation event.
+      $checkbox.trigger(this.getValidationEventName());
     },
 
     radioChangeHandler(event) {

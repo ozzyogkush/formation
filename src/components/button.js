@@ -70,12 +70,7 @@ const buttonComponentStamp = stampit()
      * @returns     {buttonComponentStamp}
      */
     setEnabled(enable) {
-      if (enable) {
-        this.$button.removeProp('disabled').removeClass('disabled');
-      }
-      else {
-        this.$button.prop('disabled', 'disabled').addClass('disabled');
-      }
+      this.enableOrDisableElement(this.$button, enable);
 
       return this;
     },
