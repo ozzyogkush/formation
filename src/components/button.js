@@ -25,8 +25,83 @@ const buttonComponentStamp = stampit()
     loadingTextDataKey : 'data-loading-text'
   })
   .methods({
+
+    /**
+     * Check whether the `$button` represents a non-empty jQuery object.
+     *
+     * @access      public
+     * @memberOf    {buttonComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Boolean}
+     */
     exists() {
       return (this.$button !== null && this.$button.length > 0);
+    },
+
+    /**
+     * Check whether the `$button` is currently in a 'submitting' state.
+     *
+     * @access      public
+     * @memberOf    {buttonComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Boolean}       isSubmitting
+     */
+    isSubmitting() {
+      const isSubmitting = (
+        this.exists() &&
+        this.$button.attr(this.submittingStateDataKey) !== undefined &&
+        parseInt(this.$button.attr(this.submittingStateDataKey)) === 1
+      );
+
+      return isSubmitting;
+    },
+
+    /**
+     * Will enable or disable the `$button` based on the `enable` param.
+     *
+     * @access      public
+     * @memberOf    {buttonComponentStamp}
+     * @since       0.1.0
+     *
+     * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$button`. Required.
+     *
+     * @returns     {buttonComponentStamp}
+     */
+    setEnabled(enable) {
+      if (enable) {
+        this.$button.removeProp('disabled').removeClass('disabled');
+      }
+      else {
+        this.$button.prop('disabled', 'disabled').addClass('disabled');
+      }
+
+      return this;
+    },
+
+    /**
+     * Will set the `$button` to a `submitting` state or undo it depending on
+     * the `submitting` param.
+     *
+     * @access      public
+     * @memberOf    {buttonComponentStamp}
+     * @since       0.1.0
+     *
+     * @param       {Boolean}       submitting      Whether to set the `$button` to a submitting state (true) or not (false). Required.
+     *
+     * @returns     {buttonComponentStamp}
+     */
+    setSubmitting(submitting) {
+      // TODO - the `button()` calls will throw an error until we get Bootstrap into the mix.
+      if (submitting) {
+        this.$button.attr(this.submittingStateDataKey, 1).button('loading');
+      }
+      else {
+        this.$button.removeAttr(this.submittingStateDataKey).button('reset');
+      }
+
+      return this;
     },
 
     addHandleFormSubmitListener() {
@@ -49,12 +124,9 @@ const buttonComponentStamp = stampit()
     handleFormSubmitEvent(event) {
       this.log('handleFormSubmitEvent() called for ' + this.$button.selector);
       if (this.exists()) {
-        this.$button
-          .prop('disabled', 'disabled')
-          .addClass('disabled')
-          .attr('data-submitting', 1)
-          .button('loading') // TODO - this will throw an error until we get Bootstrap into the mix
-          .trigger(this.getBlurEventName());
+        this.setEnabled(false).setSubmitting(true);
+
+        this.$button.trigger(this.getBlurEventName());
       }
     }
   })

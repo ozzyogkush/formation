@@ -33,12 +33,15 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
     it('should return a set of jQuery-wrapped form input elements', function() {
       let $form = $('<form data-formation="1"></form>');
       let $formMock = sinon.mock($form);
-      formEventsHandler = formEventsHandlerStamp({$form: $form});
+      formEventsHandler = formEventsHandlerStamp();
+      let formEventsHandlerMock = sinon.mock(formEventsHandler);
 
+      formEventsHandlerMock.expects('get$form').once().returns($form);
       $formMock.expects('find').once().withArgs('input, textarea, select').returns($());
 
       formEventsHandler.getAllInputElementsToValidate();
 
+      formEventsHandlerMock.verify();
       $formMock.verify();
     });
   });
@@ -46,7 +49,13 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
   describe('`addDefaultEventHandlers()`', function() {
     describe('when the `$form` object is null', function() {
       it('should throw an Error', function() {
+        formEventsHandler = formEventsHandlerStamp();
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('get$form').once().returns(null);
         assert.throws(() => formEventsHandler.addDefaultEventHandlers(), Error);
+
+        formEventsHandlerMock.verify();
       });
     });
 
@@ -54,8 +63,10 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
       it('should set a bunch of event handlers on various input elements (text, textarea, select, radio, checkbox)', function() {
         let $form = $('<form data-formation="1"></form>');
         let $formMock = sinon.mock($form);
-        formEventsHandler = formEventsHandlerStamp({$form : $form});
+        formEventsHandler = formEventsHandlerStamp();
         let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('get$form').once().returns($form);
 
         // See http://stackoverflow.com/questions/38387222/mocking-a-method-which-is-called-using-an-arrow-function-as-a-parameter
         $formMock.expects('submit').once().withArgs(sinon.match.func).returns($form);

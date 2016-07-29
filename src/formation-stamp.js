@@ -2,7 +2,6 @@
 
 const bodyEventsHandlerStamp = require('./event-handlers/body-events-handler');
 const consoleLoggerStamp = require('./logging/console');
-const formComponentStamp = require('./components/form');
 const formEventsHandlerStamp = require('./event-handlers/form-events-handler');
 
 const stampit = require('stampit');
@@ -259,18 +258,13 @@ const formationStamp = stampit()
         try {
           let $form = $(form);
           // Set up the Form but only if it has the proper DOM.
-          let formationComponent = formComponentStamp({
+          let formationComponent = formEventsHandlerStamp({
             formationSelector: this.getFormationSelector(),
             nodeEvents : this.nodeEvents
           }).initLogging(this.getLogConsole());
 
           formationComponent.initForm($form);
-
-          let formEventsHandler = formEventsHandlerStamp({
-            $form : $form,
-            nodeEvents : this.nodeEvents
-          });
-          formationComponent.initFormEvents(formEventsHandler);
+          formationComponent.initFormEvents();
         }
         catch (exception) {
           this.error(exception);

@@ -62,6 +62,19 @@ const formComponentStamp = stampit()
     let __$form = $();
 
     /**
+     * Returns the jQuery object containing the initialized form node.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {jQuery}       __$form
+     */
+    this.get$form = () => {
+      return __$form;
+    };
+
+    /**
      * The initialization status.
      *
      * @private
@@ -155,46 +168,6 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * Object composed of a {formEventsHandlerStamp} which handles form input element events.
-     *
-     * @access      public
-     * @type        {Object}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
-     * @default     null
-     */
-    let __formEventsHandler = null;
-
-    /**
-     * Add the default event handlers for a form's various input element,
-     * iff that has not already taken place.
-     *
-     * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
-     *
-     * @param       {formEventsHandlerStamp}        formEventsHandler     Object which is composed of a `formEventsHandlerStamp`. Required.
-     *
-     * @returns     {formComponentStamp}
-     */
-    this.initFormEvents = (formEventsHandler) => {
-      this.log('Initializing form events...');
-
-      if (formEventsHandler.getEventsInitialized()) {
-        this.info('Form events previously initialized for this form, skipping.');
-        return this;
-      }
-      __formEventsHandler = formEventsHandler;
-
-      __formEventsHandler
-        .initLogging(this.getLogConsole())
-        .addDefaultEventHandlers()
-        .triggerValidationCheck();
-
-      return this;
-    };
-
-    /**
      * The jQuery object containing the elements in this form that are required to be validated.
      *
      * @private
@@ -205,6 +178,19 @@ const formComponentStamp = stampit()
      * @default     $()
      */
     let __$requiredFields = $();
+
+    /**
+     * Returns the jQuery object containing the elements in this form that are required to be validated.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {jQuery}       __$requiredFields
+     */
+    this.get$requiredFields = () => {
+      return __$requiredFields;
+    };
 
     /**
      * Find the required fields and set them to the private `__$requiredFields` var.
@@ -235,6 +221,19 @@ const formComponentStamp = stampit()
      * @default     $()
      */
     let __$optionalFields = $();
+
+    /**
+     * Returns the jQuery object containing the elements in this form that are optional to be validated.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {jQuery}       __$optionalFields
+     */
+    this.get$optionalFields = () => {
+      return __$optionalFields;
+    };
 
     /**
      * Find the optional fields and set them to the private `__$optionalFields` var.
@@ -311,6 +310,20 @@ const formComponentStamp = stampit()
      */
     this.getPreviewButton = () => {
       return __previewButton;
+    };
+
+    this.getSubmitWithFallbackPreviewButton = () => {
+      const submitButton = this.getSubmitButton();
+      if (submitButton !== null && submitButton.exists()) {
+        return submitButton;
+      }
+      const previewButton = this.getPreviewButton();
+      if (previewButton !== null && previewButton.exists()) {
+        return previewButton;
+      }
+
+      // We don't have a submit or preview button, so there's really nothing to do.
+      return null;
     };
 
     /**

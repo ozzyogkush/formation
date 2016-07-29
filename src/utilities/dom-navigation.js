@@ -28,6 +28,18 @@ const domNavigationStamp = stampit()
     validAttrKey : 'data-valid',
 
     /**
+     * The Bootstrap stateful element attribute whose value is used for setting the element's innerHTML
+     * when set to the 'loading' state.
+     *
+     * @access      public
+     * @type        String
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     * @default     data-submitting
+     */
+    submittingStateDataKey : 'data-submitting',
+
+    /**
      * The data key used to to store a `formComponent` object on the `form` object.
      *
      * @access      public

@@ -1,23 +1,15 @@
 'use strict';
 
 const consoleLoggerStamp = require('../logging/console');
+const domNavigationStamp = require('../utilities/dom-navigation');
 const eventDefinitionsStamp = require('./event-definitions-stamp');
+const formComponentStamp = require('../components/form');
 
 const stampit = require('stampit');
+const $ = require('jquery');
 
 const formEventsHandlerStamp = stampit()
   .refs({
-
-    /**
-     * The jQuery extended `form` element.
-     *
-     * @access      public
-     * @type        {jQuery}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
-     * @default     null
-     */
-    $form : null,
 
     /**
      * A singleton passed along so we have some semblance of
@@ -50,8 +42,58 @@ const formEventsHandlerStamp = stampit()
       return true;
     },
 
+    /**
+     * Performs a final check to make sure all visible required fields are validated.
+     *
+     * Hidden required fields are only * actually * required when they're being displayed
+     * to the user. This is generally because an optional field toggles it, and thus
+     * only needs to be filled out when the user takes action to show it.
+     *
+     * If all necessary fields are valid, this will enable the submit button specified
+     * for the current form. Otherwise, the submit button is disabled.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}         event         jQuery `check-form-validity` event object. Required.
+     */
     checkFormValidityHandler(event) {
+      if (event.namespace === undefined || event.namespace !== "formation") {
+        return;
+      }
 
+      let continueButton = this.getSubmitWithFallbackPreviewButton();
+      if (continueButton === null) {
+        // We don't have a submit or preview button, so there's really nothing to do.
+        return;
+      }
+
+      if (continueButton.isSubmitting()) {
+        // It's already submitting, don't change the state of the button.
+        return;
+      }
+
+      // Get the list of required, enabled, and visible fields.
+      let $visibleRequiredFields = this.get$requiredFields()
+        .filter(function() {
+          let hiddenOrDisabled = (
+            $(this).hasClass('hidden') ||
+            $(this).prop('disabled') === "disabled" ||
+            $(this).hasClass('disabled')
+          );
+          return (! hiddenOrDisabled);
+        });
+
+      // Grab the list of valid visible fields.
+      const $validRequiredFields = $visibleRequiredFields.filter(`[${this.validAttrKey}="1"]`);
+
+      // Everything is basically valid if all required fields are valid...
+      const everythingValid = ($visibleRequiredFields.length === $validRequiredFields.length);
+
+      continueButton.setEnabled(everythingValid);
     },
 
     checkBoxChangeHandler(event) {
@@ -101,6 +143,32 @@ const formEventsHandlerStamp = stampit()
   .init(function() {
 
     /**
+     * Add the default event handlers for a form's various input element,
+     * iff that has not already taken place.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @returns     {formEventsHandlerStamp}
+     */
+    this.initFormEvents = () => {
+      this.log('Initializing form events...');
+
+      if (this.getEventsInitialized()) {
+        this.info('Form events previously initialized for this form, skipping.');
+        return this;
+      }
+
+      this
+        .initLogging(this.getLogConsole())
+        .addDefaultEventHandlers()
+        .triggerValidationCheck();
+
+      return this;
+    };
+
+    /**
      * The form element types which get validated.
      *
      * @private
@@ -124,7 +192,7 @@ const formEventsHandlerStamp = stampit()
      */
     this.getAllInputElementsToValidate = () => {
       const inputElementTypesToValidate = __inputElementTypesToValidate.join(', ');
-      return this.$form.find(inputElementTypesToValidate);
+      return this.get$form().find(inputElementTypesToValidate);
     };
 
     /**
@@ -148,7 +216,7 @@ const formEventsHandlerStamp = stampit()
         this.getTouchStartEventName()
       ].join(', ');
 
-      this.$form
+      this.get$form()
         .submit((event) => this.formSubmitHandler(event))
         .on(this.getCheckFormValidityEventName(), (event) => this.checkFormValidityHandler(event))
         .on(this.getChangeEventName(), 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
@@ -165,4 +233,9 @@ const formEventsHandlerStamp = stampit()
     };
   });
 
-module.exports = formEventsHandlerStamp.compose(eventDefinitionsStamp, consoleLoggerStamp);
+module.exports = formEventsHandlerStamp.compose(
+  formComponentStamp,
+  eventDefinitionsStamp,
+  domNavigationStamp,
+  consoleLoggerStamp
+);
