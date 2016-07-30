@@ -121,6 +121,91 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
     });
   });
 
+  describe('all the element event handlers', function() {
+    let $fnMock;
+    beforeEach(function() {
+      $fnMock = sinon.mock($.fn);
+    });
+    afterEach(function() {
+      $fnMock.restore();
+    });
+    describe('`checkBoxChangeHandler()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        jQueryEvent.target = $('<input type="checkbox" />').get(0);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+        $fnMock.expects('is').once().withArgs(':checked').returns(false);
+        formEventsHandlerMock.expects('showOrHideLinkedElement')
+          .once().withArgs($(jQueryEvent.target), false);
+
+        formEventsHandler.checkBoxChangeHandler(jQueryEvent);
+
+        $fnMock.verify();
+        formEventsHandlerMock.verify();
+      });
+    });
+
+    describe('`radioChangeHandler()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        jQueryEvent.target = $('<input type="radio" />').get(0);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+
+        formEventsHandler.radioChangeHandler(jQueryEvent);
+        $fnMock.verify();
+      });
+    });
+
+    describe('`selectChangeHandler()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        jQueryEvent.target = $('<select></select>').get(0);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+
+        formEventsHandler.selectChangeHandler(jQueryEvent);
+        $fnMock.verify();
+      });
+    });
+
+    describe('`inputTextareaKeyUpHandler()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        jQueryEvent.target = $('<textarea></textarea>').get(0);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+
+        formEventsHandler.inputTextareaKeyUpHandler(jQueryEvent);
+        $fnMock.verify();
+      });
+    });
+
+    describe('`inputFocusHandler()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        jQueryEvent.target = $('<input type="text" />').get(0);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+
+        formEventsHandler.inputFocusHandler(jQueryEvent);
+        $fnMock.verify();
+      });
+    });
+
+    describe('`validateFormFields()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        jQueryEvent.target = $('<form></form>').get(0);
+        let $requiredFields = $('<input />').add($('<select></select>')).add($('<textarea></textarea>'));
+        let $optionalFields = $('<textarea></textarea>').add($('<input type="email" />'));
+        formEventsHandlerMock.expects('get$requiredFields').once().returns($requiredFields);
+        formEventsHandlerMock.expects('get$optionalFields').once().returns($optionalFields);
+        let $fields = $().add($requiredFields).add($optionalFields);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($fields);
+
+        formEventsHandler.validateFormFields(jQueryEvent);
+
+        $fnMock.verify();
+        formEventsHandlerMock.verify();
+      });
+    });
+  });
+
   describe('`triggerValidationCheck()`', function() {
     it('should return `false` when the form events have not yet been initialized (as it is by default)', function() {
       let formEventsHandlerMock = sinon.mock(formEventsHandler);

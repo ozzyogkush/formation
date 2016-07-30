@@ -127,7 +127,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
           });
           describe('when the input is inside a Formation `form`', function() {
             let $form;
-            let $formMock;
             let event;
             let formComponent;
             let formComponentMock;
@@ -138,7 +137,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
               formComponent = formComponentStamp();
               formComponentMock = sinon.mock(formComponent);
               $form = $('<form data-formation="1"></form>').data(bodyEventsHandler.formationDataKey, formComponent);
-              $formMock = sinon.mock($form);
               event = {target: $('<input type="text" />').get(0), which: keyCodes.ENTER};
             });
             describe('when the Form decides the key press event should progress', function() {
@@ -153,7 +151,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
 
                 $fnMock.verify();
                 $Mock.verify();
-                $formMock.verify();
                 bodyEventsHandlerMock.verify();
                 formComponentMock.verify();
               });
@@ -170,7 +167,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
 
                 $fnMock.verify();
                 $Mock.verify();
-                $formMock.verify();
                 bodyEventsHandlerMock.verify();
                 formComponentMock.verify();
               });
