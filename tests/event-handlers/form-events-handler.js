@@ -204,6 +204,40 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         formEventsHandlerMock.verify();
       });
     });
+
+    describe('`formValidationHandler()`', function() {
+      beforeEach(function() { jQueryEvent.namespace = 'formation'; });
+      describe('nothing should happen', function() {
+        it('when the event namespace is undefined or not `formation`', function () {
+          delete jQueryEvent.namespace; // so it's `undefined`
+          assert.isUndefined(formEventsHandler.formValidationHandler(jQueryEvent));
+          jQueryEvent.namespace = 'randomjibberish';
+          assert.isUndefined(formEventsHandler.formValidationHandler(jQueryEvent));
+        });
+      });
+      describe('something should happen when the event namespace is `formation`', function() {
+        it('should attempt to validate the target element and then trigger the forms `check-form-validity` event', function () {
+          jQueryEvent.target = $('<input type="tel" />').get(0);
+          let validator = { validate : function() {}};
+          let $form = $('<form></form>');
+          let $formMock = sinon.mock($form);
+          let validatorMock = sinon.mock(validator);
+          let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+          formEventsHandlerMock.expects('getValidator').once().returns(validator);
+          validatorMock.expects('validate').once().withArgs($(jQueryEvent.target));
+          formEventsHandlerMock.expects('get$form').once().returns($form);
+          $formMock.expects('trigger').once().withArgs('check-form-validity.formation');
+
+          formEventsHandler.formValidationHandler(jQueryEvent);
+
+          $formMock.verify();
+          $fnMock.verify();
+          formEventsHandlerMock.verify();
+          validatorMock.verify();
+        });
+      });
+    });
   });
 
   describe('`triggerValidationCheck()`', function() {

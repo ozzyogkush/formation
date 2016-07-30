@@ -215,8 +215,28 @@ const formEventsHandlerStamp = stampit()
       return this;
     },
 
+    /**
+     * Handle the form `validation-handler` event which will trigger a validator for
+     * the specific element/type being validated.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}         event         jQuery `validation-handler` Formation event object. Required.
+     */
     formValidationHandler(event) {
+      if (event.namespace === null || event.namespace !== "formation") {
+        return;
+      }
+      let $triggeringFormInput = $(event.target);
+      let validator = this.getValidator($triggeringFormInput);
 
+      validator.validate($triggeringFormInput);
+
+      this.get$form().trigger(this.getCheckFormValidityEventName());
     }
   })
   .init(function() {
