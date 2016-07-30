@@ -294,6 +294,10 @@ const formEventsHandlerStamp = stampit()
       return this.get$form().find(inputElementTypesToValidate);
     };
 
+    this.getValidator = ($formInputElemet) => {
+      // this is a stub
+    };
+
     /**
      * Adds a form submit event handler, as well as various change, keyup, focus, and
      * movement events to the various form input element types, as well as Formation-specific
