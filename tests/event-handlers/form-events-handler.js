@@ -240,6 +240,39 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
     });
   });
 
+  describe('`initFormEvents()`', function() {
+    describe('it is already initialized', function() {
+      it('sees that it already initialized and returns', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('log').once().withArgs('Initializing form events...');
+        formEventsHandlerMock.expects('getEventsInitialized').once().returns(true);
+        formEventsHandlerMock.expects('info').once().withArgs('Form events previously initialized for this form, skipping.');
+
+        assert.equal(formEventsHandler.initFormEvents(), formEventsHandler);
+
+        formEventsHandlerMock.verify();
+      });
+    });
+    describe('it is not yet initialized', function() {
+      it('sees that it has not yet initialized, and initializes', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('log').once().withArgs('Initializing form events...');
+        formEventsHandlerMock.expects('getEventsInitialized').once().returns(false);
+        formEventsHandlerMock.expects('info').never();
+        formEventsHandlerMock.expects('getLogConsole').once().returns(true);
+        formEventsHandlerMock.expects('initLogging').once().withArgs(true).returns(formEventsHandler);
+        formEventsHandlerMock.expects('addDefaultEventHandlers').once().returns(formEventsHandler);
+        formEventsHandlerMock.expects('triggerValidationCheck').once().returns(formEventsHandler);
+
+        assert.equal(formEventsHandler.initFormEvents(), formEventsHandler);
+
+        formEventsHandlerMock.verify();
+      });
+    });
+  });
+
   describe('`triggerValidationCheck()`', function() {
     it('should return `false` when the form events have not yet been initialized (as it is by default)', function() {
       let formEventsHandlerMock = sinon.mock(formEventsHandler);
