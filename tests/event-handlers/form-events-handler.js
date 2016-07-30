@@ -6,12 +6,119 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const buttonComponentStamp = require('../../src/components/button');
+const domNavigationStamp = require('../../src/utilities/dom-navigation');
+const eventEmitterEventsStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formEventsHandlerStamp = require('../../src/event-handlers/form-events-handler');
 
 describe('Objects created using the `formEventsHandlerStamp`', function() {
   let formEventsHandler;
+  let jQueryEvent;
   beforeEach(function() {
+    jQueryEvent = new $.Event();
     formEventsHandler = formEventsHandlerStamp();
+  });
+
+  describe('`formSubmitHandler()`', function() {
+    it('should emit a `formationFormSubmit` node event', function() {
+      const nodeEvents = eventEmitterEventsStamp();
+      const nodeEventsMock = sinon.mock(nodeEvents);
+
+      nodeEventsMock.expects('emit').once().withArgs('formationFormSubmit', jQueryEvent);
+      formEventsHandler = formEventsHandlerStamp({nodeEvents : nodeEvents});
+
+      assert.isTrue(formEventsHandler.formSubmitHandler(jQueryEvent));
+
+      nodeEventsMock.verify();
+    });
+  });
+
+  describe('`checkFormValidityHandler()`', function() {
+    beforeEach(function() { jQueryEvent.namespace = 'formation'; });
+    describe('nothing should happen', function() {
+      it('when the event namespace is undefined or not `formation`', function() {
+        delete jQueryEvent.namespace; // so it's `undefined`
+        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
+        jQueryEvent.namespace = 'randomjibberish';
+        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
+      });
+      it('when the continue (submit or preview) button cannot be found for the form', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+        formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(null);
+
+        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
+
+        formEventsHandlerMock.verify();
+      });
+      it('when continue button is already in a `submitting` state', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+        let button = buttonComponentStamp();
+        let buttonMock = sinon.mock(button);
+
+        formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(button);
+        buttonMock.expects('isSubmitting').once().returns(true);
+        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
+
+        formEventsHandlerMock.verify();
+        buttonMock.verify();
+      });
+    });
+    describe('something should happen', function() {
+      let formEventsHandlerMock;
+      let button;
+      let buttonMock;
+      let $visibleRequired;
+      let $visibleRequiredMock;
+      beforeEach(function() {
+        formEventsHandlerMock = sinon.mock(formEventsHandler);
+        button = buttonComponentStamp();
+        buttonMock = sinon.mock(button);
+        $visibleRequired = $('<input />,<select></select>,<textarea></textarea>');
+        $visibleRequiredMock = sinon.mock($visibleRequired);
+      });
+      describe('when all elements are not valid', function() {
+        it('disables the `continue` button', function() {
+          let $validRequiredFields = $('<input />,<select></select>');
+
+          formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(button);
+          buttonMock.expects('isSubmitting').once().returns(false);
+          formEventsHandlerMock.expects('get$requiredFields').once().returns($visibleRequired);
+          $visibleRequiredMock.expects('filter')
+            .once().withArgs(domNavigationStamp().visibleEnabledFilter)
+            .returns($visibleRequired);
+          $visibleRequiredMock.expects('filter')
+            .once().withArgs('[data-valid="1"]')
+            .returns($validRequiredFields);
+          buttonMock.expects('setEnabled').once().withArgs(false);
+
+          formEventsHandler.checkFormValidityHandler(jQueryEvent);
+
+          formEventsHandlerMock.verify();
+          buttonMock.verify();
+          $visibleRequiredMock.verify();
+        });
+      });
+      describe('when all elements are valid', function() {
+        it('enables the `continue` button', function() {
+          formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(button);
+          buttonMock.expects('isSubmitting').once().returns(false);
+          formEventsHandlerMock.expects('get$requiredFields').once().returns($visibleRequired);
+          $visibleRequiredMock.expects('filter')
+            .once().withArgs(domNavigationStamp().visibleEnabledFilter)
+            .returns($visibleRequired);
+          $visibleRequiredMock.expects('filter')
+            .once().withArgs('[data-valid="1"]')
+            .returns($visibleRequired);
+          buttonMock.expects('setEnabled').once().withArgs(true);
+
+          formEventsHandler.checkFormValidityHandler(jQueryEvent);
+
+          formEventsHandlerMock.verify();
+          buttonMock.verify();
+          $visibleRequiredMock.verify();
+        });
+      });
+    });
   });
 
   describe('`triggerValidationCheck()`', function() {

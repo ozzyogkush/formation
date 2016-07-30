@@ -377,6 +377,16 @@ const domNavigationStamp = stampit()
       if (includeHidden) {
         this.showOrHideElement($element, false);
       }
+    },
+
+    visibleEnabledFilter(index, element) {
+      const $element = $(element);
+      let hiddenOrDisabled = (
+        $element.hasClass('hidden') ||
+        $element.prop('disabled') === "disabled" ||
+        $element.hasClass('disabled')
+      );
+      return (! hiddenOrDisabled);
     }
   });
 
