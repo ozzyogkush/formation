@@ -154,22 +154,77 @@ const domNavigationStamp = stampit()
       return formComponent;
     },
 
+    /**
+     * Find the required fields in the specified `$form` element.
+     *
+     * @access      public
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
+     *
+     * @returns     {jQuery}                The set of required fields in the $form.
+     */
     findRequiredFields($form) {
       return $form.find(this.requiredFieldsSelector);
     },
 
+    /**
+     * Find the optional fields in the specified `$form` element.
+     *
+     * @access      public
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
+     *
+     * @returns     {jQuery}                The set of optional fields in the $form.
+     */
     findOptionalFields($form) {
       return $form.find(this.optionalFieldsSelector);
     },
 
+    /**
+     * Find the Formation submit button in the specified `$form` element.
+     *
+     * @access      public
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
+     *
+     * @returns     {jQuery}                The Formation submit button in the $form.
+     */
     findSubmitButton($form) {
       return $form.find(this.submitButtonSelector);
     },
 
+    /**
+     * Find the Formation preview button in the specified `$form` element.
+     *
+     * @access      public
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}      $form               The jQuery wrapped `form` element. Required.
+     *
+     * @returns     {jQuery}      The Formation preview button in the $form.
+     */
     findPreviewButton($form) {
       return $form.find(this.previewButtonSelector);
     },
 
+    /**
+     * Check whether `$element` is a custom Formation Bootstrap Radio or Checkbox widget.
+     *
+     * @access      public
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}      $element          The jQuery wrapped `form` element. Required.
+     *
+     * @returns     {jQuery}      The Formation submit button in the $form.
+     */
     elementIsCustomRadioOrCheckboxWidget($element) {
       let $currentForm = this.findCurrentFormByTarget($element);
       let tbr = false;
@@ -218,7 +273,7 @@ const domNavigationStamp = stampit()
         const $linkedElement = $(`#${linkedElementID}`);
         if ($linkedElement.length === 0) {
           throw new Error(
-            `Expected an element with a \`${this.linkedInputAttrKey}\` attribute equal to "\`${linkedElementID}\`".`
+            `Expected an element with a \`${this.linkedInputAttrKey}\` attribute equal to "${linkedElementID}".`
           );
         }
 
@@ -292,7 +347,7 @@ const domNavigationStamp = stampit()
       const $linkedElement = this.getLinkedElement($element);
       if ($linkedElement === null) {
         // no linked element, do nothing
-        return;
+        return this;
       }
       const $linkedInputFormGroup = $linkedElement.closest('.form-group');
 
@@ -306,6 +361,8 @@ const domNavigationStamp = stampit()
 
       // show and enable, or hide and disable, the $linkedElement.
       this.enableOrDisableLinkedElement($linkedElement, show, ! hasFormGroup);
+
+      return this;
     },
 
     /**
@@ -321,6 +378,8 @@ const domNavigationStamp = stampit()
      * @param	      {jQuery}      $linkedElement        jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     enableAndShow         Flag indicating whether to show/enable, or hide/disable, the element. Required.
      * @param       {Boolean}     elementHandlesHidden  Flag indicating whether the element handles its hidden/shown status. Required.
+     *
+     * @returns     {domNavigationStamp}
      */
     enableOrDisableLinkedElement($linkedElement, enableAndShow, elementHandlesHidden) {
       if (enableAndShow) {
@@ -329,6 +388,8 @@ const domNavigationStamp = stampit()
       else {
         this.hideDisableLinkedElement($linkedElement, elementHandlesHidden);
       }
+
+      return this;
     },
 
     /**
@@ -342,12 +403,16 @@ const domNavigationStamp = stampit()
      *
      * @param	      {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     removeHidden      Flag indicating whether to remove the 'hidden' class. Required.
+     *
+     * @returns     {domNavigationStamp}
      */
     showEnableLinkedElement($element, removeHidden) {
       this.enableOrDisableElement($element, true);
       if (removeHidden) {
         this.showOrHideElement($element, true);
       }
+
+      return this;
     },
 
     /**
@@ -363,6 +428,8 @@ const domNavigationStamp = stampit()
      *
      * @param       {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     includeHidden     Flag indicating whether to add the 'hidden' class. Required.
+     *
+     * @returns     {domNavigationStamp}
      */
     hideDisableLinkedElement($element, includeHidden) {
       const clearValue = (
@@ -377,8 +444,23 @@ const domNavigationStamp = stampit()
       if (includeHidden) {
         this.showOrHideElement($element, false);
       }
+
+      return this;
     },
 
+    /**
+     * Helper function to filter a jQuery set to return only elements that are
+     * not hidden nor disabled.
+     *
+     * @access      public
+     * @memberOf    {domNavigationStamp}
+     * @since       0.1.0
+     *
+     * @param       {int}           index         The index of the element in the jQuery set.
+     * @param       {jQuery}        element       The DOM element to check.
+     *
+     * @returns     {boolean}
+     */
     visibleEnabledFilter(index, element) {
       const $element = $(element);
       let hiddenOrDisabled = (
