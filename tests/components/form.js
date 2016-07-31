@@ -70,7 +70,7 @@ describe('Objects created using the `formComponentStamp`', function() {
   describe('`initForm()`', function() {
     describe('it has been initialized', function() {
       it('should log that it was already initialized and return itself', function() {
-        let $form = $('<form></form>');
+        let $form = $('<form></form>').data('formation-form', formComponent);
         formComponentMock.expects('initialized').once().returns(false);
         formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(formComponent);
         formComponentMock.expects('initialized').once().returns(true);

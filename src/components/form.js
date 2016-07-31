@@ -31,6 +31,16 @@ const formComponentStamp = stampit()
         this.getSubmitButton() !== null && this.getSubmitButton().exists()
       );
       return allowKeyEventToProgress;
+    },
+
+    registerRule(rule) {
+      if (typeof rule.isFormationRule !== 'function' || ! rule.isFormationRule()) {
+        throw new TypeError('The supplied `rule` object is not built from a `ruleStamp` stamp.');
+      }
+      //if rule is already registered, log it and return this
+      //if rule is not yet registered, attempt to add it, and return this
+      //  store the rule on the form component for later use. do we store it in an array, or custom object?
+      //  handle triggering sorting here?
     }
   })
   .init(function() {
@@ -109,14 +119,13 @@ const formComponentStamp = stampit()
      * @memberOf    {formComponentStamp}
      * @since       0.1.0
      *
-     * @param       {jQuery}        $form         The form to check for an attached `formComponent` instance. Required.
-     *
      * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
      */
-    let __formAlreadyInitialized = ($form) => {
+    let __formAlreadyInitialized = () => {
       let alreadyInit = this.initialized();
       try {
         let formComponent;
+        const $form = this.get$form();
         alreadyInit = (
           alreadyInit || (
             (formComponent = this.getFormComponentOfCurrentElement($form)) !== null &&
@@ -146,13 +155,13 @@ const formComponentStamp = stampit()
      * @returns     {formComponentStamp}
      */
     this.initForm = ($form) => {
-      if (__formAlreadyInitialized($form)) {
+      // Set the form so we can use it internally elsewhere.
+      __$form = $form;
+
+      if (__formAlreadyInitialized()) {
         this.warn('This `formComponent` is already initialized, skipping.');
         return this;
       }
-
-      // Set the form so we can use it internally elsewhere.
-      __$form = $form;
 
       // Get the required and optional fields, and the submit and preview buttons present in the form.
       __setRequiredFields();

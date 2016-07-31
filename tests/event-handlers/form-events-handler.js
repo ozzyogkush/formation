@@ -243,11 +243,14 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
   describe('`initFormEvents()`', function() {
     describe('it is already initialized', function() {
       it('sees that it already initialized and returns', function() {
+        let $form = $('<form></form>').data('formation-form', formEventsHandler);
         let formEventsHandlerMock = sinon.mock(formEventsHandler);
 
-        formEventsHandlerMock.expects('log').once().withArgs('Initializing form events...');
+        formEventsHandlerMock.expects('getEventsInitialized').once().returns(false);
+        formEventsHandlerMock.expects('get$form').once().returns($form);
+        formEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(formEventsHandler);
         formEventsHandlerMock.expects('getEventsInitialized').once().returns(true);
-        formEventsHandlerMock.expects('info').once().withArgs('Form events previously initialized for this form, skipping.');
+        formEventsHandlerMock.expects('warn').once().withArgs('Form events previously initialized for this form, skipping.');
 
         assert.equal(formEventsHandler.initFormEvents(), formEventsHandler);
 
@@ -256,11 +259,15 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
     });
     describe('it is not yet initialized', function() {
       it('sees that it has not yet initialized, and initializes', function() {
+        let $form = $('<form></form>');
+        let typeErrMsg = 'The `formation-form` data object is not set.';
+        let err = new TypeError(typeErrMsg);
         let formEventsHandlerMock = sinon.mock(formEventsHandler);
 
-        formEventsHandlerMock.expects('log').once().withArgs('Initializing form events...');
         formEventsHandlerMock.expects('getEventsInitialized').once().returns(false);
-        formEventsHandlerMock.expects('info').never();
+        formEventsHandlerMock.expects('get$form').once().returns($form);
+        formEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).throws(err);
+        formEventsHandlerMock.expects('info').once().withArgs(err);
         formEventsHandlerMock.expects('getLogConsole').once().returns(true);
         formEventsHandlerMock.expects('initLogging').once().withArgs(true).returns(formEventsHandler);
         formEventsHandlerMock.expects('addDefaultEventHandlers').once().returns(formEventsHandler);

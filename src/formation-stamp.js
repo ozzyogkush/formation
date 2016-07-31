@@ -2,7 +2,10 @@
 
 const bodyEventsHandlerStamp = require('./event-handlers/body-events-handler');
 const consoleLoggerStamp = require('./logging/console');
+const defaultRulesStamp = require('./rules/default-rules');
+const domNavigationStamp = require('./utilities/dom-navigation');
 const formEventsHandlerStamp = require('./event-handlers/form-events-handler');
+const ruleStamp = require('./rules/rule');
 
 const stampit = require('stampit');
 const $ = require('jquery');
@@ -79,12 +82,63 @@ const formationStamp = stampit()
       });
       this.initBodyEvents(bodyEventsHandler);
       this.initForms();
+      this.registerDefaultRules();
+
+      return this;
+    },
+
+    initForm($form) {
+      try {
+        // Set up the Form but only if it has the proper DOM.
+        let formationComponent = formEventsHandlerStamp({
+          formationSelector: this.getFormationSelector(),
+          nodeEvents : this.nodeEvents
+        }).initLogging(this.getLogConsole());
+
+        formationComponent.initForm($form.eq(0));
+        formationComponent.initFormEvents();
+      }
+      catch (exception) {
+        this.error(exception);
+      }
 
       return this;
     },
 
     getFormationSelector() {
       return `[${this.formationDataAttrKey}="1"]`;
+    },
+
+    /**
+     * Attempt to register the `ruleName` rule with each form's formComponent.
+     * Handle when things go wrong.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @param       {String}      ruleName                The name of the rule to be registered. Required.
+     * @param       {Function}    ruleCallbackMethod      The callback method to be run when the rule is checked. Required.
+     */
+    registerRule(ruleName, ruleCallbackMethod) {
+      if (typeof ruleName !== 'string') {
+        throw TypeError('Expected `ruleName` param to be a `String`, was a `' + typeof ruleName + '`.');
+      }
+      if (typeof ruleCallbackMethod !== 'function') {
+        throw TypeError('Expected `ruleCallbackMethod` param to be a `Function`, was a `' + typeof ruleCallbackMethod + '`.');
+      }
+      this.get$forms().each((index, form) => {
+        try {
+          const $form = $(form);
+          const rule = ruleStamp({name: ruleName, callback: ruleCallbackMethod});
+          this.getFormComponentOfCurrentElement($form).registerRule(rule);
+        }
+        catch (exception) {
+          this.error(exception);
+        }
+      });
+
+      return this;
     }
   })
   .init(function() {
@@ -255,16 +309,20 @@ const formationStamp = stampit()
     this.initForms = () => {
       // Set up the individual forms.
       $forms.each((index, form) => {
-        try {
-          let $form = $(form);
-          // Set up the Form but only if it has the proper DOM.
-          let formationComponent = formEventsHandlerStamp({
-            formationSelector: this.getFormationSelector(),
-            nodeEvents : this.nodeEvents
-          }).initLogging(this.getLogConsole());
+        let $form = $(form);
 
-          formationComponent.initForm($form);
-          formationComponent.initFormEvents();
+        this.initForm($form);
+      });
+
+      return this;
+    };
+
+    this.registerDefaultRules = () => {
+      const defaultRules = defaultRulesStamp();
+
+      $.each(defaultRules.getRules(), (index, rule) => {
+        try {
+          this.registerRule(rule.name, rule.callback);
         }
         catch (exception) {
           this.error(exception);
@@ -275,6 +333,6 @@ const formationStamp = stampit()
     };
   });
 
-const formationLoggerStamp = formationStamp.compose(consoleLoggerStamp);
+const formationLoggerStamp = formationStamp.compose(domNavigationStamp, consoleLoggerStamp);
 
 module.exports = formationLoggerStamp;

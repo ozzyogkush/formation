@@ -5,6 +5,7 @@ const $ = require('jquery');
 
 const domNavigationStamp = stampit()
   .refs({
+    formationDataAttrKey : 'data-formation',
 
     /**
      * The selector used to find a Formation `form` element.
@@ -120,6 +121,10 @@ const domNavigationStamp = stampit()
      * @returns     {jQuery}       The jQuery wrapped `form` element.
      */
     findCurrentFormByTarget($element) {
+      if ($element.prop('tagName').toLowerCase() === 'form' &&
+          $element.attr(this.formationDataAttrKey) !== undefined) {
+        return $element;
+      }
       return $element.closest(this.formationSelector);
     },
 
