@@ -6,32 +6,20 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const eventEmitterStamp = require('../src/utilities/node-event-emitter-stamp');
 const formationStamp = require('../src/formation-stamp');
 const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
 
 describe('Objects created using the `formationStamp`', function() {
   let formation;
   beforeEach(function() {
-    formation = formationStamp();
+    formation = formationStamp({ nodeEvents: eventEmitterStamp() });
   });
 
   describe('`readyDocument()`', function() {
-    it('should enable logging when debugging is enabled, Enter Formation, and return itself', function() {
+    it('should Enter Formation and return itself', function() {
       let formationMock = sinon.mock(formation);
 
-      formationMock.expects('getDebug').once().returns(true);
-      formationMock.expects('setLogConsole').once().withArgs(true);
-      formationMock.expects('enterFormation').once();
-
-      assert.equal(formation.readyDocument(), formation);
-
-      formationMock.verify();
-    });
-    it('should disable logging when debugging is disable, Enter Formation, and return itself', function() {
-      let formationMock = sinon.mock(formation);
-
-      formationMock.expects('getDebug').once().returns(false);
-      formationMock.expects('setLogConsole').once().withArgs(false);
       formationMock.expects('enterFormation').once();
 
       assert.equal(formation.readyDocument(), formation);
@@ -173,13 +161,13 @@ describe('Objects created using the `formationStamp`', function() {
     describe('when the body events have not yet been initialized', function() {
       it('logs initialization, and calls `setLogConsole()` and `addDefaultEventHandlers()` on the new instance', function() {
         let formationMock = sinon.mock(formation);
-        let bodyEventsHandler = bodyEventsHandlerStamp();
+        let bodyEventsHandler = bodyEventsHandlerStamp({ nodeEvents : eventEmitterStamp() });
         let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
 
         formationMock.expects('log').once().withArgs('Initializing body events...');
         formationMock.expects('getLogConsole').once().returns(true);
         bodyEventsHandlerMock.expects('setLogConsole').once().withArgs(true).returns(bodyEventsHandler);
-        bodyEventsHandlerMock.expects('getBodyEventsInitialized').once().returns(false);
+        bodyEventsHandlerMock.expects('getEventsInitialized').once().returns(false);
         bodyEventsHandlerMock.expects('addDefaultEventHandlers').once().returns(bodyEventsHandler);
 
         assert.equal(formation.initBodyEvents(bodyEventsHandler), formation);
@@ -191,14 +179,14 @@ describe('Objects created using the `formationStamp`', function() {
     describe('when the body events have been initialized', function() {
       it('logs initialization, calls `setLogConsole()`, but does not call `addDefaultEventHandlers()` on the new instance', function() {
         let formationMock = sinon.mock(formation);
-        let bodyEventsHandler = bodyEventsHandlerStamp();
+        let bodyEventsHandler = bodyEventsHandlerStamp({ nodeEvents : eventEmitterStamp() });
         let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
 
         formationMock.expects('log').once().withArgs('Initializing body events...');
         formationMock.expects('info').once().withArgs('Body events previously initialized, skipping.');
         formationMock.expects('getLogConsole').once().returns(true);
         bodyEventsHandlerMock.expects('setLogConsole').once().withArgs(true).returns(bodyEventsHandler);
-        bodyEventsHandlerMock.expects('getBodyEventsInitialized').once().returns(true);
+        bodyEventsHandlerMock.expects('getEventsInitialized').once().returns(true);
         bodyEventsHandlerMock.expects('addDefaultEventHandlers').never();
 
         assert.equal(formation.initBodyEvents(bodyEventsHandler), formation);

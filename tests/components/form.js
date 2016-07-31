@@ -6,13 +6,14 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const eventEmitterStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formComponentStamp = require('../../src/components/form');
 
 describe('Objects created using the `formComponentStamp`', function() {
   let formComponent;
   let formComponentMock;
   beforeEach(function() {
-    formComponent = formComponentStamp();
+    formComponent = formComponentStamp({ nodeEvents : eventEmitterStamp() });
     formComponentMock = sinon.mock(formComponent);
   });
 
@@ -89,7 +90,7 @@ describe('Objects created using the `formComponentStamp`', function() {
             formComponentMock.expects('initialized').once().returns(false);
             formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).throws(err);
             formComponentMock.expects('findRequiredFields').once().withArgs($form).returns($());
-            formComponentMock.expects('error').once().withArgs(err);
+            formComponentMock.expects('info').once().withArgs(err);
 
             assert.throws(
               () => {formComponent.initForm($form);},

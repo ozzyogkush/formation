@@ -2,11 +2,10 @@
 
 const bodyEventsHandlerStamp = require('./event-handlers/body-events-handler');
 const consoleLoggerStamp = require('./logging/console');
-const formComponentStamp = require('./components/form');
+const formEventsHandlerStamp = require('./event-handlers/form-events-handler');
 
 const stampit = require('stampit');
 const $ = require('jquery');
-const jQuery = $;
 
 /**
  * This stamp lets you initialize Formation, and turn debug on or off.
@@ -20,7 +19,19 @@ const jQuery = $;
  */
 const formationStamp = stampit()
   .refs({
-    formationDataAttrKey : 'data-formation'
+    formationDataAttrKey : 'data-formation',
+
+    /**
+     * A singleton passed along so we have some semblance of
+     * a global Formation event emitter.
+     *
+     * @access      public
+     * @type        {eventEmitterStamp}
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    nodeEvents : null
   })
   .methods({
 
@@ -35,9 +46,6 @@ const formationStamp = stampit()
      * @returns     this            Return the instance of the generated object so we can chain methods.
      */
     readyDocument() {
-      // TODO - refactor setDebug() to emit an event instead that this object listens to in order to call setLogConsole()!
-      this.setLogConsole(this.getDebug());
-
       // DOM is ready, so Enter Formation!
       this.enterFormation();
 
@@ -66,6 +74,7 @@ const formationStamp = stampit()
 
       let bodyEventsHandler = bodyEventsHandlerStamp({
         $body: $(document.body),
+        nodeEvents : this.nodeEvents,
         formationSelector: this.getFormationSelector()
       });
       this.initBodyEvents(bodyEventsHandler);
@@ -123,6 +132,8 @@ const formationStamp = stampit()
       }
 
       debug = newVal;
+
+      this.nodeEvents.emit(this.nodeEvents.getNodeSetDebugEvent(), newVal);
 
       // So we can chain methods.
       return this;
@@ -209,15 +220,18 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
+     * @param       {bodyEventsHandlerStamp}        bodyEventsHandler     Object which is composed of a `bodyEventsHandlerStamp`. Required.
+     *
      * @returns     {formationStamp}
      */
     this.initBodyEvents = (bodyEventsHandler) => {
       this.log('Initializing body events...');
 
+      // TODO - do check on `bodyEventsHandler` before setting `__bodyEventsHandler`
       __bodyEventsHandler = bodyEventsHandler;
-      __bodyEventsHandler.setLogConsole(this.getLogConsole());
+      __bodyEventsHandler.initLogging(this.getLogConsole());
 
-      if (__bodyEventsHandler.getBodyEventsInitialized()) {
+      if (__bodyEventsHandler.getEventsInitialized()) {
         this.info('Body events previously initialized, skipping.');
         return this;
       }
@@ -228,17 +242,29 @@ const formationStamp = stampit()
       return this;
     };
 
+    /**
+     * For each registered Formation `form`, initialize its DOM and the
+     * various events which should be handled.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @returns     {formationStamp}
+     */
     this.initForms = () => {
       // Set up the individual forms.
       $forms.each((index, form) => {
         try {
           let $form = $(form);
           // Set up the Form but only if it has the proper DOM.
-          let formationComponent = formComponentStamp({
-            formationSelector: this.getFormationSelector()
-          }).setLogConsole(this.getLogConsole());
+          let formationComponent = formEventsHandlerStamp({
+            formationSelector: this.getFormationSelector(),
+            nodeEvents : this.nodeEvents
+          }).initLogging(this.getLogConsole());
 
           formationComponent.initForm($form);
+          formationComponent.initFormEvents();
         }
         catch (exception) {
           this.error(exception);

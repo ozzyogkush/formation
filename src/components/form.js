@@ -1,12 +1,27 @@
 'use strict';
 
+const buttonComponentStamp = require('./button');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
-const buttonComponentStamp = require('./button');
+
 const stampit = require('stampit');
 const $ = require('jquery');
 
 const formComponentStamp = stampit()
+  .refs({
+
+    /**
+     * A singleton passed along so we have some semblance of
+     * a global Formation event emitter.
+     *
+     * @access      public
+     * @type        {eventEmitterStamp}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    nodeEvents : null
+  })
   .methods({
     shouldBodyKeyPressEventsProgress() {
       // Does the current form have a submit button?
@@ -45,6 +60,19 @@ const formComponentStamp = stampit()
      * @default     $()
      */
     let __$form = $();
+
+    /**
+     * Returns the jQuery object containing the initialized form node.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {jQuery}       __$form
+     */
+    this.get$form = () => {
+      return __$form;
+    };
 
     /**
      * The initialization status.
@@ -98,7 +126,7 @@ const formComponentStamp = stampit()
       }
       catch (e) {
         // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
-        this.error(e);
+        this.info(e);
       }
       return alreadyInit;
     };
@@ -107,7 +135,7 @@ const formComponentStamp = stampit()
      * The meat of this Stamp. Will initialize a jQuery wrapped `form` and assign it internally,
      * setting all the required and optional fields, the form buttons (such as submit and preview),
      * and initializing the fields' current validation status. If everything went without error,
-     * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`
+     * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`.
      *
      * @access      public
      * @memberOf    {formComponentStamp}
@@ -152,6 +180,19 @@ const formComponentStamp = stampit()
     let __$requiredFields = $();
 
     /**
+     * Returns the jQuery object containing the elements in this form that are required to be validated.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {jQuery}       __$requiredFields
+     */
+    this.get$requiredFields = () => {
+      return __$requiredFields;
+    };
+
+    /**
      * Find the required fields and set them to the private `__$requiredFields` var.
      *
      * @throws      Error       iff the set of required fields is empty.
@@ -180,6 +221,19 @@ const formComponentStamp = stampit()
      * @default     $()
      */
     let __$optionalFields = $();
+
+    /**
+     * Returns the jQuery object containing the elements in this form that are optional to be validated.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {jQuery}       __$optionalFields
+     */
+    this.get$optionalFields = () => {
+      return __$optionalFields;
+    };
 
     /**
      * Find the optional fields and set them to the private `__$optionalFields` var.
@@ -258,6 +312,20 @@ const formComponentStamp = stampit()
       return __previewButton;
     };
 
+    this.getSubmitWithFallbackPreviewButton = () => {
+      const submitButton = this.getSubmitButton();
+      if (submitButton !== null && submitButton.exists()) {
+        return submitButton;
+      }
+      const previewButton = this.getPreviewButton();
+      if (previewButton !== null && previewButton.exists()) {
+        return previewButton;
+      }
+
+      // We don't have a submit or preview button, so there's really nothing to do.
+      return null;
+    };
+
     /**
      * Create new `buttonComponents` to manage the Submit and Preview buttons
      * for this form, and set them to the private `__submitButton` and
@@ -274,13 +342,22 @@ const formComponentStamp = stampit()
     let __initFormButtons = () => {
       __submitButton = buttonComponentStamp({
         $button : this.findSubmitButton(__$form),
-        loadingText : 'Submitting, please wait...'
-      }).setLoadingHTML();
+        loadingText : 'Submitting, please wait...',
+        nodeEvents : this.nodeEvents
+      }).initLogging(this.getLogConsole())
+        .addHandleFormSubmitListener()
+        .setLoadingHTML();
       __previewButton = buttonComponentStamp({
         $button : this.findPreviewButton(__$form),
-        loadingText : 'Rendering preview, please wait...'
-      }).setLoadingHTML();
+        loadingText : 'Rendering preview, please wait...',
+        nodeEvents : this.nodeEvents
+      }).initLogging(this.getLogConsole())
+        .addHandleFormSubmitListener()
+        .setLoadingHTML();
     };
   });
 
-module.exports = formComponentStamp.compose(domNavigationStamp, consoleLoggerStamp);
+module.exports = formComponentStamp.compose(
+  domNavigationStamp,
+  consoleLoggerStamp
+);
