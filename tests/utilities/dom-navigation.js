@@ -117,7 +117,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
         $input.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-required="1"]').returns($());
+        $formMock.expects('find').once().withArgs('[data-fv-required="1"]').returns($());
         domNavigation.findRequiredFields($form);
 
         $formMock.verify();
@@ -125,12 +125,12 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
     describe('when there are required fields inside the specified `form` node', function() {
       it('should return a non-empty jQuery set', function() {
-        let $element = $('<input type="text" data-required="1" />');
+        let $element = $('<input type="text" data-fv-required="1" />');
         let $form = $('<form data-formation="1"></form>');
         $element.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-required="1"]').returns($element);
+        $formMock.expects('find').once().withArgs('[data-fv-required="1"]').returns($element);
         domNavigation.findRequiredFields($form);
 
         $formMock.verify();
@@ -146,7 +146,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
         $input.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-optional="1"]').returns($());
+        $formMock.expects('find').once().withArgs('[data-fv-optional="1"]').returns($());
         domNavigation.findOptionalFields($form);
 
         $formMock.verify();
@@ -154,12 +154,12 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
     describe('when there are optional fields inside the specified `form` node', function() {
       it('should return a non-empty jQuery set', function() {
-        let $element = $('<input type="text" data-optional="1" />');
+        let $element = $('<input type="text" data-fv-optional="1" />');
         let $form = $('<form data-formation="1"></form>');
         $element.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-optional="1"]').returns($element);
+        $formMock.expects('find').once().withArgs('[data-fv-optional="1"]').returns($element);
         domNavigation.findOptionalFields($form);
 
         $formMock.verify();
@@ -175,7 +175,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
         $button.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-form-submit]').returns($());
+        $formMock.expects('find').once().withArgs('[data-fv-form-submit]').returns($());
         domNavigation.findSubmitButton($form);
 
         $formMock.verify();
@@ -183,12 +183,12 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
     describe('when there is a Formation submit button inside the specified `form` node', function() {
       it('should return a non-empty jQuery set', function() {
-        let $button = $('<button type="submit" data-form-submit="1">Go</button>');
+        let $button = $('<button type="submit" data-fv-form-submit="1">Go</button>');
         let $form = $('<form data-formation="1"></form>');
         $button.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-form-submit]').returns($button);
+        $formMock.expects('find').once().withArgs('[data-fv-form-submit]').returns($button);
         domNavigation.findSubmitButton($form);
 
         $formMock.verify();
@@ -204,7 +204,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
         $button.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-form-preview]').returns($());
+        $formMock.expects('find').once().withArgs('[data-fv-form-preview]').returns($());
         domNavigation.findPreviewButton($form);
 
         $formMock.verify();
@@ -212,12 +212,12 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
     describe('when there is a Formation submit button inside the specified `form` node', function() {
       it('should return a non-empty jQuery set', function() {
-        let $button = $('<button type="button" data-form-preview="1">Preview</button>');
+        let $button = $('<button type="button" data-fv-form-preview="1">Preview</button>');
         let $form = $('<form data-formation="1"></form>');
         $button.wrap($form);
         let $formMock = sinon.mock($form);
 
-        $formMock.expects('find').once().withArgs('[data-form-preview]').returns($button);
+        $formMock.expects('find').once().withArgs('[data-fv-form-preview]').returns($button);
         domNavigation.findPreviewButton($form);
 
         $formMock.verify();
@@ -292,7 +292,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
         let $source = $('<input type="checkbox" />');
         let $sourceMock = sinon.mock($source);
 
-        $sourceMock.expects('attr').once().withArgs('data-linked-input').returns(undefined);
+        $sourceMock.expects('attr').once().withArgs('data-fv-linked-input').returns(undefined);
 
         assert.isNull(domNavigation.getLinkedElement($source));
 
@@ -301,15 +301,15 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
     describe('when the linked element is expected but not found in the DOM', function() {
       it('throws an error', function() {
-        let $source = $('<input type="checkbox" data-linked-input="some-other-id" />');
+        let $source = $('<input type="checkbox" data-fv-linked-input="some-other-id" />');
         let $sourceMock = sinon.mock($source);
 
-        $sourceMock.expects('attr').once().withArgs('data-linked-input').returns('some-other-id');
+        $sourceMock.expects('attr').once().withArgs('data-fv-linked-input').returns('some-other-id');
 
         assert.throws(
           () => { domNavigation.getLinkedElement($source); },
           Error,
-          'Expected an element with a `data-linked-input` attribute equal to "some-other-id".'
+          'Expected an element with a `data-fv-linked-input` attribute equal to "some-other-id".'
         );
 
         $sourceMock.verify();
@@ -319,10 +319,10 @@ describe('Objects created using the `domNavigationStamp`', function() {
       it('returns the linked element', function() {
         let $someOtherElement = $('<input id="some-other-id" />');
         $('body').append($someOtherElement);
-        let $source = $('<input type="checkbox" data-linked-input="some-other-id" />');
+        let $source = $('<input type="checkbox" data-fv-linked-input="some-other-id" />');
         let $sourceMock = sinon.mock($source);
 
-        $sourceMock.expects('attr').once().withArgs('data-linked-input').returns('some-other-id');
+        $sourceMock.expects('attr').once().withArgs('data-fv-linked-input').returns('some-other-id');
 
         assert.deepEqual(domNavigation.getLinkedElement($source), $('#some-other-id'));
 
@@ -489,7 +489,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
           let $element = $('<input type="text" />');
           let $elementMock = sinon.mock($element);
 
-          $elementMock.expects('attr').twice().withArgs('data-toggle-override-text').returns('0');
+          $elementMock.expects('attr').twice().withArgs('data-fv-toggle-override-text').returns('0');
           domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
           domNavigationMock.expects('showOrHideElement').never().returns(domNavigation);
           assert.equal(domNavigation.hideDisableLinkedElement($element, false), domNavigation);
@@ -503,7 +503,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
           let $element = $('<input type="text" />');
           let $elementMock = sinon.mock($element);
 
-          $elementMock.expects('attr').twice().withArgs('data-toggle-override-text').returns('0');
+          $elementMock.expects('attr').twice().withArgs('data-fv-toggle-override-text').returns('0');
           domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
           domNavigationMock.expects('showOrHideElement').once().withArgs($element, false).returns(domNavigation);
           assert.equal(domNavigation.hideDisableLinkedElement($element, true), domNavigation);
@@ -518,9 +518,9 @@ describe('Objects created using the `domNavigationStamp`', function() {
         let $element = $('<input type="text" />');
         let $elementMock = sinon.mock($element);
 
-        $elementMock.expects('attr').once().withArgs('data-toggle-override-text').returns(undefined);
+        $elementMock.expects('attr').once().withArgs('data-fv-toggle-override-text').returns(undefined);
         $elementMock.expects('val').once().withArgs('').returns($element);
-        $elementMock.expects('attr').once().withArgs('data-valid', 0).returns($element);
+        $elementMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($element);
         domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
         domNavigationMock.expects('showOrHideElement').never().returns(domNavigation);
         assert.equal(domNavigation.hideDisableLinkedElement($element, false), domNavigation);

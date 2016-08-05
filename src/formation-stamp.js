@@ -87,6 +87,18 @@ const formationStamp = stampit()
       return this;
     },
 
+    /**
+     * Allow consumers of Formation to initialize forms that may be added
+     * to the DOM after auto-initialization of the DOM.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}              $form         The jQuery extended `form` element to be initialized. Required.
+     *
+     * @returns     {formationStamp}      this
+     */
     initForm($form) {
       try {
         // Set up the Form but only if it has the proper DOM.
@@ -211,7 +223,7 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
-     * @returns    {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
+     * @returns     {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
      */
     this.get$forms = () => {
       return $forms;

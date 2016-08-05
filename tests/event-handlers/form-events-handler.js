@@ -87,7 +87,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
             .once().withArgs(domNavigationStamp().visibleEnabledFilter)
             .returns($visibleRequired);
           $visibleRequiredMock.expects('filter')
-            .once().withArgs('[data-valid="1"]')
+            .once().withArgs('[data-fv-valid="1"]')
             .returns($validRequiredFields);
           buttonMock.expects('setEnabled').once().withArgs(false);
 
@@ -107,7 +107,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
             .once().withArgs(domNavigationStamp().visibleEnabledFilter)
             .returns($visibleRequired);
           $visibleRequiredMock.expects('filter')
-            .once().withArgs('[data-valid="1"]')
+            .once().withArgs('[data-fv-valid="1"]')
             .returns($visibleRequired);
           buttonMock.expects('setEnabled').once().withArgs(true);
 
