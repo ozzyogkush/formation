@@ -2,7 +2,6 @@
 
 const bodyEventsHandlerStamp = require('./event-handlers/body-events-handler');
 const consoleLoggerStamp = require('./logging/console');
-const defaultRulesStamp = require('./rules/default-rules');
 const domNavigationStamp = require('./utilities/dom-navigation');
 const formEventsHandlerStamp = require('./event-handlers/form-events-handler');
 const ruleStamp = require('./rules/rule');
@@ -46,7 +45,7 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
-     * @returns     this            Return the instance of the generated object so we can chain methods.
+     * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
      */
     readyDocument() {
       // DOM is ready, so Enter Formation!
@@ -62,7 +61,7 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
-     * @returns     this            Return the instance of the generated object so we can chain methods.
+     * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
      */
     enterFormation() {
       this.log('Initializing Formation...');
@@ -82,7 +81,6 @@ const formationStamp = stampit()
       });
       this.initBodyEvents(bodyEventsHandler);
       this.initForms();
-      this.registerDefaultRules();
 
       return this;
     },
@@ -129,10 +127,19 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
+     * @param       {String}      elementType             The type of element to which this rule applies. Required.
      * @param       {String}      ruleName                The name of the rule to be registered. Required.
      * @param       {Function}    ruleCallbackMethod      The callback method to be run when the rule is checked. Required.
+     *
+     * @returns     {formationStamp}    this
      */
-    registerRule(ruleName, ruleCallbackMethod) {
+    registerRule(elementType, ruleName, ruleCallbackMethod) {
+      if (typeof elementType !== 'string') {
+        throw TypeError('Expected `elementType` param to be a `String`, was a `' + typeof elementType + '`.');
+      }
+      if ($.inArray(elementType, this.getSupportedElementTypes()) === -1) {
+        throw TypeError('Specified `elementType` `' + elementType + '` is not supported.');
+      }
       if (typeof ruleName !== 'string') {
         throw TypeError('Expected `ruleName` param to be a `String`, was a `' + typeof ruleName + '`.');
       }
@@ -143,7 +150,7 @@ const formationStamp = stampit()
         try {
           const $form = $(form);
           const rule = ruleStamp({name: ruleName, callback: ruleCallbackMethod});
-          this.getFormComponentOfCurrentElement($form).registerRule(rule);
+          this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
         }
         catch (exception) {
           this.error(exception);
@@ -269,6 +276,36 @@ const formationStamp = stampit()
     };
 
     /**
+     * The types of elements that are supported by Formation.
+     *
+     * @private
+     * @access      private
+     * @const
+     * @type        {Array}
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     */
+    const __supportedElementTypes = [
+      'text',
+      'checkbox',
+      'radio',
+      'select'
+    ];
+
+    /**
+     * Return the value of the private `__supportedElementTypes` object.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Array}       __supportedElementTypes         Types of elements supported by Formation.
+     */
+    this.getSupportedElementTypes = () => {
+      return __supportedElementTypes;
+    };
+
+    /**
      * Object composed of a {bodyEventsHandlerStamp} which handles body events.
      *
      * @access      public
@@ -324,21 +361,6 @@ const formationStamp = stampit()
         let $form = $(form);
 
         this.initForm($form);
-      });
-
-      return this;
-    };
-
-    this.registerDefaultRules = () => {
-      const defaultRules = defaultRulesStamp();
-
-      $.each(defaultRules.getRules(), (index, rule) => {
-        try {
-          this.registerRule(rule.name, rule.callback);
-        }
-        catch (exception) {
-          this.error(exception);
-        }
       });
 
       return this;

@@ -2,19 +2,20 @@
 
 const eventDefinitionsStamp = require('../event-handlers/event-definitions-stamp');
 const ruleStamp = require('./rule');
+const ruleSetStamp = require('./rule-set');
 const validityChecksStamp = require('../utilities/validity-checks');
 
 const stampit = require('stampit');
 const $ = require('jquery');
 
-const defaultRulesStamp = stampit()
+const textDefaultRulesStamp = stampit()
   .methods({
 
     /**
      * When a field is required, it's trimmed value must not be empty.
      *
      * @access      public
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
@@ -31,7 +32,7 @@ const defaultRulesStamp = stampit()
      * or equal to the specified attribute value.
      *
      * @access      public
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
@@ -52,7 +53,7 @@ const defaultRulesStamp = stampit()
      * or equal to the specified attribute value.
      *
      * @access      public
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
@@ -75,7 +76,7 @@ const defaultRulesStamp = stampit()
      * if you prefer.
      *
      * @access      public
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
@@ -117,7 +118,7 @@ const defaultRulesStamp = stampit()
      *
      * @throws      Error           iff the other field to match is not in the DOM
      * @access      public
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
@@ -158,7 +159,7 @@ const defaultRulesStamp = stampit()
      * @access      private
      * @const
      * @type        Array
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      */
     const __rules = [
@@ -188,7 +189,7 @@ const defaultRulesStamp = stampit()
      * Return the value of the private `__rules` object.
      *
      * @access      public
-     * @memberOf    {defaultRulesStamp}
+     * @memberOf    {textDefaultRulesStamp}
      * @since       0.1.0
      *
      * @returns     {Array}     __rules     The default rules we've defined.
@@ -198,4 +199,4 @@ const defaultRulesStamp = stampit()
     };
   });
 
-module.exports = defaultRulesStamp.compose(eventDefinitionsStamp, validityChecksStamp);
+module.exports = ruleSetStamp.compose(textDefaultRulesStamp);

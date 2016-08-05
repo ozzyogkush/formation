@@ -38,7 +38,6 @@ describe('Objects created using the `formationStamp`', function() {
         formationMock.expects('info').once().withArgs('No Formation forms present, exiting.');
         formationMock.expects('initBodyEvents').never();
         formationMock.expects('initForms').never();
-        formationMock.expects('registerDefaultRules').never();
 
         assert.equal(formation.enterFormation(), formation);
 
@@ -53,7 +52,6 @@ describe('Objects created using the `formationStamp`', function() {
         formationMock.expects('get$forms').once().returns($('<form data-formation="1"></form>'));
         formationMock.expects('initBodyEvents').once().returns(formation);
         formationMock.expects('initForms').once().returns(formation);
-        formationMock.expects('registerDefaultRules').once().returns(formation);
 
         assert.equal(formation.enterFormation(), formation);
 
