@@ -12,7 +12,8 @@ const textDefaultRulesStamp = stampit()
   .methods({
 
     /**
-     * When a field is required, it's trimmed value must not be empty.
+     * The default text-based input elements rule is that
+     * it's trimmed value must not be empty.
      *
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
@@ -23,7 +24,7 @@ const textDefaultRulesStamp = stampit()
      *
      * @returns     {Boolean}
      */
-    dataFvRequired($element, attribute) {
+    dataFvDefault($element, attribute) {
       return $element.val().trim() !== '';
     },
 
@@ -152,8 +153,8 @@ const textDefaultRulesStamp = stampit()
   .init(function() {
 
     /**
-     * The default rules Formation against which elements will be checked
-     * during validation.
+     * The default, pre-defined rules Formation will check during validation
+     * of text-based input elements.
      *
      * @private
      * @access      private
@@ -164,8 +165,8 @@ const textDefaultRulesStamp = stampit()
      */
     const __rules = [
       ruleStamp({
-        name : 'required',
-        callback : this.dataFvRequired
+        name : 'default',
+        callback : this.dataFvDefault
       }),
       ruleStamp({
         name : 'min-length',
