@@ -40,6 +40,19 @@ const ruleSetStamp = stampit()
 
       return this;
     };
+
+    /**
+     * Return an empty array. This method is a stub.
+     *
+     * @access      public
+     * @memberOf    {ruleSetStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Array}     An empty array;
+     */
+    this.getRules = () => {
+      return [];
+    };
   });
 
 module.exports = ruleSetStamp.compose(eventDefinitionsStamp, validityChecksStamp);
