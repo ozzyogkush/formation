@@ -4,6 +4,7 @@ const buttonComponentStamp = require('./button');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
 const ruleSetStamp = require('../rules/rule-set');
+const radioDefaultRulesStamp = require('../rules/radio-default-rules');
 const textDefaultRulesStamp = require('../rules/text-default-rules');
 
 const stampit = require('stampit');
@@ -407,7 +408,7 @@ const formComponentStamp = stampit()
     let __supportedElementTypesRuleSets = {
       'text' : textDefaultRulesStamp(),
       'checkbox' : null,
-      'radio' : null,
+      'radio' : radioDefaultRulesStamp(),
       'select': null
     };
 
