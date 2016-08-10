@@ -79,7 +79,7 @@ const formEventsHandlerStamp = stampit()
       // Get the list of required, enabled, and visible fields.
       let $visibleRequiredFields = this.get$requiredFields().filter(this.visibleEnabledFilter);
 
-      // Grab the list of valid visible fields.
+      // Grab the list of valid visible required fields.
       const $validRequiredFields = $visibleRequiredFields.filter(`[${this.validAttrKey}="1"]`);
 
       // Everything is basically valid if all required fields are valid...

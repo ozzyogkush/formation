@@ -1,9 +1,7 @@
 'use strict';
 
-const eventDefinitionsStamp = require('../event-handlers/event-definitions-stamp');
 const ruleStamp = require('./rule');
 const ruleSetStamp = require('./rule-set');
-const validityChecksStamp = require('../utilities/validity-checks');
 
 const stampit = require('stampit');
 const $ = require('jquery');
@@ -166,23 +164,23 @@ const textDefaultRulesStamp = stampit()
     const __rules = [
       ruleStamp({
         name : 'default',
-        callback : this.dataFvDefault
+        callback : ($element, attribute) => this.dataFvDefault($element, attribute)
       }),
       ruleStamp({
         name : 'min-length',
-        callback : this.dataFvMinLength
+        callback : ($element, attribute) => this.dataFvMinLength($element, attribute)
       }),
       ruleStamp({
         name : 'max-length',
-        callback : this.dataFvMaxLength
+        callback : ($element, attribute) => this.dataFvMaxLength($element, attribute)
       }),
       ruleStamp({
         name : 'format',
-        callback : this.dataFvFormat
+        callback : ($element, attribute) => this.dataFvFormat($element, attribute)
       }),
       ruleStamp({
         name : 'match-field',
-        callback : this.dataFvMatchField
+        callback : ($element, attribute) => this.dataFvMatchField($element, attribute)
       })
     ];
 
