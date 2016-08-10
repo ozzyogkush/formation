@@ -89,15 +89,22 @@ const textDefaultRulesStamp = stampit()
       const trimmedVal = $element.val().trim();
       switch (format) {
         case 'zip5' :
+          valid = this.isValidZip(trimmedVal, 5);
+          break;
         case 'zip4' :
+          valid = this.isValidZip(trimmedVal, 4);
+          break;
         case 'zip' :
-          valid = this.isValidNumeric(trimmedVal);
+          valid = this.isValidZip(trimmedVal);
           break;
         case 'email' :
           valid = this.isValidEmail(trimmedVal);
           break;
         case 'phone' :
           valid = this.isValidPhone(trimmedVal);
+          break;
+        case 'phone-multi' :
+          valid = this.isValidPhone(trimmedVal, true);
           break;
         default:
           // If it looks like a regex, test the value against it.
@@ -136,7 +143,7 @@ const textDefaultRulesStamp = stampit()
 
       const trimmedVal = $element.val().trim();
       const otherFieldTrimmedVal = $otherField.val().trim();
-      let valid = (trimmedVal === otherFieldTrimmedVal) ? 1 : 0;
+      let valid = (trimmedVal === otherFieldTrimmedVal);
 
       if (parseInt($otherField.attr('data-fv-required')) === 1) {
         // Set the valid flag on the matched field - TODO - trigger an event that $otherField handles
