@@ -1,6 +1,7 @@
 'use strict';
 
 const buttonComponentStamp = require('./button');
+const checkboxDefaultRulesStamp = require('../rules/checkbox-default-rules');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
 const ruleSetStamp = require('../rules/rule-set');
@@ -40,7 +41,17 @@ const formComponentStamp = stampit()
       if (typeof rule.isFormationRule !== 'function' || ! rule.isFormationRule()) {
         throw new TypeError('The supplied `rule` object is not built from a `ruleStamp` stamp.');
       }
-      this.getRuleSetBySupportedElementType(elementType).add(rule);
+
+      if (this.initialized()) {
+        // This is initialized, the default rules have been generated.
+        this.getRuleSetBySupportedElementType(elementType).add(rule);
+      }
+      else {
+        // Since this isn't initialized, the default rules have not been generated.
+        $(document).ready((elementType, rule) => {
+          this.getRuleSetBySupportedElementType(elementType).add(rule);
+        });
+      }
     }
   })
   .init(function() {
@@ -168,6 +179,7 @@ const formComponentStamp = stampit()
       __setOptionalFields();
       __initFields();
       __initFormButtons();
+      __initDefaultRules();
 
       // There were no problems initializing the form, set the data and the private vars.
       __$form.data(this.formationDataKey, this);
@@ -401,15 +413,21 @@ const formComponentStamp = stampit()
      *
      * @private
      * @access      private
-     * @type        {Object}
+     * @type        {Object|null}
      * @memberOf    {formComponentStamp}
      * @since       0.1.0
+     * @default     null
      */
-    let __supportedElementTypesRuleSets = {
-      'text' : textDefaultRulesStamp(),
-      'checkbox' : null,
-      'radio' : radioDefaultRulesStamp(),
-      'select': null
+    let __supportedElementTypesRuleSets = null;
+
+    let __initDefaultRules = () => {
+      const formationSelector = this.formationSelector;
+      __supportedElementTypesRuleSets = {
+        'text' : textDefaultRulesStamp({formationSelector: formationSelector}),
+        'checkbox' : checkboxDefaultRulesStamp({formationSelector: formationSelector}),
+        'radio' : radioDefaultRulesStamp({formationSelector: formationSelector}),
+        'select': null
+      };
     };
 
     /**
@@ -419,7 +437,7 @@ const formComponentStamp = stampit()
      * @memberOf    {formComponentStamp}
      * @since       0.1.0
      *
-     * @returns     {Array}
+     * @returns     {Object}
      */
     this.getSupportedElementTypeRuleSets = () => {
       return __supportedElementTypesRuleSets;

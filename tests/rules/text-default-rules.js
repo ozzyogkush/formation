@@ -339,8 +339,8 @@ describe('Objects created using the `textDefaultRulesStamp`', function() {
 
     describe('the first rule', function() {
       it('should call `dataFvDefault()`', function() {
-        textRulesSetMock.expects('dataFvDefault').once().withArgs($element, 'data-fv-default');
-        assert.strictEqual(textRules[0].callback($element, 'data-fv-default'));
+        textRulesSetMock.expects('dataFvDefault').once().withArgs($element, 'data-fv-default').returns(true);
+        assert.isTrue(textRules[0].callback($element, 'data-fv-default'));
 
         textRulesSetMock.verify();
       });
@@ -348,8 +348,8 @@ describe('Objects created using the `textDefaultRulesStamp`', function() {
 
     describe('the second rule', function() {
       it('should call `dataFvMinLength()`', function() {
-        textRulesSetMock.expects('dataFvMinLength').once().withArgs($element, 'data-fv-min-length');
-        assert.strictEqual(textRules[1].callback($element, 'data-fv-min-length'));
+        textRulesSetMock.expects('dataFvMinLength').once().withArgs($element, 'data-fv-min-length').returns(true);
+        assert.isTrue(textRules[1].callback($element, 'data-fv-min-length'));
 
         textRulesSetMock.verify();
       });
@@ -357,8 +357,8 @@ describe('Objects created using the `textDefaultRulesStamp`', function() {
 
     describe('the third rule', function() {
       it('should call `dataFvMaxLength()`', function() {
-        textRulesSetMock.expects('dataFvMaxLength').once().withArgs($element, 'data-fv-max-length');
-        assert.strictEqual(textRules[2].callback($element, 'data-fv-max-length'));
+        textRulesSetMock.expects('dataFvMaxLength').once().withArgs($element, 'data-fv-max-length').returns(true);
+        assert.isTrue(textRules[2].callback($element, 'data-fv-max-length'));
 
         textRulesSetMock.verify();
       });
@@ -366,8 +366,8 @@ describe('Objects created using the `textDefaultRulesStamp`', function() {
 
     describe('the fourth rule', function() {
       it('should call `dataFvFormat()`', function() {
-        textRulesSetMock.expects('dataFvFormat').once().withArgs($element, 'data-fv-format');
-        assert.strictEqual(textRules[3].callback($element, 'data-fv-format'));
+        textRulesSetMock.expects('dataFvFormat').once().withArgs($element, 'data-fv-format').returns(true);
+        assert.isTrue(textRules[3].callback($element, 'data-fv-format'));
 
         textRulesSetMock.verify();
       });
@@ -375,8 +375,8 @@ describe('Objects created using the `textDefaultRulesStamp`', function() {
 
     describe('the fifth rule', function() {
       it('should call `dataFvMatchField()`', function() {
-        textRulesSetMock.expects('dataFvMatchField').once().withArgs($element, 'data-fv-match-field');
-        assert.strictEqual(textRules[4].callback($element, 'data-fv-match-field'));
+        textRulesSetMock.expects('dataFvMatchField').once().withArgs($element, 'data-fv-match-field').returns(true);
+        assert.isTrue(textRules[4].callback($element, 'data-fv-match-field'));
 
         textRulesSetMock.verify();
       });

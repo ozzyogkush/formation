@@ -239,6 +239,16 @@ const domNavigationStamp = stampit()
       return tbr;
     },
 
+    getButtonGroup($element) {
+      return $element.closest('.btn-group');
+    },
+
+    getAllCheckboxesOrRadiosByName($element) {
+      return this
+        .findCurrentFormByTarget($element)
+        .find(`input[name="${$element.attr('name')}"]`);
+    },
+
     /**
      * Find the `label` element in the DOM for the supplied `$input` element.
      *

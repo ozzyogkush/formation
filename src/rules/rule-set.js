@@ -1,5 +1,6 @@
 'use strict';
 
+const domNavigationStamp = require('../utilities/dom-navigation');
 const eventDefinitionsStamp = require('../event-handlers/event-definitions-stamp');
 const ruleStamp = require('./rule');
 const validityChecksStamp = require('../utilities/validity-checks');
@@ -55,4 +56,8 @@ const ruleSetStamp = stampit()
     };
   });
 
-module.exports = ruleSetStamp.compose(eventDefinitionsStamp, validityChecksStamp);
+module.exports = ruleSetStamp.compose(
+  domNavigationStamp,
+  eventDefinitionsStamp,
+  validityChecksStamp
+);

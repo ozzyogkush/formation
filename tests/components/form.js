@@ -13,7 +13,10 @@ describe('Objects created using the `formComponentStamp`', function() {
   let formComponent;
   let formComponentMock;
   beforeEach(function() {
-    formComponent = formComponentStamp({ nodeEvents : eventEmitterStamp() });
+    formComponent = formComponentStamp({
+      nodeEvents : eventEmitterStamp(),
+      formationSelector : '[data-formation="1"]'
+    });
     formComponentMock = sinon.mock(formComponent);
   });
 

@@ -16,15 +16,17 @@ const radioDefaultRulesStamp = stampit()
      * @memberOf    {radioDefaultRulesStamp}
      * @since       0.1.0
      *
-     * @param       {jQuery}        $radios         The set of `radio` elements upon which to apply the rule. Required.
+     * @param       {jQuery}        $radio          The `radio` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    dataFvDefault($radios, attribute) {
-      const $checkedRadios = $radios.filter(':checked');
+    dataFvDefault($radio, attribute) {
+      const $checkedRadios = this
+        .getAllCheckboxesOrRadiosByName($radio.attr('name'))
+        .filter(':checked');
 
-      return $checkedRadios.length > 0;
+      return $checkedRadios.length == 1;
     }
   })
   .init(function() {
@@ -43,7 +45,7 @@ const radioDefaultRulesStamp = stampit()
     const __rules = [
       ruleStamp({
         name : 'default',
-        callback : ($radios, attribute) => this.dataFvDefault($radios, attribute)
+        callback : ($radio, attribute) => this.dataFvDefault($radio, attribute)
       })
     ];
 
