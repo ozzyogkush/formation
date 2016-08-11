@@ -227,7 +227,7 @@ const formEventsHandlerStamp = stampit()
      *
      * @param       {Event}         event         jQuery `validation-handler` Formation event object. Required.
      */
-    formValidationHandler(event) {
+    inputElementValidationHandler(event) {
       if (event.namespace === null || event.namespace !== "formation") {
         return;
       }
@@ -350,13 +350,13 @@ const formEventsHandlerStamp = stampit()
 
       this.get$form()
         .submit((event) => this.formSubmitHandler(event))
-        .on(this.getCheckFormValidityEventName(), (event) => this.checkFormValidityHandler(event))
         .on(this.getChangeEventName(), 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
         .on(this.getChangeEventName(), 'input:radio', (event) => this.radioChangeHandler(event))
         .on(this.getChangeEventName(), 'select', (event) => this.selectChangeHandler(event))
         .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
-        .on(this.getValidationEventName(), allInputElementsSelector, (event) => this.formValidationHandler(event))
         .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))
+        .on(this.getValidationEventName(), allInputElementsSelector, (event) => this.inputElementValidationHandler(event))
+        .on(this.getCheckFormValidityEventName(), (event) => this.checkFormValidityHandler(event))
         .parent()
           .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
 

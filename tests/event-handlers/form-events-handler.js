@@ -205,14 +205,14 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
       });
     });
 
-    describe('`formValidationHandler()`', function() {
+    describe('`inputElementValidationHandler()`', function() {
       beforeEach(function() { jQueryEvent.namespace = 'formation'; });
       describe('nothing should happen', function() {
         it('when the event namespace is undefined or not `formation`', function () {
           delete jQueryEvent.namespace; // so it's `undefined`
-          assert.isUndefined(formEventsHandler.formValidationHandler(jQueryEvent));
+          assert.isUndefined(formEventsHandler.inputElementValidationHandler(jQueryEvent));
           jQueryEvent.namespace = 'randomjibberish';
-          assert.isUndefined(formEventsHandler.formValidationHandler(jQueryEvent));
+          assert.isUndefined(formEventsHandler.inputElementValidationHandler(jQueryEvent));
         });
       });
       describe('something should happen when the event namespace is `formation`', function() {
@@ -229,7 +229,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
           formEventsHandlerMock.expects('get$form').once().returns($form);
           $formMock.expects('trigger').once().withArgs('check-form-validity.formation');
 
-          formEventsHandler.formValidationHandler(jQueryEvent);
+          formEventsHandler.inputElementValidationHandler(jQueryEvent);
 
           $formMock.verify();
           $fnMock.verify();
