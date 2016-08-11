@@ -6,6 +6,7 @@ const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
 const ruleSetStamp = require('../rules/rule-set');
 const radioDefaultRulesStamp = require('../rules/radio-default-rules');
+const selectDefaultRulesStamp = require('../rules/select-default-rules');
 const textDefaultRulesStamp = require('../rules/text-default-rules');
 
 const stampit = require('stampit');
@@ -426,7 +427,7 @@ const formComponentStamp = stampit()
         'text' : textDefaultRulesStamp({formationSelector: formationSelector}),
         'checkbox' : checkboxDefaultRulesStamp({formationSelector: formationSelector}),
         'radio' : radioDefaultRulesStamp({formationSelector: formationSelector}),
-        'select': null
+        'select': selectDefaultRulesStamp({formationSelector: formationSelector}),
       };
     };
 
