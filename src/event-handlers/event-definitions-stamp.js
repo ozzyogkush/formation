@@ -303,6 +303,57 @@ const eventDefinitionsStamp = stampit()
     this.getValidationEventName = () => {
       return __validationEventName;
     };
+
+    /**
+     * All input events get a handler which can handle this event, which is
+     * for setting the flag on the target element indicating whether it is valid.
+     *
+     * @private
+     * @access      private
+     * @const
+     * @type        {String}
+     * @memberOf    {eventDefinitionsStamp}
+     * @since       0.1.0
+     */
+    const __setValidationFlagEventName = 'set-validation-flag.formation';
+
+    /**
+     * Returns the private `__setValidationFlagEventName` property.
+     *
+     * @access      public
+     * @memberOf    {eventDefinitionsStamp}
+     * @since       0.1.0
+     *
+     * @returns     {String}      __setValidationFlagEventName      The private `__setValidationFlagEventName` property.
+     */
+    this.getSetValidationFlagEventName = () => {
+      return __setValidationFlagEventName;
+    };
+
+    /**
+     * Event specifying when the validity flag for an element has changed.
+     *
+     * @private
+     * @access      private
+     * @const
+     * @type        {String}
+     * @memberOf    {eventDefinitionsStamp}
+     * @since       0.1.0
+     */
+    const __validityChangedEventName = 'validity-changed.formation';
+
+    /**
+     * Returns the private `__validityChangedEventName` property.
+     *
+     * @access      public
+     * @memberOf    {eventDefinitionsStamp}
+     * @since       0.1.0
+     *
+     * @returns     {String}      __validityChangedEventName     The private `__validityChangedEventName` property.
+     */
+    this.getValidityChangedEventName = () => {
+      return __validityChangedEventName;
+    };
   });
 
 module.exports = eventDefinitionsStamp;

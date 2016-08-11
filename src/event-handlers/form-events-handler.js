@@ -83,9 +83,11 @@ const formEventsHandlerStamp = stampit()
       const $validRequiredFields = $visibleRequiredFields.filter(`[${this.validAttrKey}="1"]`);
 
       // Everything is basically valid if all required fields are valid...
-      const everythingValid = ($visibleRequiredFields.length === $validRequiredFields.length);
+      const validAfterRuleCheck = ($visibleRequiredFields.length === $validRequiredFields.length);
 
-      continueButton.setEnabled(everythingValid);
+      continueButton.setEnabled(validAfterRuleCheck);
+
+      this.get$form().trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
     },
 
     /**
@@ -143,6 +145,24 @@ const formEventsHandlerStamp = stampit()
       const $select = $(event.target);
 
       $select.trigger(this.getValidationEventName());
+    },
+
+    /**
+     * Triggers a form validation check on the input or textarea whose value has
+     * changed due to the value of the element changing.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @param       {Event}       event         jQuery `change` event object. Required.
+     */
+    inputTextareaChangeHandler(event) {
+      const $target = $(event.target);
+
+      $target.trigger(this.getValidationEventName());
     },
 
     /**
@@ -232,14 +252,97 @@ const formEventsHandlerStamp = stampit()
         return;
       }
       let $triggeringFormInput = $(event.target);
-      let validator = this.getValidator($triggeringFormInput);
 
-      validator.validate($triggeringFormInput);
+      // Validate this element
+      this.validate($triggeringFormInput);
 
+      // Check the validity of the whole form
       this.get$form().trigger(this.getCheckFormValidityEventName());
+    },
+
+    setValidationFlagHandler(event, validAfterRuleCheck) {
+      let $element = $(event.target);
+      const validBeforeRuleCheck = (parseInt($element.attr(this.validAttrKey)) === 1);
+
+      // Set the value
+      $element.attr(this.validAttrKey, (validAfterRuleCheck === true ? 1 : 0));
+
+      // If the value changed, trigger the validity changed event
+      const validityChanged = (
+        (validBeforeRuleCheck && ! validAfterRuleCheck) ||
+        (! validBeforeRuleCheck && validAfterRuleCheck)
+      );
+      if (validityChanged) {
+        $element.trigger(this.getValidityChangedEventName());
+      }
+    },
+
+    validate($element) {
+      const lowerTag = $element.prop('tagName').toLowerCase();
+
+      let type = null;
+      if (lowerTag === 'textarea' ||
+          (lowerTag === 'input' && $.inArray(
+            $element.prop('type'),
+            this.getInputTypesArr()) !== -1)) {
+        type = 'text';
+      }
+      else if ($element.prop('type') === 'checkbox') {
+        type = 'checkbox';
+      }
+      else if ($element.prop('type') === 'radio') {
+        type = 'radio';
+      }
+      else if (lowerTag === 'select') {
+        type = 'select';
+      }
+
+      if (type === null) {
+        this.warn(`No rules class exists for the tag \`${lowerTag}\`.`);
+        return;
+      }
+
+      const registeredRules = this.getRuleSetBySupportedElementType(type);
+      const validAfterRuleCheck = registeredRules.process($element);
+
+      if ($.inArray(type, ['checkbox', 'radio']) !== -1) {
+        this
+          .getButtonGroup($element)
+          .trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
+      }
+      else {
+        // Text and selects set it on the input itself
+        $element
+          .trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
+      }
     }
   })
   .init(function() {
+
+    /**
+     * Types of `input` elements that take in characters from the keyboard.
+     *
+     * @private
+     * @access      private
+     * @const
+     * @type        {Array}
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     */
+    const __inputTypes = ['text', 'password', 'email', 'tel'];
+
+    /**
+     * Return the private `__inputTypes` var.
+     *
+     * @access      public
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Array}       __inputTypes
+     */
+    this.getInputTypesArr = () => {
+      return __inputTypes;
+    };
 
     /**
      * Checks whether this instance has been initialized, or if there is a `formEventsHandlerStamp` attached to
@@ -323,10 +426,6 @@ const formEventsHandlerStamp = stampit()
       return this.get$form().find(inputElementTypesToValidate);
     };
 
-    this.getValidator = ($formInputElemet) => {
-      // this is a stub
-    };
-
     /**
      * Adds a form submit event handler, as well as various change, keyup, focus, and
      * movement events to the various form input element types, as well as Formation-specific
@@ -352,11 +451,21 @@ const formEventsHandlerStamp = stampit()
         .submit((event) => this.formSubmitHandler(event))
         .on(this.getChangeEventName(), 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
         .on(this.getChangeEventName(), 'input:radio', (event) => this.radioChangeHandler(event))
+        .on(this.getChangeEventName(), 'input:text, textarea', (event) => this.inputTextareaChangeHandler(event))
         .on(this.getChangeEventName(), 'select', (event) => this.selectChangeHandler(event))
         .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
         .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))
-        .on(this.getValidationEventName(), allInputElementsSelector, (event) => this.inputElementValidationHandler(event))
-        .on(this.getCheckFormValidityEventName(), (event) => this.checkFormValidityHandler(event))
+        .on(this.getValidationEventName(),
+            allInputElementsSelector,
+            (event) => this.inputElementValidationHandler(event))
+        .on(this.getCheckFormValidityEventName(),
+            (event) => this.checkFormValidityHandler(event))
+        .on(this.getSetValidationFlagEventName(),
+            (event, isValid) => this.setValidationFlagHandler(event, isValid))
+        .on(this.getSetValidationFlagEventName(),
+            allInputElementsSelector,
+            (event, isValid) => this.setValidationFlagHandler(event, isValid)
+        )
         .parent()
           .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
 

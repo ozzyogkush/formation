@@ -520,7 +520,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
 
         $elementMock.expects('attr').once().withArgs('data-fv-toggle-override-text').returns(undefined);
         $elementMock.expects('val').once().withArgs('').returns($element);
-        $elementMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($element);
+        $elementMock.expects('trigger').once().withArgs('set-validation-flag.formation', false);
         domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
         domNavigationMock.expects('showOrHideElement').never().returns(domNavigation);
         assert.equal(domNavigation.hideDisableLinkedElement($element, false), domNavigation);

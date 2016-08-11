@@ -1,5 +1,7 @@
 'use strict';
 
+const eventDefinitionsStamp = require('../event-handlers/event-definitions-stamp');
+
 const stampit = require('stampit');
 const $ = require('jquery');
 
@@ -452,7 +454,7 @@ const domNavigationStamp = stampit()
         parseInt($element.attr(this.toggleOverrideTextAttrKey)) === 1
       );
       if (clearValue) {
-        $element.val('').attr(this.validAttrKey, 0);
+        $element.val('').trigger(this.getSetValidationFlagEventName(), false);
       }
 
       this.enableOrDisableElement($element, false);
@@ -487,4 +489,4 @@ const domNavigationStamp = stampit()
     }
   });
 
-module.exports = domNavigationStamp;
+module.exports = domNavigationStamp.compose(eventDefinitionsStamp);

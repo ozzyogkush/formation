@@ -118,6 +118,8 @@ describe('Objects created using the `formComponentStamp`', function() {
           formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(null);
           formComponentMock.expects('findRequiredFields').once().withArgs($form).returns($requiredFields);
           formComponentMock.expects('findOptionalFields').once().withArgs($form).returns($optionalFields);
+          formComponentMock.expects('get$form').twice().returns($form);
+          $formMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($form);
           $requiredFieldsMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($requiredFields);
           $optionalFieldsMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($optionalFields);
           $formMock.expects('data').once().withArgs('formation-form', formComponent);
