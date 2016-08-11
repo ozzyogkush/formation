@@ -33,6 +33,32 @@ const validityCheckStamp = stampit()
     },
 
     /**
+     * Returns true iff the string is a ZIP code, or the specified part of a ZIP code.
+     *
+     * @access      public
+     * @memberOf    {validityCheckStamp}
+     * @since
+     *
+     * @param       {String}        strToTest   The string to test. Required.
+     * @param       {int|null}      part        The part of ZIP code to check. Optional. Default null.
+     *
+     * @returns     {Boolean}                   Flag indicating whether the string only contains numbers.
+     */
+    isValidZip(strToTest, part = null) {
+      // satisfies `12345` and `12345-1234`
+      let filter = /^(\d{5})(\-(\d{4})?)$/;
+
+      if (part === 4) {
+        filter = /^(\d{4})$/;
+      }
+      else if (part === 5) {
+        filter = /^(\d{5})$/;
+      }
+
+      return filter.test(strToTest);
+    },
+
+    /**
      * Returns true if the string matches the format of an email address. Returns false otherwise.
      *
      * @access      public
@@ -51,18 +77,23 @@ const validityCheckStamp = stampit()
 
     /**
      * Returns true if the string matches the format `(xxx) xxx-xxxx` where `x` is
-     * a number [0-9]. Returns false otherwise.
+     * a number [0-9]. If the `multi` param is true, allows the formats `xxxxxxxxxx`
+     * and `xxx-xxx-xxxx` as well. Returns false otherwise.
      *
      * @access      public
      * @memberOf    {validityCheckStamp}
      * @since
      *
      * @param       {String}        strToTest   The string to test. Required.
+     * @param       {Boolean}       multi       Flag indicating whether to allow multiple formats. Optional. False.
      *
      * @returns     {Boolean}                   Flag indicating whether the string is a valid phone number.
      */
-    isValidPhone(strToTest) {
-      let filter = /^\((\d){3}\)(\s)(\d){3}-(\d){4}$/;
+    isValidPhone(strToTest, multi = false) {
+      let filter = /^\((\d{3})\)(\s)(\d{3})-(\d{4})$/;
+      if (multi) {
+        filter = /^(\d{10})|(\((\d{3})\)(\s)(\d{3})-(\d{4}))|((\d{3})-(\d{3})-(\d{4}))$/;
+      }
 
       return filter.test(strToTest);
     }

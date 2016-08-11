@@ -2,7 +2,9 @@
 
 const bodyEventsHandlerStamp = require('./event-handlers/body-events-handler');
 const consoleLoggerStamp = require('./logging/console');
+const domNavigationStamp = require('./utilities/dom-navigation');
 const formEventsHandlerStamp = require('./event-handlers/form-events-handler');
+const ruleStamp = require('./rules/rule');
 
 const stampit = require('stampit');
 const $ = require('jquery');
@@ -43,7 +45,7 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
-     * @returns     this            Return the instance of the generated object so we can chain methods.
+     * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
      */
     readyDocument() {
       // DOM is ready, so Enter Formation!
@@ -59,7 +61,7 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
-     * @returns     this            Return the instance of the generated object so we can chain methods.
+     * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
      */
     enterFormation() {
       this.log('Initializing Formation...');
@@ -83,8 +85,79 @@ const formationStamp = stampit()
       return this;
     },
 
+    /**
+     * Allow consumers of Formation to initialize forms that may be added
+     * to the DOM after auto-initialization of the DOM.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @param       {jQuery}              $form         The jQuery extended `form` element to be initialized. Required.
+     *
+     * @returns     {formationStamp}      this
+     */
+    initForm($form) {
+      try {
+        // Set up the Form but only if it has the proper DOM.
+        let formationComponent = formEventsHandlerStamp({
+          formationSelector: this.getFormationSelector(),
+          nodeEvents : this.nodeEvents
+        }).initLogging(this.getLogConsole());
+
+        formationComponent.initForm($form.eq(0));
+        formationComponent.initFormEvents();
+      }
+      catch (exception) {
+        this.error(exception);
+      }
+
+      return this;
+    },
+
     getFormationSelector() {
       return `[${this.formationDataAttrKey}="1"]`;
+    },
+
+    /**
+     * Attempt to register the `ruleName` rule with each form's formComponent.
+     * Handle when things go wrong.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @param       {String}      elementType             The type of element to which this rule applies. Required.
+     * @param       {String}      ruleName                The name of the rule to be registered. Required.
+     * @param       {Function}    ruleCallbackMethod      The callback method to be run when the rule is checked. Required.
+     *
+     * @returns     {formationStamp}    this
+     */
+    registerRule(elementType, ruleName, ruleCallbackMethod) {
+      if (typeof elementType !== 'string') {
+        throw TypeError('Expected `elementType` param to be a `String`, was a `' + typeof elementType + '`.');
+      }
+      if ($.inArray(elementType, this.getSupportedElementTypes()) === -1) {
+        throw TypeError('Specified `elementType` `' + elementType + '` is not supported.');
+      }
+      if (typeof ruleName !== 'string') {
+        throw TypeError('Expected `ruleName` param to be a `String`, was a `' + typeof ruleName + '`.');
+      }
+      if (typeof ruleCallbackMethod !== 'function') {
+        throw TypeError('Expected `ruleCallbackMethod` param to be a `Function`, was a `' + typeof ruleCallbackMethod + '`.');
+      }
+      this.get$forms().each((index, form) => {
+        try {
+          const $form = $(form);
+          const rule = ruleStamp({name: ruleName, callback: ruleCallbackMethod});
+          this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
+        }
+        catch (exception) {
+          this.error(exception);
+        }
+      });
+
+      return this;
     }
   })
   .init(function() {
@@ -157,7 +230,7 @@ const formationStamp = stampit()
      * @memberOf    {formationStamp}
      * @since       0.1.0
      *
-     * @returns    {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
+     * @returns     {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
      */
     this.get$forms = () => {
       return $forms;
@@ -200,6 +273,36 @@ const formationStamp = stampit()
         $element.attr(this.formationDataAttrKey) !== undefined &&
         parseInt($element.attr(this.formationDataAttrKey)) == 1
       );
+    };
+
+    /**
+     * The types of elements that are supported by Formation.
+     *
+     * @private
+     * @access      private
+     * @const
+     * @type        {Array}
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     */
+    const __supportedElementTypes = [
+      'text',
+      'checkbox',
+      'radio',
+      'select'
+    ];
+
+    /**
+     * Return the value of the private `__supportedElementTypes` object.
+     *
+     * @access      public
+     * @memberOf    {formationStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Array}       __supportedElementTypes         Types of elements supported by Formation.
+     */
+    this.getSupportedElementTypes = () => {
+      return __supportedElementTypes;
     };
 
     /**
@@ -255,26 +358,15 @@ const formationStamp = stampit()
     this.initForms = () => {
       // Set up the individual forms.
       $forms.each((index, form) => {
-        try {
-          let $form = $(form);
-          // Set up the Form but only if it has the proper DOM.
-          let formationComponent = formEventsHandlerStamp({
-            formationSelector: this.getFormationSelector(),
-            nodeEvents : this.nodeEvents
-          }).initLogging(this.getLogConsole());
+        let $form = $(form);
 
-          formationComponent.initForm($form);
-          formationComponent.initFormEvents();
-        }
-        catch (exception) {
-          this.error(exception);
-        }
+        this.initForm($form);
       });
 
       return this;
     };
   });
 
-const formationLoggerStamp = formationStamp.compose(consoleLoggerStamp);
+const formationLoggerStamp = formationStamp.compose(domNavigationStamp, consoleLoggerStamp);
 
 module.exports = formationLoggerStamp;

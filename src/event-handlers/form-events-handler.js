@@ -79,7 +79,7 @@ const formEventsHandlerStamp = stampit()
       // Get the list of required, enabled, and visible fields.
       let $visibleRequiredFields = this.get$requiredFields().filter(this.visibleEnabledFilter);
 
-      // Grab the list of valid visible fields.
+      // Grab the list of valid visible required fields.
       const $validRequiredFields = $visibleRequiredFields.filter(`[${this.validAttrKey}="1"]`);
 
       // Everything is basically valid if all required fields are valid...
@@ -242,6 +242,37 @@ const formEventsHandlerStamp = stampit()
   .init(function() {
 
     /**
+     * Checks whether this instance has been initialized, or if there is a `formEventsHandlerStamp` attached to
+     * the `$form` element already which has been initialized.
+     *
+     * @private
+     * @access      private
+     * @type        {Function}
+     * @memberOf    {formEventsHandlerStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
+     */
+    let __formEventsAlreadyInitialized = () => {
+      let alreadyInit = this.getEventsInitialized();
+      try {
+        let formEventsHandler;
+        const $form = this.get$form();
+        alreadyInit = (
+          alreadyInit || (
+            (formEventsHandler = this.getFormComponentOfCurrentElement($form)) !== null &&
+            formEventsHandler.getEventsInitialized()
+          )
+        );
+      }
+      catch (e) {
+        // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
+        this.info(e);
+      }
+      return alreadyInit;
+    };
+
+    /**
      * Add the default event handlers for a form's various input element,
      * iff that has not already taken place.
      *
@@ -252,10 +283,8 @@ const formEventsHandlerStamp = stampit()
      * @returns     {formEventsHandlerStamp}
      */
     this.initFormEvents = () => {
-      this.log('Initializing form events...');
-
-      if (this.getEventsInitialized()) {
-        this.info('Form events previously initialized for this form, skipping.');
+      if (__formEventsAlreadyInitialized()) {
+        this.warn('Form events previously initialized for this form, skipping.');
         return this;
       }
 
@@ -328,7 +357,8 @@ const formEventsHandlerStamp = stampit()
         .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
         .on(this.getValidationEventName(), allInputElementsSelector, (event) => this.formValidationHandler(event))
         .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))
-        .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
+        .parent()
+          .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
 
       this.setEventsInitialized(true);
 

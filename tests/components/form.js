@@ -13,7 +13,10 @@ describe('Objects created using the `formComponentStamp`', function() {
   let formComponent;
   let formComponentMock;
   beforeEach(function() {
-    formComponent = formComponentStamp({ nodeEvents : eventEmitterStamp() });
+    formComponent = formComponentStamp({
+      nodeEvents : eventEmitterStamp(),
+      formationSelector : '[data-formation="1"]'
+    });
     formComponentMock = sinon.mock(formComponent);
   });
 
@@ -70,7 +73,7 @@ describe('Objects created using the `formComponentStamp`', function() {
   describe('`initForm()`', function() {
     describe('it has been initialized', function() {
       it('should log that it was already initialized and return itself', function() {
-        let $form = $('<form></form>');
+        let $form = $('<form></form>').data('formation-form', formComponent);
         formComponentMock.expects('initialized').once().returns(false);
         formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(formComponent);
         formComponentMock.expects('initialized').once().returns(true);
@@ -110,13 +113,13 @@ describe('Objects created using the `formComponentStamp`', function() {
           let $requiredFieldsMock = sinon.mock($requiredFields);
           let $optionalFields = $('<input type="checkbox" />').add($('<select><option value="0">nope</option></select>'));
           let $optionalFieldsMock = sinon.mock($optionalFields);
-          let $submitButton = $('<button data-submit="1"></button>');
+          let $submitButton = $('<button data-fv-submit="1"></button>');
           formComponentMock.expects('initialized').once().returns(false);
           formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(null);
           formComponentMock.expects('findRequiredFields').once().withArgs($form).returns($requiredFields);
           formComponentMock.expects('findOptionalFields').once().withArgs($form).returns($optionalFields);
-          $requiredFieldsMock.expects('attr').once().withArgs('data-valid', 0).returns($requiredFields);
-          $optionalFieldsMock.expects('attr').once().withArgs('data-valid', 0).returns($optionalFields);
+          $requiredFieldsMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($requiredFields);
+          $optionalFieldsMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($optionalFields);
           $formMock.expects('data').once().withArgs('formation-form', formComponent);
           formComponentMock.expects('findSubmitButton').once().withArgs($form).returns($submitButton);
           formComponentMock.expects('findPreviewButton').once().withArgs($form).returns($());

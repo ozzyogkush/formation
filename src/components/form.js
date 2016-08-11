@@ -1,8 +1,13 @@
 'use strict';
 
 const buttonComponentStamp = require('./button');
+const checkboxDefaultRulesStamp = require('../rules/checkbox-default-rules');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
+const ruleSetStamp = require('../rules/rule-set');
+const radioDefaultRulesStamp = require('../rules/radio-default-rules');
+const selectDefaultRulesStamp = require('../rules/select-default-rules');
+const textDefaultRulesStamp = require('../rules/text-default-rules');
 
 const stampit = require('stampit');
 const $ = require('jquery');
@@ -31,6 +36,23 @@ const formComponentStamp = stampit()
         this.getSubmitButton() !== null && this.getSubmitButton().exists()
       );
       return allowKeyEventToProgress;
+    },
+
+    registerRule(elementType, rule) {
+      if (typeof rule.isFormationRule !== 'function' || ! rule.isFormationRule()) {
+        throw new TypeError('The supplied `rule` object is not built from a `ruleStamp` stamp.');
+      }
+
+      if (this.initialized()) {
+        // This is initialized, the default rules have been generated.
+        this.getRuleSetBySupportedElementType(elementType).add(rule);
+      }
+      else {
+        // Since this isn't initialized, the default rules have not been generated.
+        $(document).ready((elementType, rule) => {
+          this.getRuleSetBySupportedElementType(elementType).add(rule);
+        });
+      }
     }
   })
   .init(function() {
@@ -109,14 +131,13 @@ const formComponentStamp = stampit()
      * @memberOf    {formComponentStamp}
      * @since       0.1.0
      *
-     * @param       {jQuery}        $form         The form to check for an attached `formComponent` instance. Required.
-     *
      * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
      */
-    let __formAlreadyInitialized = ($form) => {
+    let __formAlreadyInitialized = () => {
       let alreadyInit = this.initialized();
       try {
         let formComponent;
+        const $form = this.get$form();
         alreadyInit = (
           alreadyInit || (
             (formComponent = this.getFormComponentOfCurrentElement($form)) !== null &&
@@ -146,19 +167,20 @@ const formComponentStamp = stampit()
      * @returns     {formComponentStamp}
      */
     this.initForm = ($form) => {
-      if (__formAlreadyInitialized($form)) {
+      // Set the form so we can use it internally elsewhere.
+      __$form = $form;
+
+      if (__formAlreadyInitialized()) {
         this.warn('This `formComponent` is already initialized, skipping.');
         return this;
       }
-
-      // Set the form so we can use it internally elsewhere.
-      __$form = $form;
 
       // Get the required and optional fields, and the submit and preview buttons present in the form.
       __setRequiredFields();
       __setOptionalFields();
       __initFields();
       __initFormButtons();
+      __initDefaultRules();
 
       // There were no problems initializing the form, set the data and the private vars.
       __$form.data(this.formationDataKey, this);
@@ -354,6 +376,101 @@ const formComponentStamp = stampit()
       }).initLogging(this.getLogConsole())
         .addHandleFormSubmitListener()
         .setLoadingHTML();
+    };
+
+    /**
+     * The types of elements that are supported by Formation mapped to jQuery
+     * compatible selectors.
+     *
+     * @private
+     * @access      private
+     * @const
+     * @type        {Object}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     */
+    const __supportedElementTypesMap = {
+      'text' : 'input:text,input:password,input:email,input:tel,textarea',
+      'checkbox' : 'input:checkbox',
+      'radio' : 'input:radio',
+      'select': 'select'
+    };
+
+    /**
+     * Return the value of the private `__supportedElementTypesMap` object.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Object}      __supportedElementTypesMap         Types of elements supported by Formation.
+     */
+    this.getSupportedElementTypesMap = () => {
+      return __supportedElementTypesMap;
+    };
+
+    /**
+     * Rule sets keyed by the supported element types.
+     *
+     * @private
+     * @access      private
+     * @type        {Object|null}
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     * @default     null
+     */
+    let __supportedElementTypesRuleSets = null;
+
+    let __initDefaultRules = () => {
+      const formationSelector = this.formationSelector;
+      __supportedElementTypesRuleSets = {
+        'text' : textDefaultRulesStamp({formationSelector: formationSelector}),
+        'checkbox' : checkboxDefaultRulesStamp({formationSelector: formationSelector}),
+        'radio' : radioDefaultRulesStamp({formationSelector: formationSelector}),
+        'select': selectDefaultRulesStamp({formationSelector: formationSelector}),
+      };
+    };
+
+    /**
+     * Get all the supported rule sets.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @returns     {Object}
+     */
+    this.getSupportedElementTypeRuleSets = () => {
+      return __supportedElementTypesRuleSets;
+    };
+
+    /**
+     * Get the rule set to be applied to the specified supported element type.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @param       {String}          type          The supported element type whose rules we want. Required.
+     *
+     * @returns     {ruleSetStamp}
+     */
+    this.getRuleSetBySupportedElementType = (type) => {
+      return __supportedElementTypesRuleSets[type];
+    };
+
+    /**
+     * Set the rule set to be applied to the specified supported element type.
+     *
+     * @access      public
+     * @memberOf    {formComponentStamp}
+     * @since       0.1.0
+     *
+     * @param       {String}          type          The supported element type. Required.
+     * @param       {ruleSetStamp}    rules         The rule set to be applied. Required.
+     */
+    this.setSupportedElementTypeRuleSet = (type, rules) => {
+      __supportedElementTypesRuleSets[type] = rules;
     };
   });
 

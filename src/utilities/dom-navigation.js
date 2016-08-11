@@ -5,6 +5,7 @@ const $ = require('jquery');
 
 const domNavigationStamp = stampit()
   .refs({
+    formationDataAttrKey : 'data-formation',
 
     /**
      * The selector used to find a Formation `form` element.
@@ -24,9 +25,9 @@ const domNavigationStamp = stampit()
      * @type        {String}
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     data-valid
+     * @default     data-fv-valid
      */
-    validAttrKey : 'data-valid',
+    validAttrKey : 'data-fv-valid',
 
     /**
      * The CSS selector used to find an `input` element "linked" to another.
@@ -35,11 +36,11 @@ const domNavigationStamp = stampit()
      * @type        {String}
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     data-linked-input
+     * @default     data-fv-linked-input
      */
-    linkedInputAttrKey : 'data-linked-input',
+    linkedInputAttrKey : 'data-fv-linked-input',
 
-    toggleOverrideTextAttrKey : 'data-toggle-override-text',
+    toggleOverrideTextAttrKey : 'data-fv-toggle-override-text',
 
     /**
      * The Bootstrap stateful element attribute whose value is used for setting the element's innerHTML
@@ -49,9 +50,9 @@ const domNavigationStamp = stampit()
      * @type        String
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     data-submitting
+     * @default     data-fv-submitting
      */
-    submittingStateDataKey : 'data-submitting',
+    submittingStateDataKey : 'data-fv-submitting',
 
     /**
      * The data key used to to store a `formComponent` object on the `form` object.
@@ -71,9 +72,9 @@ const domNavigationStamp = stampit()
      * @type        {String}
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     [data-optional="1"]
+     * @default     [data-fv-optional="1"]
      */
-    optionalFieldsSelector : '[data-optional="1"]',
+    optionalFieldsSelector : '[data-fv-optional="1"]',
 
     /**
      * The CSS selector used to find the form's preview button element.
@@ -82,9 +83,9 @@ const domNavigationStamp = stampit()
      * @type        {String}
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     [data-form-preview]
+     * @default     [data-fv-form-preview]
      */
-    previewButtonSelector : '[data-form-preview]',
+    previewButtonSelector : '[data-fv-form-preview]',
 
     /**
      * The CSS selector used to find the form's required input elements.
@@ -93,9 +94,9 @@ const domNavigationStamp = stampit()
      * @type        {String}
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     [data-required="1"]
+     * @default     [data-fv-required="1"]
      */
-    requiredFieldsSelector : '[data-required="1"]',
+    requiredFieldsSelector : '[data-fv-required="1"]',
 
     /**
      * The CSS selector used to find the form's submit button element.
@@ -104,9 +105,9 @@ const domNavigationStamp = stampit()
      * @type        {String}
      * @memberOf    {domNavigationStamp}
      * @since       0.1.0
-     * @default     [data-form-submit]
+     * @default     [data-fv-form-submit]
      */
-    submitButtonSelector : '[data-form-submit]'
+    submitButtonSelector : '[data-fv-form-submit]'
   })
   .methods({
 
@@ -120,6 +121,10 @@ const domNavigationStamp = stampit()
      * @returns     {jQuery}       The jQuery wrapped `form` element.
      */
     findCurrentFormByTarget($element) {
+      if ($element.prop('tagName').toLowerCase() === 'form' &&
+          $element.attr(this.formationDataAttrKey) !== undefined) {
+        return $element;
+      }
       return $element.closest(this.formationSelector);
     },
 
@@ -232,6 +237,16 @@ const domNavigationStamp = stampit()
         tbr = ($element.hasClass('btn-checkbox') || $element.hasClass('btn-radio'));
       }
       return tbr;
+    },
+
+    getButtonGroup($element) {
+      return $element.closest('.btn-group');
+    },
+
+    getAllCheckboxesOrRadiosByName($element) {
+      return this
+        .findCurrentFormByTarget($element)
+        .find(`input[name="${$element.attr('name')}"]`);
     },
 
     /**
@@ -419,8 +434,8 @@ const domNavigationStamp = stampit()
      * Convenience method which, for the supplied `$element`, disables it and gives it the
      * Twitter Bootstrap class of "disabled". If the `includeHidden` parameter is
      * specified and is `true`, also adds the "hidden" class to the element. By default
-     * it will clear the value of the text input and set the `data-valid` attribute to 0 (false),
-     * unless the `data-toggle-override-text` is set on the linked input with a value of 0.
+     * it will clear the value of the text input and set the `data-fv-valid` attribute to 0 (false),
+     * unless the `data-fv-toggle-override-text` is set on the linked input with a value of 0.
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
