@@ -328,6 +328,8 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
     describe('when the `$form` object is set', function() {
       it('should set a bunch of event handlers on various input elements (text, textarea, select, radio, checkbox)', function() {
         let $form = $('<form data-formation="1"></form>');
+        let $body = $form.wrap('body').parent();
+        let $bodyMock = sinon.mock($body);
         let $formMock = sinon.mock($form);
         formEventsHandler = formEventsHandlerStamp();
         let formEventsHandlerMock = sinon.mock(formEventsHandler);
@@ -357,9 +359,10 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         $formMock.expects('on').once()
           .withArgs('focus.formation', 'input, textarea, select', sinon.match.func)
           .returns($form);
-        $formMock.expects('on').once()
+        $formMock.expects('parent').once().returns($body);
+        $bodyMock.expects('on').once()
           .withArgs('mouseenter.formation, mouseleave.formation, touchstart.formation', sinon.match.func)
-          .returns($form);
+          .returns($body);
 
         formEventsHandlerMock.expects('setEventsInitialized').once().withArgs(true).returns(formEventsHandler);
 
@@ -367,6 +370,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         assert.equal(formEventsHandler.addDefaultEventHandlers(), formEventsHandler);
 
         $formMock.verify();
+        $bodyMock.verify();
         formEventsHandlerMock.verify();
       });
     });

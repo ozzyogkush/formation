@@ -357,7 +357,8 @@ const formEventsHandlerStamp = stampit()
         .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
         .on(this.getValidationEventName(), allInputElementsSelector, (event) => this.formValidationHandler(event))
         .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))
-        .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
+        .parent()
+          .on(mouseMoveTouchEvents, (event) => this.validateFormFields(event));
 
       this.setEventsInitialized(true);
 
