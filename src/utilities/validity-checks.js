@@ -46,7 +46,7 @@ const validityCheckStamp = stampit()
      */
     isValidZip(strToTest, part = null) {
       // satisfies `12345` and `12345-1234`
-      let filter = /^(\d{5})(\-(\d{4})?)$/;
+      let filter = /^(\d{5})((\-(\d{4}))?)$/;
 
       if (part === 4) {
         filter = /^(\d{4})$/;
