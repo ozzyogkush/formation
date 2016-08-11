@@ -205,14 +205,14 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
       });
     });
 
-    describe('`formValidationHandler()`', function() {
+    describe('`inputElementValidationHandler()`', function() {
       beforeEach(function() { jQueryEvent.namespace = 'formation'; });
       describe('nothing should happen', function() {
         it('when the event namespace is undefined or not `formation`', function () {
           delete jQueryEvent.namespace; // so it's `undefined`
-          assert.isUndefined(formEventsHandler.formValidationHandler(jQueryEvent));
+          assert.isUndefined(formEventsHandler.inputElementValidationHandler(jQueryEvent));
           jQueryEvent.namespace = 'randomjibberish';
-          assert.isUndefined(formEventsHandler.formValidationHandler(jQueryEvent));
+          assert.isUndefined(formEventsHandler.inputElementValidationHandler(jQueryEvent));
         });
       });
       describe('something should happen when the event namespace is `formation`', function() {
@@ -221,20 +221,17 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
           let validator = { validate : function() {}};
           let $form = $('<form></form>');
           let $formMock = sinon.mock($form);
-          let validatorMock = sinon.mock(validator);
           let formEventsHandlerMock = sinon.mock(formEventsHandler);
 
-          formEventsHandlerMock.expects('getValidator').once().returns(validator);
-          validatorMock.expects('validate').once().withArgs($(jQueryEvent.target));
+          formEventsHandlerMock.expects('validate').once().withArgs($(jQueryEvent.target));
           formEventsHandlerMock.expects('get$form').once().returns($form);
           $formMock.expects('trigger').once().withArgs('check-form-validity.formation');
 
-          formEventsHandler.formValidationHandler(jQueryEvent);
+          formEventsHandler.inputElementValidationHandler(jQueryEvent);
 
           $formMock.verify();
           $fnMock.verify();
           formEventsHandlerMock.verify();
-          validatorMock.verify();
         });
       });
     });
@@ -339,13 +336,13 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         // See http://stackoverflow.com/questions/38387222/mocking-a-method-which-is-called-using-an-arrow-function-as-a-parameter
         $formMock.expects('submit').once().withArgs(sinon.match.func).returns($form);
         $formMock.expects('on').once()
-          .withArgs('check-form-validity.formation', sinon.match.func)
-          .returns($form);
-        $formMock.expects('on').once()
           .withArgs('change.formation', 'input:checkbox', sinon.match.func)
           .returns($form);
         $formMock.expects('on').once()
           .withArgs('change.formation', 'input:radio', sinon.match.func)
+          .returns($form);
+        $formMock.expects('on').once()
+          .withArgs('change.formation', 'input:text, textarea', sinon.match.func)
           .returns($form);
         $formMock.expects('on').once()
           .withArgs('change.formation', 'select', sinon.match.func)
@@ -354,10 +351,19 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
           .withArgs('keyup.formation', 'input, textarea', sinon.match.func)
           .returns($form);
         $formMock.expects('on').once()
+          .withArgs('focus.formation', 'input, textarea, select', sinon.match.func)
+          .returns($form);
+        $formMock.expects('on').once()
           .withArgs('validation-handler.formation', 'input, textarea, select', sinon.match.func)
           .returns($form);
         $formMock.expects('on').once()
-          .withArgs('focus.formation', 'input, textarea, select', sinon.match.func)
+          .withArgs('check-form-validity.formation', sinon.match.func)
+          .returns($form);
+        $formMock.expects('on').once()
+          .withArgs('set-validation-flag.formation', sinon.match.func)
+          .returns($form);
+        $formMock.expects('on').once()
+          .withArgs('set-validation-flag.formation', 'input, textarea, select', sinon.match.func)
           .returns($form);
         $formMock.expects('parent').once().returns($body);
         $bodyMock.expects('on').once()

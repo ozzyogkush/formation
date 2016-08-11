@@ -23,6 +23,28 @@ describe('Objects created using the `validityCheckStamp`', function() {
     });
   });
 
+  describe('`isValidZip()`', function() {
+    it('should return `false` when the value being tested is not a 5-digit ZIP code or ZIP +4', function() {
+      assert.isFalse(validityCheck.isValidZip('1234'));
+      assert.isFalse(validityCheck.isValidZip('1234a'));
+      assert.isFalse(validityCheck.isValidZip('12345-'));
+      assert.isFalse(validityCheck.isValidZip('12345-123'));
+      assert.isFalse(validityCheck.isValidZip('12345-123a'));
+    });
+    it('should return `true` when the value being tested is a 5-digit ZIP code', function() {
+      assert.isTrue(validityCheck.isValidZip('12345'));
+    });
+    it('should return `true` when the value being tested is a 5-digit ZIP code and only that part is specified', function() {
+      assert.isTrue(validityCheck.isValidZip('12345', 5));
+    });
+    it('should return `true` when the value being tested is a 5-digit ZIP code with the 4 digit extension', function() {
+      assert.isTrue(validityCheck.isValidZip('12345-1234'));
+    });
+    it('should return `true` when the value being tested is a 4-digit ZIP+4 code and only that part is specified', function() {
+      assert.isTrue(validityCheck.isValidZip('1234', 4));
+    });
+  });
+
   describe('`isValidEmail()`', function() {
     it('should return `false` when the value being tested is not a valid email address', function() {
       assert.isFalse(validityCheck.isValidEmail('testmissingatsign.com'));
@@ -40,9 +62,14 @@ describe('Objects created using the `validityCheckStamp`', function() {
       assert.isFalse(validityCheck.isValidPhone('180012345678'));
       assert.isFalse(validityCheck.isValidPhone('1234567890'));
     });
-    it('should return `true` when the value being tested is not formatted as a US phone number', function() {
+    it('should return `true` when the value being tested is formatted as a US phone number', function() {
       assert.isTrue(validityCheck.isValidPhone('(123) 456-7890'));
       assert.isTrue(validityCheck.isValidPhone('(800) 420-1420'));
+    });
+    it('should return `true` when the value being tested is in one of a few formats when multi specified', function() {
+      assert.isTrue(validityCheck.isValidPhone('(800) 420-1420', true));
+      assert.isTrue(validityCheck.isValidPhone('1234567890', true));
+      assert.isTrue(validityCheck.isValidPhone('800-420-1420', true));
     });
   });
 });

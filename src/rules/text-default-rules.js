@@ -146,10 +146,8 @@ const textDefaultRulesStamp = stampit()
       let valid = (trimmedVal === otherFieldTrimmedVal);
 
       if (parseInt($otherField.attr('data-fv-required')) === 1) {
-        // Set the valid flag on the matched field - TODO - trigger an event that $otherField handles
-        $otherField.trigger(
-          this.getSetValidationFlagEventName(), {elementIsValid : valid}
-        );
+        // Set the valid flag on the matched field
+        $otherField.trigger(this.getSetValidationFlagEventName(), valid);
       }
 
       return valid;

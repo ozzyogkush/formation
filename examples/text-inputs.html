@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Formation - Text Inputs and TextAreas</h1>
-    <em>input[type="text"], textarea</em>
+    <em>input[type="text"], textarea</em> - will handle the <u>validity-changed.formation</u> event:
 
     <h2>View Source To See DOM Code</h2>
     <form role="form" data-formation="1">
@@ -27,24 +27,25 @@
       <h4>Rules:</h4>
       <ul>
         <li>data-fv-required = 1</li>
-        <li>data-fv-validate-min-length = 5</li>
-        <li>data-fv-validate-max-length = 15</li>
+        <li>data-fv-min-length = 5</li>
+        <li>data-fv-max-length = 15</li>
       </ul>
       <div>
-        <label for="textTest2">Input 2 - text</label> -
+        <label for="textTest2">Input 2 - text - <em>loaded with passing value</em></label> -
         <input
           type="text"
           name="textTest2"
           id="textTest2"
+          value="passing"
           data-fv-required="1"
-          data-fv-validate-min-length="5"
-          data-fv-validate-max-length="15" />
+          data-fv-min-length="5"
+          data-fv-max-length="15" />
       </div>
 
       <h4>Rules:</h4>
       <ul>
         <li>data-fv-required = 1</li>
-        <li>data-fv-validate-format = email</li>
+        <li>data-fv-format = email</li>
       </ul>
       <div>
         <label for="textTest3">Input 3 - text</label> -
@@ -53,13 +54,13 @@
           name="textTest3"
           id="textTest3"
           data-fv-required="1"
-          data-fv-validate-format="email" />
+          data-fv-format="email" />
       </div>
 
       <h4>Rules:</h4>
       <ul>
         <li>data-fv-required = 1</li>
-        <li>data-fv-validate-format = phone</li>
+        <li>data-fv-format = phone</li>
       </ul>
       <div>
         <label for="textTest4">Input 4 - text</label> -
@@ -68,53 +69,105 @@
           name="textTest4"
           id="textTest4"
           data-fv-required="1"
-          data-fv-validate-format="phone" />
+          data-fv-format="phone" />
       </div>
 
       <h4>Rules:</h4>
       <ul>
         <li>data-fv-required = 1</li>
-        <li>data-fv-validate-format = zip</li>
+        <li>data-fv-format = phone-multi</li>
       </ul>
       <div>
-        <label for="textTest5">Input 5 - format for ZIP code</label> -
+        <label for="textTest5">Input 5 - text</label> -
         <input
           type="text"
           name="textTest5"
           id="textTest5"
           data-fv-required="1"
-          data-fv-validate-format="zip" />
+          data-fv-format="phone-multi" />
       </div>
 
       <h4>Rules:</h4>
       <ul>
         <li>data-fv-required = 1</li>
-        <li>data-fv-validate-match-field = elementID</li>
+        <li>data-fv-format = zip</li>
       </ul>
       <div>
-        <label for="textTest6">Input 6 - must match Input 7's value</label> -
+        <label for="textTest6">Input 6 - format for ZIP code</label> -
         <input
           type="text"
           name="textTest6"
           id="textTest6"
           data-fv-required="1"
-          data-fv-validate-match-field="textTest7" /><br />
-        <label for="textTest7">Input 7 - must match Input 6's value</label> -
+          data-fv-format="zip" />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-fv-required = 1</li>
+        <li>data-fv-match-field = elementID</li>
+      </ul>
+      <div>
+        <label for="textTest7">Input 7 - must match Input 8's value</label> -
         <input
           type="text"
           name="textTest7"
           id="textTest7"
           data-fv-required="1"
-          data-fv-validate-match-field="textTest6" /><br />
+          data-fv-match-field="textTest8" /><br />
+        <label for="textTest8">Input 8 - must match Input 7's value</label> -
+        <input
+          type="text"
+          name="textTest8"
+          id="textTest8"
+          data-fv-required="1"
+          data-fv-match-field="textTest7" /><br />
+      </div>
+
+      <h4>Rules:</h4>
+      <ul>
+        <li>data-fv-optional = 1</li>
+        <li>data-fv-min-length = 25</li>
+      </ul>
+      <div>
+        <label for="textTest9">Textarea - OPTIONAL</label> -
+        <textarea name="textTest9"
+                  id="textTest9"
+                  data-fv-optional="1"
+                  data-fv-min-length="25"></textarea>
       </div>
 
       <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
       <div>
         <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
       </div>
+      <div id="form-valid"></div>
     </form>
   </body>
   <script type="text/javascript">
     Formation.setDebug(true);
+    $('form').each(function() {
+      var $form = $(this);
+      var $formValid = $('#form-valid').css({ 'color' : 'white' });
+      $form.on(Formation.getValidityChangedEventName(), function() {
+        if (parseInt($form.attr('data-fv-valid')) === 1) {
+          $formValid.html('FORM VALID').css({'background-color' : '#008800'});
+        }
+        else {
+          $formValid.html('FORM NOT VALID').css({'background-color' : '#880000'});
+        }
+      });
+      Formation.findRequiredFields($form).add(Formation.findOptionalFields($form))
+        .on(Formation.getValidityChangedEventName(), function() {
+          var $this = $(this);
+          if (parseInt($this.attr('data-fv-valid')) === 1) {
+            $this.next('div.status').html('FIELD VALID').css({'background-color' : '#008800'});
+          }
+          else {
+            $this.next('div.status').html('FIELD NOT VALID').css({'background-color' : '#880000'});
+          }
+        })
+        .after($('<div></div>').addClass('status').css({ 'color' : 'white' }));
+    });
   </script>
 </html>

@@ -54,6 +54,21 @@ const ruleSetStamp = stampit()
     this.getRules = () => {
       return [];
     };
+
+    this.process = ($element) => {
+      let validAfterRuleCheck = true;
+      for (const rule of this.getRules()) {
+        const ruleAttribute = `data-fv-${rule.name}`;
+        if (rule.name === 'default' || $element.attr(ruleAttribute) !== undefined) {
+          validAfterRuleCheck = rule.callback($element, ruleAttribute);
+          if (! validAfterRuleCheck) {
+            break;
+          }
+        }
+      }
+
+      return validAfterRuleCheck;
+    };
   });
 
 module.exports = ruleSetStamp.compose(

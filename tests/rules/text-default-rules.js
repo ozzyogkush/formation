@@ -316,7 +316,7 @@ describe('Objects created using the `textDefaultRulesStamp`', function() {
           $elementMock.expects('val').once().returns('some string with text');
           $fnMock.expects('val').once().returns('some string with text');
           $fnMock.expects('attr').once().withArgs('data-fv-required').returns('1');
-          $fnMock.expects('trigger').once().withArgs('set-validation-flag.formation', {elementIsValid : true});
+          $fnMock.expects('trigger').once().withArgs('set-validation-flag.formation', true);
           textRulesSet.dataFvMatchField($element, 'data-fv-match-field');
 
           $fnMock.verify();

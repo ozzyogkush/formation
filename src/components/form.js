@@ -271,7 +271,8 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * Initialize (or reset) the validity of the required and optional fields to `false` (0).
+     * Initialize (or reset) the validity of the `form`, and the
+     * required and optional fields to `false` (0).
      *
      * @private
      * @access      private
@@ -280,6 +281,7 @@ const formComponentStamp = stampit()
      * @since       0.1.0
      */
     let __initFields = () => {
+      this.get$form().attr(this.validAttrKey, 0);
       __$requiredFields.attr(this.validAttrKey, 0);
       __$optionalFields.attr(this.validAttrKey, 0);
     };
