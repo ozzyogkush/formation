@@ -428,11 +428,13 @@ const formEventsHandlerStamp = stampit()
         this.getTouchStartEventName()
       ].join(', ');
 
+      const textElementsSelector = __inputTypes.map(item => `input:${item}`).join(', ') + ', textarea';
+
       this.get$form()
         .submit((event) => this.formSubmitHandler(event))
         .on(this.getChangeEventName(), 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
         .on(this.getChangeEventName(), 'input:radio', (event) => this.radioChangeHandler(event))
-        .on(this.getChangeEventName(), 'input:text, textarea', (event) => this.inputTextareaChangeHandler(event))
+        .on(this.getChangeEventName(), textElementsSelector, (event) => this.inputTextareaChangeHandler(event))
         .on(this.getChangeEventName(), 'select', (event) => this.selectChangeHandler(event))
         .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
         .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))
