@@ -15,7 +15,6 @@ const selectDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {selectDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -37,7 +36,6 @@ const selectDefaultRulesStamp = stampit()
      * @const
      * @type        Array
      * @memberOf    {selectDefaultRulesStamp}
-     * @since       0.1.0
      */
     const __rules = [
       ruleStamp({
@@ -51,7 +49,6 @@ const selectDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {selectDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */

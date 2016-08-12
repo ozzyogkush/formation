@@ -15,7 +15,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     null
      */
     formationSelector: null,
@@ -26,7 +25,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     data-fv-valid
      */
     validAttrKey : 'data-fv-valid',
@@ -37,7 +35,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     data-fv-linked-input
      */
     linkedInputAttrKey : 'data-fv-linked-input',
@@ -51,7 +48,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        String
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     data-fv-submitting
      */
     submittingStateDataKey : 'data-fv-submitting',
@@ -62,7 +58,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     formation-form
      */
     formationDataKey : 'formation-form',
@@ -73,7 +68,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     [data-fv-optional="1"]
      */
     optionalFieldsSelector : '[data-fv-optional="1"]',
@@ -84,7 +78,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     [data-fv-form-preview]
      */
     previewButtonSelector : '[data-fv-form-preview]',
@@ -95,7 +88,6 @@ const domNavigationStamp = stampit()
      * @access      public
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     [data-fv-required="1"]
      */
     requiredFieldsSelector : '[data-fv-required="1"]',
@@ -106,7 +98,6 @@ const domNavigationStamp = stampit()
      * @access      private
      * @type        {String}
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      * @default     [data-fv-form-submit]
      */
     submitButtonSelector : '[data-fv-form-submit]'
@@ -118,7 +109,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @returns     {jQuery}       The jQuery wrapped `form` element.
      */
@@ -136,7 +126,6 @@ const domNavigationStamp = stampit()
      * @throws      TypeError               if the `formComponent` is undefined, has no `isFormComponent` or `isFormComponent()` returns false
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}                $element            The jQuery wrapped element for which to find the `formComponent` instance. Required.
      *
@@ -166,7 +155,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
      *
@@ -181,7 +169,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
      *
@@ -196,7 +183,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
      *
@@ -211,7 +197,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}      $form               The jQuery wrapped `form` element. Required.
      *
@@ -226,7 +211,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}      $element          The jQuery wrapped `form` element. Required.
      *
@@ -256,7 +240,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $input      The source element used to find a `label` element. Required.
      *
@@ -276,7 +259,6 @@ const domNavigationStamp = stampit()
      * @throws      Error                       iff the linked element is not found in the DOM when expected
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $source     The source element used to find a linked element. Required.
      *
@@ -305,7 +287,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element to enable or disable. Required.
      * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$element`. Required.
@@ -328,7 +309,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element to show or hide. Required.
      * @param       {Boolean}       show            Whether to show (true) or hide (false) the `$element`. Required.
@@ -353,7 +333,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element to show or hide. Required.
      * @param       {Boolean}       show            Whether to show (true) or hide (false) the `$element`. Required.
@@ -390,7 +369,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param	      {jQuery}      $linkedElement        jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     enableAndShow         Flag indicating whether to show/enable, or hide/disable, the element. Required.
@@ -416,7 +394,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param	      {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     removeHidden      Flag indicating whether to remove the 'hidden' class. Required.
@@ -441,7 +418,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     includeHidden     Flag indicating whether to add the 'hidden' class. Required.
@@ -471,7 +447,6 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @memberOf    {domNavigationStamp}
-     * @since       0.1.0
      *
      * @param       {int}           index         The index of the element in the jQuery set.
      * @param       {jQuery}        element       The DOM element to check.

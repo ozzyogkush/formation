@@ -17,7 +17,6 @@ const $ = require('jquery');
  * @class         formationStamp
  * @name          formationStamp
  * @package       Formation
- * @version
  */
 const formationStamp = stampit()
   .refs({
@@ -30,7 +29,6 @@ const formationStamp = stampit()
      * @access      public
      * @type        {eventEmitterStamp}
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      * @default     null
      */
     nodeEvents : null
@@ -43,7 +41,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
      */
@@ -59,7 +56,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
      */
@@ -91,7 +87,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}              $form         The jQuery extended `form` element to be initialized. Required.
      *
@@ -125,7 +120,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @param       {String}      elementType             The type of element to which this rule applies. Required.
      * @param       {String}      ruleName                The name of the rule to be registered. Required.
@@ -168,7 +162,6 @@ const formationStamp = stampit()
      * @access      private
      * @type        Boolean
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      * @default     false
      */
     let debug = false;
@@ -178,7 +171,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns    {Boolean}        debug           Flag indicating whether we're turning debug on or off.
      */
@@ -192,7 +184,6 @@ const formationStamp = stampit()
      * @throws      TypeError                         if the `newVal` param is not a boolean.
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @param       {Boolean}         newVal          Flag indicating whether we're turning debug on or off. Required.
      *
@@ -218,7 +209,6 @@ const formationStamp = stampit()
      * @access      private
      * @type        jQuery
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      * @default     $()
      */
     let $forms = $();
@@ -228,7 +218,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns     {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
      */
@@ -242,7 +231,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns     {formationStamp}  this            Return the instance of the generated object so we can chain methods.
      */
@@ -259,7 +247,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @param       {int}           index         The index of the element in the jQuery set.
      * @param       {jQuery}        element       The DOM element to check.
@@ -283,7 +270,6 @@ const formationStamp = stampit()
      * @const
      * @type        {Array}
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      */
     const __supportedElementTypes = [
       'text',
@@ -297,7 +283,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}       __supportedElementTypes         Types of elements supported by Formation.
      */
@@ -311,7 +296,6 @@ const formationStamp = stampit()
      * @access      public
      * @type        {Object}
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      * @default     null
      */
     let __bodyEventsHandler = null;
@@ -321,7 +305,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @param       {bodyEventsHandlerStamp}        bodyEventsHandler     Object which is composed of a `bodyEventsHandlerStamp`. Required.
      *
@@ -351,7 +334,6 @@ const formationStamp = stampit()
      *
      * @access      public
      * @memberOf    {formationStamp}
-     * @since       0.1.0
      *
      * @returns     {formationStamp}
      */

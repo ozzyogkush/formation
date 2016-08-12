@@ -14,7 +14,6 @@ const checkboxDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -34,7 +33,6 @@ const checkboxDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -56,7 +54,6 @@ const checkboxDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -83,7 +80,6 @@ const checkboxDefaultRulesStamp = stampit()
      * @const
      * @type        Array
      * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
      */
     const __rules = [
       ruleStamp({
@@ -105,7 +101,6 @@ const checkboxDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */

@@ -15,7 +15,6 @@ const textDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -32,7 +31,6 @@ const textDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -53,7 +51,6 @@ const textDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -76,7 +73,6 @@ const textDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -125,7 +121,6 @@ const textDefaultRulesStamp = stampit()
      * @throws      Error           iff the other field to match is not in the DOM
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -164,7 +159,6 @@ const textDefaultRulesStamp = stampit()
      * @const
      * @type        Array
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      */
     const __rules = [
       ruleStamp({
@@ -194,7 +188,6 @@ const textDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {textDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */

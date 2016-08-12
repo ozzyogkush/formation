@@ -8,7 +8,6 @@
  * @class         KeyCodeSet
  * @name          KeyCodeSet
  * @package       Formation
- * @version
  */
 const KeyCodeSet = {
   BACKSPACE: 8,

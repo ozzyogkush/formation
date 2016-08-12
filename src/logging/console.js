@@ -18,7 +18,6 @@ const toggleableConsoleStamp = stampit()
      * @access      public
      * @type        {eventEmitterStamp}
      * @memberOf    {toggleableConsoleStamp}
-     * @since       0.1.0
      * @default     null
      */
     nodeEvents : null
@@ -53,7 +52,6 @@ const toggleableConsoleStamp = stampit()
      * @access      private
      * @type        Boolean
      * @memberOf    {toggleableConsoleStamp}
-     * @since       0.1.0
      * @default     false
      */
     let logConsole = false;
@@ -63,7 +61,6 @@ const toggleableConsoleStamp = stampit()
      *
      * @access      public
      * @memberOf    {toggleableConsoleStamp}
-     * @since       0.1.0
      *
      * @returns    {Boolean}        debug           Flag indicating whether we're using the console logging methods.
      */
@@ -77,7 +74,6 @@ const toggleableConsoleStamp = stampit()
      * @throws      TypeError                               if the `newVal` param is not a boolean.
      * @access      public
      * @memberOf    {toggleableConsoleStamp}
-     * @since       0.1.0
      *
      * @param       {Boolean}                   newVal      Flag indicating whether we're turning console logging on or off. Required.
      *
@@ -101,7 +97,6 @@ const toggleableConsoleStamp = stampit()
      *
      * @access      public
      * @memberOf    {toggleableConsoleStamp}
-     * @since       0.1.0
      *
      * @param       {Boolean}                   initial     Initial console logging flag. Required.
      *

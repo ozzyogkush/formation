@@ -17,7 +17,6 @@ const buttonComponentStamp = stampit()
      * @access      public
      * @type        {eventEmitterStamp}
      * @memberOf    {buttonComponentStamp}
-     * @since       0.1.0
      * @default     null
      */
     nodeEvents : null,
@@ -31,7 +30,6 @@ const buttonComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {buttonComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {Boolean}
      */
@@ -44,7 +42,6 @@ const buttonComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {buttonComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {Boolean}       isSubmitting
      */
@@ -63,7 +60,6 @@ const buttonComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {buttonComponentStamp}
-     * @since       0.1.0
      *
      * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$button`. Required.
      *
@@ -81,7 +77,6 @@ const buttonComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {buttonComponentStamp}
-     * @since       0.1.0
      *
      * @param       {Boolean}       submitting      Whether to set the `$button` to a submitting state (true) or not (false). Required.
      *
@@ -112,7 +107,6 @@ const buttonComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {buttonComponentStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event       jQuery `submit` event object. Required.
      */

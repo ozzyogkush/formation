@@ -14,7 +14,6 @@ const radioDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {radioDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $radio          The `radio` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -40,7 +39,6 @@ const radioDefaultRulesStamp = stampit()
      * @const
      * @type        Array
      * @memberOf    {radioDefaultRulesStamp}
-     * @since       0.1.0
      */
     const __rules = [
       ruleStamp({
@@ -54,7 +52,6 @@ const radioDefaultRulesStamp = stampit()
      *
      * @access      public
      * @memberOf    {radioDefaultRulesStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */

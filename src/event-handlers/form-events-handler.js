@@ -18,7 +18,6 @@ const formEventsHandlerStamp = stampit()
      * @access      public
      * @type        {eventEmitterStamp}
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      * @default     null
      */
     nodeEvents : null
@@ -30,7 +29,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event       jQuery `submit` event object. Required.
      *
@@ -56,7 +54,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}         event         jQuery `check-form-validity` event object. Required.
      */
@@ -99,7 +96,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `change` event object. Required.
      */
@@ -120,7 +116,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `change` event object. Required.
      */
@@ -137,7 +132,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `change` event object. Required.
      */
@@ -155,7 +149,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `change` event object. Required.
      */
@@ -173,7 +166,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `keyup` event object. Required.
      */
@@ -190,7 +182,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `focus` event object. Required.
      */
@@ -210,7 +201,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event         jQuery `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
      */
@@ -225,7 +215,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {formEventsHandlerStamp}
      */
@@ -243,7 +232,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}         event         jQuery `validation-handler` Formation event object. Required.
      */
@@ -327,7 +315,6 @@ const formEventsHandlerStamp = stampit()
      * @const
      * @type        {Array}
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      */
     const __inputTypes = ['text', 'password', 'email', 'tel'];
 
@@ -336,7 +323,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}       __inputTypes
      */
@@ -352,7 +338,6 @@ const formEventsHandlerStamp = stampit()
      * @access      private
      * @type        {Function}
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
      */
@@ -381,7 +366,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {formEventsHandlerStamp}
      */
@@ -407,7 +391,6 @@ const formEventsHandlerStamp = stampit()
      * @const
      * @type        {Array}
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      */
     const __inputElementTypesToValidate = ['input', 'textarea', 'select'];
 
@@ -417,7 +400,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {jQuery}
      */
@@ -435,7 +417,6 @@ const formEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {formEventsHandlerStamp}    this        Return the instance of the generated object so we can chain methods.
      */

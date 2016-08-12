@@ -11,7 +11,6 @@ let stampit = require('stampit');
  * @class         validityCheckStamp
  * @name          validityCheckStamp
  * @package       Formation
- * @version
  */
 const validityCheckStamp = stampit()
   .methods({
@@ -20,7 +19,6 @@ const validityCheckStamp = stampit()
      *
      * @access      public
      * @memberOf    {validityCheckStamp}
-     * @since
      *
      * @param       {String}        strToTest   The string to test. Required.
      *
@@ -37,7 +35,6 @@ const validityCheckStamp = stampit()
      *
      * @access      public
      * @memberOf    {validityCheckStamp}
-     * @since
      *
      * @param       {String}        strToTest   The string to test. Required.
      * @param       {int|null}      part        The part of ZIP code to check. Optional. Default null.
@@ -63,7 +60,6 @@ const validityCheckStamp = stampit()
      *
      * @access      public
      * @memberOf    {validityCheckStamp}
-     * @since
      *
      * @param       {String}        strToTest   The string to test. Required.
      *
@@ -82,7 +78,6 @@ const validityCheckStamp = stampit()
      *
      * @access      public
      * @memberOf    {validityCheckStamp}
-     * @since
      *
      * @param       {String}        strToTest   The string to test. Required.
      * @param       {Boolean}       multi       Flag indicating whether to allow multiple formats. Optional. False.

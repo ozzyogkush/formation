@@ -16,7 +16,6 @@ const ruleSetStamp = stampit()
      *
      * @access      public
      * @memberOf    {ruleSetStamp}
-     * @since       0.1.0
      *
      * @returns     {Boolean}       true
      */
@@ -29,7 +28,6 @@ const ruleSetStamp = stampit()
      *
      * @access      public
      * @memberOf    {ruleSetStamp}
-     * @since       0.1.0
      *
      * @param       {ruleStamp}         rule        The rule to add to this set. Required.
      *
@@ -47,7 +45,6 @@ const ruleSetStamp = stampit()
      *
      * @access      public
      * @memberOf    {ruleSetStamp}
-     * @since       0.1.0
      *
      * @returns     {Array}     An empty array;
      */

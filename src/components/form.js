@@ -22,7 +22,6 @@ const formComponentStamp = stampit()
      * @access      public
      * @type        {eventEmitterStamp}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     null
      */
     nodeEvents : null
@@ -63,7 +62,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns   {Boolean}       true
      */
@@ -78,7 +76,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {jQuery}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     $()
      */
     let __$form = $();
@@ -88,7 +85,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {jQuery}       __$form
      */
@@ -103,7 +99,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Boolean}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     false
      */
     let __initialized = false;
@@ -113,7 +108,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {boolean}       __initialized
      */
@@ -129,7 +123,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Function}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
      */
@@ -160,7 +153,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $form               jQuery wrapped `form` element to be managed by this instance. Required.
      *
@@ -196,7 +188,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {jQuery}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     $()
      */
     let __$requiredFields = $();
@@ -206,7 +197,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {jQuery}       __$requiredFields
      */
@@ -222,7 +212,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Function}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      */
     let __setRequiredFields = () => {
       __$requiredFields = this.findRequiredFields(__$form);
@@ -239,7 +228,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {jQuery}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     $()
      */
     let __$optionalFields = $();
@@ -249,7 +237,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {jQuery}       __$optionalFields
      */
@@ -264,7 +251,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Function}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      */
     let __setOptionalFields = () => {
       __$optionalFields = this.findOptionalFields(__$form);
@@ -278,7 +264,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Function}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      */
     let __initFields = () => {
       this.get$form().attr(this.validAttrKey, 0);
@@ -293,7 +278,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {buttonComponentStamp}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     null
      */
     let __submitButton = null;
@@ -303,7 +287,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {buttonComponentStamp}       __submitButton
      */
@@ -318,7 +301,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {buttonComponentStamp}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     null
      */
     let __previewButton = null;
@@ -328,7 +310,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {buttonComponentStamp}       __previewButton
      */
@@ -361,7 +342,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Function}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      */
     let __initFormButtons = () => {
       __submitButton = buttonComponentStamp({
@@ -389,7 +369,6 @@ const formComponentStamp = stampit()
      * @const
      * @type        {Object}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      */
     const __supportedElementTypesMap = {
       'text' : 'input:text,input:password,input:email,input:tel,textarea',
@@ -403,7 +382,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {Object}      __supportedElementTypesMap         Types of elements supported by Formation.
      */
@@ -418,7 +396,6 @@ const formComponentStamp = stampit()
      * @access      private
      * @type        {Object|null}
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      * @default     null
      */
     let __supportedElementTypesRuleSets = null;
@@ -438,7 +415,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @returns     {Object}
      */
@@ -451,7 +427,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @param       {String}          type          The supported element type whose rules we want. Required.
      *
@@ -466,7 +441,6 @@ const formComponentStamp = stampit()
      *
      * @access      public
      * @memberOf    {formComponentStamp}
-     * @since       0.1.0
      *
      * @param       {String}          type          The supported element type. Required.
      * @param       {ruleSetStamp}    rules         The rule set to be applied. Required.

@@ -12,7 +12,6 @@ const ruleStamp = stampit()
      * @throws      Error           The method for the rule is not implemented, so alert the user with an error
      * @access      public
      * @memberOf    {ruleStamp}
-     * @since       0.1.0
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -31,7 +30,6 @@ const ruleStamp = stampit()
      *
      * @access      public
      * @memberOf    {ruleStamp}
-     * @since       0.1.0
      *
      * @returns     {Boolean}       true
      */

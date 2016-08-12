@@ -16,7 +16,6 @@ const bodyEventsHandlerStamp = stampit()
      * @access      public
      * @type        {jQuery}
      * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
      * @default     null
      */
     $body : null,
@@ -28,7 +27,6 @@ const bodyEventsHandlerStamp = stampit()
      * @access      public
      * @type        {eventEmitterStamp}
      * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
      * @default     null
      */
     nodeEvents : null
@@ -41,7 +39,6 @@ const bodyEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @returns     {bodyEventsHandlerStamp}
      */
@@ -63,7 +60,6 @@ const bodyEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event       jQuery `keypress` event object. Required.
      *
@@ -99,7 +95,6 @@ const bodyEventsHandlerStamp = stampit()
      *
      * @access      public
      * @memberOf    {bodyEventsHandlerStamp}
-     * @since       0.1.0
      *
      * @param       {Event}       event       jQuery `keyup` event object. Required.
      */
