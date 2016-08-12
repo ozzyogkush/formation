@@ -40,7 +40,8 @@ const checkboxDefaultRulesStamp = stampit()
      * @returns     {Boolean}
      */
     dataFvMinSelected($checkbox, attribute) {
-      const minSelected = parseInt($checkbox.attr(attribute));
+      const minSelected = parseInt(this.getCheckboxOrRadioContainer($checkbox).attr(attribute));
+
       const $checkedCheckboxes = this
         .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
         .filter(':checked');
@@ -61,7 +62,8 @@ const checkboxDefaultRulesStamp = stampit()
      * @returns     {Boolean}
      */
     dataFvMaxSelected($checkbox, attribute) {
-      const maxSelected = parseInt($checkbox.attr(attribute));
+      const maxSelected = parseInt(this.getCheckboxOrRadioContainer($checkbox).attr(attribute));
+
       const $checkedCheckboxes = this
         .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
         .filter(':checked');
@@ -106,6 +108,23 @@ const checkboxDefaultRulesStamp = stampit()
      */
     this.getRules = () => {
       return __rules;
+    };
+
+    /**
+     * Return the DOM element that the `formation` rule attributes and validity flag
+     * will be attached to for the element provided.
+     *
+     * An ancestor element holds attributes for Checkbox buttons.
+     *
+     * @access      public
+     * @memberOf    {checkboxDefaultRulesStamp}
+     *
+     * @param       {jQuery}    $element      The element to check. Required.
+     *
+     * @returns     {jQuery}
+     */
+    this.getAttributeOwner = ($element) => {
+      return this.getCheckboxOrRadioContainer($element);
     };
   });
 

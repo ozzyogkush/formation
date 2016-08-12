@@ -250,12 +250,20 @@ const formEventsHandlerStamp = stampit()
 
     setValidationFlagHandler(event, validAfterRuleCheck) {
       let $element = $(event.target);
-      const validBeforeRuleCheck = (parseInt($element.attr(this.validAttrKey)) === 1);
+      const type = this.getInputType($element);
+      let $elementToCheckAndSetAttr = $element;
+
+      // TODO - re-use `ruleSetStamp.getAttributeOwner()` for this check
+      if ($.inArray(type, ['checkbox', 'radio']) !== -1) {
+        $elementToCheckAndSetAttr = this.getCheckboxOrRadioContainer($element);
+      }
+
+      const validBeforeRuleCheck = (parseInt($elementToCheckAndSetAttr.attr(this.validAttrKey)) === 1);
 
       // Set the value
-      $element.attr(this.validAttrKey, (validAfterRuleCheck === true ? 1 : 0));
+      $elementToCheckAndSetAttr.attr(this.validAttrKey, (validAfterRuleCheck === true ? 1 : 0));
 
-      // If the value changed, trigger the validity changed event
+      // If the value changed, trigger the validity changed event on the EVENT element
       const validityChanged = (
         (validBeforeRuleCheck && ! validAfterRuleCheck) ||
         (! validBeforeRuleCheck && validAfterRuleCheck)
@@ -267,23 +275,7 @@ const formEventsHandlerStamp = stampit()
 
     validate($element) {
       const lowerTag = $element.prop('tagName').toLowerCase();
-
-      let type = null;
-      if (lowerTag === 'textarea' ||
-          (lowerTag === 'input' && $.inArray(
-            $element.prop('type'),
-            this.getInputTypesArr()) !== -1)) {
-        type = 'text';
-      }
-      else if ($element.prop('type') === 'checkbox') {
-        type = 'checkbox';
-      }
-      else if ($element.prop('type') === 'radio') {
-        type = 'radio';
-      }
-      else if (lowerTag === 'select') {
-        type = 'select';
-      }
+      const type = this.getInputType($element);
 
       if (type === null) {
         this.warn(`No rules class exists for the tag \`${lowerTag}\`.`);
@@ -293,16 +285,7 @@ const formEventsHandlerStamp = stampit()
       const registeredRules = this.getRuleSetBySupportedElementType(type);
       const validAfterRuleCheck = registeredRules.process($element);
 
-      if ($.inArray(type, ['checkbox', 'radio']) !== -1) {
-        this
-          .getButtonGroup($element)
-          .trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
-      }
-      else {
-        // Text and selects set it on the input itself
-        $element
-          .trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
-      }
+      $element.trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
     }
   })
   .init(function() {
@@ -328,6 +311,29 @@ const formEventsHandlerStamp = stampit()
      */
     this.getInputTypesArr = () => {
       return __inputTypes;
+    };
+
+    this.getInputType = ($element) => {
+      const lowerTag = $element.prop('tagName').toLowerCase();
+
+      let type = null;
+      if (lowerTag === 'textarea' ||
+          (lowerTag === 'input' && $.inArray(
+            $element.prop('type'),
+            this.getInputTypesArr()) !== -1)) {
+        type = 'text';
+      }
+      else if ($element.prop('type') === 'checkbox') {
+        type = 'checkbox';
+      }
+      else if ($element.prop('type') === 'radio') {
+        type = 'radio';
+      }
+      else if (lowerTag === 'select') {
+        type = 'select';
+      }
+
+      return type;
     };
 
     /**

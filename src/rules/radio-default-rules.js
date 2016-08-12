@@ -58,6 +58,23 @@ const radioDefaultRulesStamp = stampit()
     this.getRules = () => {
       return __rules;
     };
+
+    /**
+     * Return the DOM element that the `formation` rule attributes and validity flag
+     * will be attached to for the element provided.
+     *
+     * An ancestor element holds attributes for Radio buttons.
+     *
+     * @access      public
+     * @memberOf    {radioDefaultRulesStamp}
+     *
+     * @param       {jQuery}    $element      The element to check. Required.
+     *
+     * @returns     {jQuery}
+     */
+    this.getAttributeOwner = ($element) => {
+      return this.getCheckboxOrRadioContainer($element);
+    };
   });
 
 module.exports = ruleSetStamp.compose(radioDefaultRulesStamp);

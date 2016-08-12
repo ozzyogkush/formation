@@ -54,10 +54,14 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
     describe('checks that number of checkboxes selected in the list is greater or equal to the value specified in the attribute', function() {
       describe('when it is', function() {
         it('returns true', function () {
-          let $checkbox = $('<input type="checkbox" name="test" id="test1" data-fv-min-selected="1" checked="checked" />');
+          let $checkbox = $('<input type="checkbox" name="test" id="test1" checked="checked" />');
+          let $checkboxContainer = $('<div data-fv-group-container="test" data-fv-min-selected="1"></div>');
           let $checkboxMock = sinon.mock($checkbox);
+          let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          $checkboxMock.expects('attr').once().withArgs('data-fv-min-selected').returns('1');
+          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+            .withArgs($checkbox).returns($checkboxContainer);
+          $checkboxContainerMock.expects('attr').once().withArgs('data-fv-min-selected').returns('1');
           $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
             .once().withArgs('test')
@@ -65,15 +69,20 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           assert.isTrue(checkboxRulesSet.dataFvMinSelected($checkbox, 'data-fv-min-selected'));
 
           $checkboxMock.verify();
+          $checkboxContainerMock.verify();
           checkboxRulesSetMock.verify();
         });
       });
       describe('when it is not', function() {
         it('returns false', function () {
-          let $checkbox = $('<input type="checkbox" name="test" id="test1" data-fv-min-selected="2" checked="checked" />');
+          let $checkbox = $('<input type="checkbox" name="test" id="test1" checked="checked" />');
+          let $checkboxContainer = $('<div data-fv-group-container="test" data-fv-min-selected="2"></div>');
           let $checkboxMock = sinon.mock($checkbox);
+          let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          $checkboxMock.expects('attr').once().withArgs('data-fv-min-selected').returns('2');
+          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+            .withArgs($checkbox).returns($checkboxContainer);
+          $checkboxContainerMock.expects('attr').once().withArgs('data-fv-min-selected').returns('2');
           $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
             .once().withArgs('test')
@@ -81,6 +90,7 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           assert.isFalse(checkboxRulesSet.dataFvMinSelected($checkbox, 'data-fv-min-selected'));
 
           $checkboxMock.verify();
+          $checkboxContainerMock.verify();
           checkboxRulesSetMock.verify();
         });
       });
@@ -91,10 +101,14 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
     describe('checks that number of checkboxes selected in the list is greater or equal to the value specified in the attribute', function() {
       describe('when it is', function() {
         it('returns true', function () {
-          let $checkbox = $('<input type="checkbox" name="test" id="test1" data-fv-max-selected="1" checked="checked" />');
+          let $checkbox = $('<input type="checkbox" name="test" id="test1" checked="checked" />');
+          let $checkboxContainer = $('<div data-fv-group-container="test" data-fv-max-selected="1"></div>');
           let $checkboxMock = sinon.mock($checkbox);
+          let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          $checkboxMock.expects('attr').once().withArgs('data-fv-max-selected').returns('1');
+          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+            .withArgs($checkbox).returns($checkboxContainer);
+          $checkboxContainerMock.expects('attr').once().withArgs('data-fv-max-selected').returns('1');
           $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
             .once().withArgs('test')
@@ -102,15 +116,20 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           assert.isTrue(checkboxRulesSet.dataFvMaxSelected($checkbox, 'data-fv-max-selected'));
 
           $checkboxMock.verify();
+          $checkboxContainerMock.verify();
           checkboxRulesSetMock.verify();
         });
       });
       describe('when it is not', function() {
         it('returns false', function () {
-          let $checkbox = $('<input type="checkbox" name="test" id="test1" data-fv-max-selected="0" checked="checked" />');
+          let $checkbox = $('<input type="checkbox" name="test" id="test1" checked="checked" />');
+          let $checkboxContainer = $('<div data-fv-group-container="test" data-fv-max-selected="0"></div>');
           let $checkboxMock = sinon.mock($checkbox);
+          let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          $checkboxMock.expects('attr').once().withArgs('data-fv-max-selected').returns('0');
+          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+            .withArgs($checkbox).returns($checkboxContainer);
+          $checkboxContainerMock.expects('attr').once().withArgs('data-fv-max-selected').returns('0');
           $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
             .once().withArgs('test')
@@ -118,6 +137,7 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           assert.isFalse(checkboxRulesSet.dataFvMaxSelected($checkbox, 'data-fv-max-selected'));
 
           $checkboxMock.verify();
+          $checkboxContainerMock.verify();
           checkboxRulesSetMock.verify();
         });
       });

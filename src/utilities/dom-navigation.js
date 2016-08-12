@@ -41,6 +41,8 @@ const domNavigationStamp = stampit()
 
     toggleOverrideTextAttrKey : 'data-fv-toggle-override-text',
 
+    radioOrCheckboxContainerAttrKey : 'data-fv-group-container',
+
     /**
      * The Bootstrap stateful element attribute whose value is used for setting the element's innerHTML
      * when set to the 'loading' state.
@@ -225,8 +227,10 @@ const domNavigationStamp = stampit()
       return tbr;
     },
 
-    getButtonGroup($element) {
-      return $element.closest('.btn-group');
+    getCheckboxOrRadioContainer($element) {
+      return this
+        .findCurrentFormByTarget($element)
+        .find(`[${this.groupedElementsContainerAttrKey}="${$element.attr('name')}"]`);
     },
 
     getAllCheckboxesOrRadiosByName($element) {

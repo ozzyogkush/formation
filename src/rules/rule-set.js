@@ -52,11 +52,28 @@ const ruleSetStamp = stampit()
       return [];
     };
 
+    /**
+     * Return the DOM element that the `formation` rule attributes and validity flag
+     * will be attached to for the element provided. By default, it is the
+     * element itself.
+     *
+     * @access      public
+     * @memberOf    {ruleSetStamp}
+     *
+     * @param       {jQuery}    $element      The element to check. Required.
+     *
+     * @returns     {jQuery}    $element
+     */
+    this.getAttributeOwner = ($element) => {
+      return $element;
+    };
+
     this.process = ($element) => {
       let validAfterRuleCheck = true;
+      const $attributeOwner = this.getAttributeOwner($element);
       for (const rule of this.getRules()) {
         const ruleAttribute = `data-fv-${rule.name}`;
-        if (rule.name === 'default' || $element.attr(ruleAttribute) !== undefined) {
+        if (rule.name === 'default' || $attributeOwner.attr(ruleAttribute) !== undefined) {
           validAfterRuleCheck = rule.callback($element, ruleAttribute);
           if (! validAfterRuleCheck) {
             break;
