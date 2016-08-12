@@ -316,7 +316,7 @@ const formEventsHandlerStamp = stampit()
      * @type        {Array}
      * @memberOf    {formEventsHandlerStamp}
      */
-    const __inputTypes = ['text', 'password', 'email', 'tel'];
+    const __inputTypes = ['text', 'password', 'email', 'number', 'tel'];
 
     /**
      * Return the private `__inputTypes` var.
@@ -421,14 +421,17 @@ const formEventsHandlerStamp = stampit()
      * @returns     {formEventsHandlerStamp}    this        Return the instance of the generated object so we can chain methods.
      */
     this.addDefaultEventHandlers = () => {
-      const allInputElementsSelector = __inputElementTypesToValidate.join(', ');
+      const joinStr = ', ';
+      const allInputElementsSelector = __inputElementTypesToValidate.join(joinStr);
       const mouseMoveTouchEvents = [
         this.getMouseEnterEventName(),
         this.getMouseLeaveEventName(),
         this.getTouchStartEventName()
-      ].join(', ');
+      ].join(joinStr);
 
-      const textElementsSelector = __inputTypes.map(item => `input:${item}`).join(', ') + ', textarea';
+      const textElementsSelector = __inputTypes
+          .map(type => `input[type="${type}"]`)
+          .join(joinStr) + `, textarea`;
 
       this.get$form()
         .submit((event) => this.formSubmitHandler(event))

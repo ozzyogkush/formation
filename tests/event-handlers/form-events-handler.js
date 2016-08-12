@@ -342,7 +342,11 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
           .withArgs('change.formation', 'input:radio', sinon.match.func)
           .returns($form);
         $formMock.expects('on').once()
-          .withArgs('change.formation', 'input:text, input:password, input:email, input:tel, textarea', sinon.match.func)
+          .withArgs(
+            'change.formation',
+            'input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="tel"], textarea',
+            sinon.match.func
+          )
           .returns($form);
         $formMock.expects('on').once()
           .withArgs('change.formation', 'select', sinon.match.func)
