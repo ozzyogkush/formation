@@ -7,6 +7,19 @@ const keyCodes = require('../utilities/key-code-set');
 const stampit = require('stampit');
 const $ = require('jquery');
 
+/**
+ * Provide an interface for managing body events.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.bodyEventsHandler
+ * @mixin         Formation.bodyEventsHandler
+ *
+ * @mixes         Formation.toggleableConsole
+ * @mixes         Formation.domNavigation
+ * @mixes         Formation.eventDefinitions
+ */
 const bodyEventsHandlerStamp = stampit()
   .refs({
 
@@ -15,7 +28,7 @@ const bodyEventsHandlerStamp = stampit()
      *
      * @access      public
      * @type        {jQuery}
-     * @memberOf    {bodyEventsHandlerStamp}
+     * @memberOf    {Formation.bodyEventsHandler}
      * @default     null
      */
     $body : null,
@@ -25,8 +38,8 @@ const bodyEventsHandlerStamp = stampit()
      * a global Formation event emitter.
      *
      * @access      public
-     * @type        {eventEmitterStamp}
-     * @memberOf    {bodyEventsHandlerStamp}
+     * @type        {Formation.eventEmitterStamp}
+     * @memberOf    {Formation.bodyEventsHandler}
      * @default     null
      */
     nodeEvents : null
@@ -38,9 +51,10 @@ const bodyEventsHandlerStamp = stampit()
      * and sets the initialized flag to be `true`.
      *
      * @access      public
-     * @memberOf    {bodyEventsHandlerStamp}
+     * @memberOf    {Formation.bodyEventsHandler}
+     * @mixes       {Formation.bodyEventsHandler}
      *
-     * @returns     {bodyEventsHandlerStamp}
+     * @returns     {Formation.bodyEventsHandler}
      */
     addDefaultEventHandlers() {
       this.$body
@@ -59,11 +73,12 @@ const bodyEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {bodyEventsHandlerStamp}
+     * @memberOf    {Formation.bodyEventsHandler}
+     * @mixes       {Formation.bodyEventsHandler}
      *
-     * @param       {Event}       event       jQuery `keypress` event object. Required.
+     * @param       {jQuery.Event}        event       jQuery `keypress` event object. Required.
      *
-     * @returns     {Boolean}     allowKeyEventToProgress
+     * @returns     {Boolean}             allowKeyEventToProgress
      */
     bodyKeyPressHandler(event) {
       const $target = $(event.target);
@@ -94,9 +109,10 @@ const bodyEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {bodyEventsHandlerStamp}
+     * @memberOf    {Formation.bodyEventsHandler}
+     * @mixes       {Formation.bodyEventsHandler}
      *
-     * @param       {Event}       event       jQuery `keyup` event object. Required.
+     * @param       {jQuery.Event}        event       jQuery `keyup` event object. Required.
      */
     bodyKeyUpHandler(event) {
       if ($.inArray(event.which, [keyCodes.ENTER, keyCodes.SPACE]) === -1) {

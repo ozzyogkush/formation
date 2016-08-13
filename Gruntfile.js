@@ -77,7 +77,7 @@ module.exports = function(grunt) {
         src:['<%= paths.jsTestSrc %>/**/*.js'],
         options: {
           coverageFolder: 'test-results',
-          nodeExec: isWindows ? require.resolve('./node_modules/.bin/babel-node.bat') : require.resolve('./node_modules/.bin/babel-node'),
+          nodeExec: isWindows ? require.resolve('./node_modules/.bin/babel-node.cmd') : require.resolve('./node_modules/.bin/babel-node'),
           scriptPath: require.resolve('isparta/bin/isparta'),
           mochaOptions: ['--compilers', 'js:babel-register', '--require', 'jsdom-global/register'],
           reportFormats: ['lcov', 'html']

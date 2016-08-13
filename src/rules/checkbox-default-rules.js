@@ -4,8 +4,19 @@ const ruleStamp = require('./rule');
 const ruleSetStamp = require('./rule-set');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
+/**
+ * Provides a wrapper for the `console` log functions that takes into account a flag that can
+ * be set based on any arbitrary reason (e.g. environment, existence of a module, etc).
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.checkboxDefaultRules
+ * @mixin         Formation.checkboxDefaultRules
+ *
+ * @mixes         Formation.ruleSet
+ */
 const checkboxDefaultRulesStamp = stampit()
   .methods({
 
@@ -13,7 +24,8 @@ const checkboxDefaultRulesStamp = stampit()
      * The default checkbox button elements rule is that at least one of them is checked.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
+     * @memberOf    {Formation.checkboxDefaultRules}
+     * @mixes       {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -32,7 +44,8 @@ const checkboxDefaultRulesStamp = stampit()
      * The default checkbox button elements rule is that at least one of them is checked.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
+     * @memberOf    {Formation.checkboxDefaultRules}
+     * @mixes       {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -54,7 +67,8 @@ const checkboxDefaultRulesStamp = stampit()
      * the number specified in the attribute.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
+     * @memberOf    {Formation.checkboxDefaultRules}
+     * @mixes       {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -81,7 +95,7 @@ const checkboxDefaultRulesStamp = stampit()
      * @access      private
      * @const
      * @type        Array
-     * @memberOf    {checkboxDefaultRulesStamp}
+     * @memberOf    {Formation.checkboxDefaultRules}
      */
     const __rules = [
       ruleStamp({
@@ -102,7 +116,7 @@ const checkboxDefaultRulesStamp = stampit()
      * Return the value of the private `__rules` object.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
+     * @memberOf    {Formation.checkboxDefaultRules}
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */
@@ -117,7 +131,7 @@ const checkboxDefaultRulesStamp = stampit()
      * An ancestor element holds attributes for Checkbox buttons.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
+     * @memberOf    {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}    $element      The element to check. Required.
      *
