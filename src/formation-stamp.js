@@ -14,12 +14,25 @@ const $ = require('jquery');
  *
  * @copyright     Copyright (c) 2016, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
- * @class         formationStamp
- * @name          formationStamp
  * @package       Formation
+ * @namespace     Formation.formation
+ * @mixin         Formation.formation
+ *
+ * @mixes         Formation.domNavigation
+ * @mixes         Formation.toggleableConsole
  */
 const formationStamp = stampit()
   .refs({
+
+    /**
+     * The element DOM attribute key which specifies whether a form is managed
+     * by Formation (1) or not (0).
+     *
+     * @access      public
+     * @type        {String}
+     * @memberOf    {Formation.formation}
+     * @default     data-formation
+     */
     formationDataAttrKey : 'data-formation',
 
     /**
@@ -27,8 +40,8 @@ const formationStamp = stampit()
      * a global Formation event emitter.
      *
      * @access      public
-     * @type        {eventEmitterStamp}
-     * @memberOf    {formationStamp}
+     * @type        {Formation.eventEmitter}
+     * @memberOf    {Formation.formation}
      * @default     null
      */
     nodeEvents : null
@@ -40,9 +53,10 @@ const formationStamp = stampit()
      * initialize Formation.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
      *
-     * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
+     * @returns     {Formation.formation}    this            Return the instance of the generated object so we can chain methods.
      */
     readyDocument() {
       // DOM is ready, so Enter Formation!
@@ -55,9 +69,10 @@ const formationStamp = stampit()
      * Initialization of the Formation forms.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
      *
-     * @returns     {formationStamp}    this            Return the instance of the generated object so we can chain methods.
+     * @returns     {Formation.formation}    this            Return the instance of the generated object so we can chain methods.
      */
     enterFormation() {
       this.log('Initializing Formation...');
@@ -86,11 +101,12 @@ const formationStamp = stampit()
      * to the DOM after auto-initialization of the DOM.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
      *
-     * @param       {jQuery}              $form         The jQuery extended `form` element to be initialized. Required.
+     * @param       {jQuery}                  $form         The jQuery extended `form` element to be initialized. Required.
      *
-     * @returns     {formationStamp}      this
+     * @returns     {Formation.formation}     this
      */
     initForm($form) {
       try {
@@ -110,6 +126,15 @@ const formationStamp = stampit()
       return this;
     },
 
+    /**
+     * Construct a CSS selector used to find Formation forms.
+     *
+     * @access      public
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
+     *
+     * @returns     {String}
+     */
     getFormationSelector() {
       return `[${this.formationDataAttrKey}="1"]`;
     },
@@ -119,13 +144,14 @@ const formationStamp = stampit()
      * Handle when things go wrong.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
      *
      * @param       {String}      elementType             The type of element to which this rule applies. Required.
      * @param       {String}      ruleName                The name of the rule to be registered. Required.
      * @param       {Function}    ruleCallbackMethod      The callback method to be run when the rule is checked. Required.
      *
-     * @returns     {formationStamp}    this
+     * @returns     {Formation.formation}    this
      */
     registerRule(elementType, ruleName, ruleCallbackMethod) {
       if (typeof elementType !== 'string') {
@@ -161,7 +187,7 @@ const formationStamp = stampit()
      *
      * @access      private
      * @type        Boolean
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      * @default     false
      */
     let debug = false;
@@ -170,9 +196,9 @@ const formationStamp = stampit()
      * Return the value of the private `debug` flag.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
-     * @returns    {Boolean}        debug           Flag indicating whether we're turning debug on or off.
+     * @returns     {Boolean}        debug           Flag indicating whether we're turning debug on or off.
      */
     this.getDebug = () => {
       return debug;
@@ -183,14 +209,14 @@ const formationStamp = stampit()
      *
      * @throws      TypeError                         if the `newVal` param is not a boolean.
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
-     * @param       {Boolean}         newVal          Flag indicating whether we're turning debug on or off. Required.
+     * @param       {Boolean}               newVal          Flag indicating whether we're turning debug on or off. Required.
      *
-     * @returns     {formationStamp}  this            Return the instance of the generated object so we can chain methods.
+     * @returns     {Formation.formation}   this            Return the instance of the generated object so we can chain methods.
      */
     this.setDebug = (newVal) => {
-      const callStackCurrent = 'formationStamp.setDebug';
+      const callStackCurrent = 'Formation.formation.setDebug';
       if (typeof newVal !== 'boolean') {
         throw new TypeError(callStackCurrent + '() - Expected `newVal` param to be a Boolean, but is `' + typeof(newVal) + '`.');
       }
@@ -208,7 +234,7 @@ const formationStamp = stampit()
      *
      * @access      private
      * @type        jQuery
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      * @default     $()
      */
     let $forms = $();
@@ -217,7 +243,7 @@ const formationStamp = stampit()
      * Return the value of the private `$forms` object.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
      * @returns     {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
      */
@@ -230,9 +256,9 @@ const formationStamp = stampit()
      * `$forms` property.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
-     * @returns     {formationStamp}  this            Return the instance of the generated object so we can chain methods.
+     * @returns     {Formation.formation}  this            Return the instance of the generated object so we can chain methods.
      */
     this.detectForms = () => {
       $forms = $('form').filter(this.formFilter);
@@ -246,12 +272,12 @@ const formationStamp = stampit()
      * by Formation.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
      * @param       {int}           index         The index of the element in the jQuery set.
      * @param       {jQuery}        element       The DOM element to check.
      *
-     * @returns     {boolean}
+     * @returns     {Boolean}
      */
     this.formFilter = (index, element) => {
       let $element = $(element);
@@ -269,7 +295,7 @@ const formationStamp = stampit()
      * @access      private
      * @const
      * @type        {Array}
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      */
     const __supportedElementTypes = [
       'text',
@@ -282,7 +308,7 @@ const formationStamp = stampit()
      * Return the value of the private `__supportedElementTypes` object.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
      * @returns     {Array}       __supportedElementTypes         Types of elements supported by Formation.
      */
@@ -295,7 +321,7 @@ const formationStamp = stampit()
      *
      * @access      public
      * @type        {Object}
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      * @default     null
      */
     let __bodyEventsHandler = null;
@@ -304,11 +330,11 @@ const formationStamp = stampit()
      * Add the default event handlers for the `body` element, iff that has not already taken place.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
-     * @param       {bodyEventsHandlerStamp}        bodyEventsHandler     Object which is composed of a `bodyEventsHandlerStamp`. Required.
+     * @param       {Formation.bodyEventsHandler}     bodyEventsHandler     Object which is composed of a `bodyEventsHandlerStamp`. Required.
      *
-     * @returns     {formationStamp}
+     * @returns     {Formation.formation}
      */
     this.initBodyEvents = (bodyEventsHandler) => {
       this.log('Initializing body events...');
@@ -333,9 +359,9 @@ const formationStamp = stampit()
      * various events which should be handled.
      *
      * @access      public
-     * @memberOf    {formationStamp}
+     * @memberOf    {Formation.formation}
      *
-     * @returns     {formationStamp}
+     * @returns     {Formation.formation}
      */
     this.initForms = () => {
       // Set up the individual forms.

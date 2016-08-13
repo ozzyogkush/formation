@@ -6,8 +6,7 @@ const ruleSetStamp = require('./rule-set');
 const stampit = require('stampit');
 
 /**
- * Provides a wrapper for the `console` log functions that takes into account a flag that can
- * be set based on any arbitrary reason (e.g. environment, existence of a module, etc).
+ * Used for processing a set of `Formation.rule` objects against `input:radio` elements.
  *
  * @copyright     Copyright (c) 2016, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
@@ -48,11 +47,10 @@ const radioDefaultRulesStamp = stampit()
      *
      * @private
      * @access      private
-     * @const
      * @type        Array
      * @memberOf    {Formation.radioDefaultRules}
      */
-    const __rules = [
+    let __rules = [
       ruleStamp({
         name : 'default',
         callback : ($radio, attribute) => this.dataFvDefault($radio, attribute)

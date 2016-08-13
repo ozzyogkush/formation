@@ -6,6 +6,17 @@ const ruleSetStamp = require('./rule-set');
 const stampit = require('stampit');
 const $ = require('jquery');
 
+/**
+ * Used for processing a set of `Formation.rule` objects against `select` elements.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.textDefaultRules
+ * @mixin         Formation.textDefaultRules
+ *
+ * @mixes         Formation.ruleSet
+ */
 const textDefaultRulesStamp = stampit()
   .methods({
 
@@ -14,7 +25,8 @@ const textDefaultRulesStamp = stampit()
      * it's trimmed value must not be empty.
      *
      * @access      public
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
+     * @mixes       {Formation.textDefaultRules}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -30,7 +42,8 @@ const textDefaultRulesStamp = stampit()
      * or equal to the specified attribute value.
      *
      * @access      public
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
+     * @mixes       {Formation.textDefaultRules}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -50,7 +63,8 @@ const textDefaultRulesStamp = stampit()
      * or equal to the specified attribute value.
      *
      * @access      public
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
+     * @mixes       {Formation.textDefaultRules}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -72,7 +86,8 @@ const textDefaultRulesStamp = stampit()
      * if you prefer.
      *
      * @access      public
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
+     * @mixes       {Formation.textDefaultRules}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -120,7 +135,8 @@ const textDefaultRulesStamp = stampit()
      *
      * @throws      Error           iff the other field to match is not in the DOM
      * @access      public
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
+     * @mixes       {Formation.textDefaultRules}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -156,11 +172,10 @@ const textDefaultRulesStamp = stampit()
      *
      * @private
      * @access      private
-     * @const
      * @type        Array
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
      */
-    const __rules = [
+    let __rules = [
       ruleStamp({
         name : 'default',
         callback : ($element, attribute) => this.dataFvDefault($element, attribute)
@@ -187,7 +202,7 @@ const textDefaultRulesStamp = stampit()
      * Return the value of the private `__rules` object.
      *
      * @access      public
-     * @memberOf    {textDefaultRulesStamp}
+     * @memberOf    {Formation.textDefaultRules}
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */

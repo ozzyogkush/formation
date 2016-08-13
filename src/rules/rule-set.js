@@ -7,8 +7,7 @@ const validityChecksStamp = require('../utilities/validity-checks');
 const stampit = require('stampit');
 
 /**
- * Provides a wrapper for the `console` log functions that takes into account a flag that can
- * be set based on any arbitrary reason (e.g. environment, existence of a module, etc).
+ * Used for processing a set of `Formation.rule` objects against form DOM elements.
  *
  * @copyright     Copyright (c) 2016, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
@@ -29,7 +28,6 @@ const ruleSetStamp = stampit()
      *
      * @access      public
      * @memberOf    {Formation.ruleSet}
-     * @mixes       {Formation.ruleSet}
      *
      * @returns     {Boolean}       true
      */
@@ -42,7 +40,6 @@ const ruleSetStamp = stampit()
      *
      * @access      public
      * @memberOf    {Formation.ruleSet}
-     * @mixes       {Formation.ruleSet}
      *
      * @param       {Formation.rule}      rule        The rule to add to this set. Required.
      *

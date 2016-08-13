@@ -5,8 +5,29 @@ const eventDefinitionsStamp = require('../event-handlers/event-definitions-stamp
 const stampit = require('stampit');
 const $ = require('jquery');
 
+/**
+ * Formation-specific DOM navigation and modification.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.domNavigation
+ * @mixin         Formation.domNavigation
+ *
+ * @mixes         Formation.eventDefinitions
+ */
 const domNavigationStamp = stampit()
   .refs({
+
+    /**
+     * The element DOM attribute key which specifies whether a form is managed
+     * by Formation (1) or not (0).
+     *
+     * @access      public
+     * @type        {String}
+     * @memberOf    {Formation.domNavigation}
+     * @default     data-fv-valid
+     */
     formationDataAttrKey : 'data-formation',
 
     /**
@@ -14,33 +35,52 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     null
      */
     formationSelector: null,
 
     /**
-     * The CSS selector used to find the form's submit button element.
+     * The element DOM attribute key which specifies whether the element
+     * is valid (1) or not (0).
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     data-fv-valid
      */
     validAttrKey : 'data-fv-valid',
 
     /**
-     * The CSS selector used to find an `input` element "linked" to another.
+     * The element DOM attribute key which specifies an `input` element "linked" to another.
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     data-fv-linked-input
      */
     linkedInputAttrKey : 'data-fv-linked-input',
 
+    /**
+     * The element DOM attribute key which specifies whether to clear the value
+     * of the element when it is hidden (1) or not (0).
+     *
+     * @access      public
+     * @type        {String}
+     * @memberOf    {Formation.domNavigation}
+     * @default     data-fv-toggle-override-text
+     */
     toggleOverrideTextAttrKey : 'data-fv-toggle-override-text',
 
+    /**
+     * The element DOM attribute key which specifies a group of input elements
+     * by the set's name (eg checkboxes or radios with the same name).
+     *
+     * @access      public
+     * @type        {String}
+     * @memberOf    {Formation.domNavigation}
+     * @default     data-fv-group-container
+     */
     radioOrCheckboxContainerAttrKey : 'data-fv-group-container',
 
     /**
@@ -49,7 +89,7 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @type        String
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     data-fv-submitting
      */
     submittingStateDataKey : 'data-fv-submitting',
@@ -59,7 +99,7 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     formation-form
      */
     formationDataKey : 'formation-form',
@@ -69,7 +109,7 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     [data-fv-optional="1"]
      */
     optionalFieldsSelector : '[data-fv-optional="1"]',
@@ -79,7 +119,7 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     [data-fv-form-preview]
      */
     previewButtonSelector : '[data-fv-form-preview]',
@@ -89,7 +129,7 @@ const domNavigationStamp = stampit()
      *
      * @access      public
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     [data-fv-required="1"]
      */
     requiredFieldsSelector : '[data-fv-required="1"]',
@@ -99,7 +139,7 @@ const domNavigationStamp = stampit()
      *
      * @access      private
      * @type        {String}
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
      * @default     [data-fv-form-submit]
      */
     submitButtonSelector : '[data-fv-form-submit]'
@@ -110,7 +150,8 @@ const domNavigationStamp = stampit()
      * Return the `form` element in which `$element` resides.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @returns     {jQuery}       The jQuery wrapped `form` element.
      */
@@ -125,13 +166,14 @@ const domNavigationStamp = stampit()
     /**
      * Find the `formComponent` for the `form` element in which the `$element` resides.
      *
-     * @throws      TypeError               if the `formComponent` is undefined, has no `isFormComponent` or `isFormComponent()` returns false
+     * @throws      TypeError                         if the `formComponent` is undefined, has no `isFormComponent` or `isFormComponent()` returns false
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
-     * @param       {jQuery}                $element            The jQuery wrapped element for which to find the `formComponent` instance. Required.
+     * @param       {jQuery}                          $element            The jQuery wrapped element for which to find the `formComponent` instance. Required.
      *
-     * @returns     {formComponent|null}    formationForm       The `formComponent` if it is there, or null otherwise.
+     * @returns     {Formation.formComponent|null}    formationForm       The `formComponent` if it is there, or null otherwise.
      */
     getFormComponentOfCurrentElement($element) {
       let $currentForm = this.findCurrentFormByTarget($element);
@@ -156,7 +198,8 @@ const domNavigationStamp = stampit()
      * Find the required fields in the specified `$form` element.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
      *
@@ -170,7 +213,8 @@ const domNavigationStamp = stampit()
      * Find the optional fields in the specified `$form` element.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
      *
@@ -184,7 +228,8 @@ const domNavigationStamp = stampit()
      * Find the Formation submit button in the specified `$form` element.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
      *
@@ -198,7 +243,8 @@ const domNavigationStamp = stampit()
      * Find the Formation preview button in the specified `$form` element.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}      $form               The jQuery wrapped `form` element. Required.
      *
@@ -212,11 +258,12 @@ const domNavigationStamp = stampit()
      * Check whether `$element` is a custom Formation Bootstrap Radio or Checkbox widget.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}      $element          The jQuery wrapped `form` element. Required.
      *
-     * @returns     {jQuery}      The Formation submit button in the $form.
+     * @returns     {Boolean}     tbr               Whether the element is a custom widget.
      */
     elementIsCustomRadioOrCheckboxWidget($element) {
       let $currentForm = this.findCurrentFormByTarget($element);
@@ -227,12 +274,35 @@ const domNavigationStamp = stampit()
       return tbr;
     },
 
+    /**
+     * Find the DOM element which acts as a container for a set of input elements
+     * with the same name as `$element`.
+     *
+     * @access      public
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
+     *
+     * @param       {jQuery}        $element        The element whose container we want to find. Required.
+     *
+     * @returns     {jQuery}
+     */
     getCheckboxOrRadioContainer($element) {
       return this
         .findCurrentFormByTarget($element)
         .find(`[${this.groupedElementsContainerAttrKey}="${$element.attr('name')}"]`);
     },
 
+    /**
+     * Find all input elements in the current form with the same name as `$element`.
+     *
+     * @access      public
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
+     *
+     * @param       {jQuery}        $element        The element whose name we want to find all elements for. Required.
+     *
+     * @returns     {jQuery}
+     */
     getAllCheckboxesOrRadiosByName($element) {
       return this
         .findCurrentFormByTarget($element)
@@ -243,7 +313,8 @@ const domNavigationStamp = stampit()
      * Find the `label` element in the DOM for the supplied `$input` element.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}        $input      The source element used to find a `label` element. Required.
      *
@@ -262,7 +333,8 @@ const domNavigationStamp = stampit()
      *
      * @throws      Error                       iff the linked element is not found in the DOM when expected
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}        $source     The source element used to find a linked element. Required.
      *
@@ -290,12 +362,13 @@ const domNavigationStamp = stampit()
      * Will enable or disable the `$element` based on the `enable` param.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}        $element        The element to enable or disable. Required.
      * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$element`. Required.
      *
-     * @returns     {domNavigationStamp}
+     * @returns     {Formation.domNavigation}
      */
     enableOrDisableElement($element, enable) {
       if (enable) {
@@ -312,12 +385,13 @@ const domNavigationStamp = stampit()
      * Will add or remove the `hidden` class of the `$element` based on the `show` param.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}        $element        The element to show or hide. Required.
      * @param       {Boolean}       show            Whether to show (true) or hide (false) the `$element`. Required.
      *
-     * @returns     {domNavigationStamp}
+     * @returns     {Formation.domNavigation}
      */
     showOrHideElement($element, show) {
       if (show) {
@@ -336,12 +410,13 @@ const domNavigationStamp = stampit()
      * when it is not.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}        $element        The element to show or hide. Required.
      * @param       {Boolean}       show            Whether to show (true) or hide (false) the `$element`. Required.
      *
-     * @returns     {domNavigationStamp}
+     * @returns     {Formation.domNavigation}
      */
     showOrHideLinkedElement($element, show) {
       const $linkedElement = this.getLinkedElement($element);
@@ -372,13 +447,14 @@ const domNavigationStamp = stampit()
      * Takes into account whether
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param	      {jQuery}      $linkedElement        jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     enableAndShow         Flag indicating whether to show/enable, or hide/disable, the element. Required.
      * @param       {Boolean}     elementHandlesHidden  Flag indicating whether the element handles its hidden/shown status. Required.
      *
-     * @returns     {domNavigationStamp}
+     * @returns     {Formation.domNavigation}
      */
     enableOrDisableLinkedElement($linkedElement, enableAndShow, elementHandlesHidden) {
       if (enableAndShow) {
@@ -397,12 +473,13 @@ const domNavigationStamp = stampit()
      * is specified and is `true`, also removes the "hidden" class from the element.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param	      {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     removeHidden      Flag indicating whether to remove the 'hidden' class. Required.
      *
-     * @returns     {domNavigationStamp}
+     * @returns     {Formation.domNavigation}
      */
     showEnableLinkedElement($element, removeHidden) {
       this.enableOrDisableElement($element, true);
@@ -421,12 +498,13 @@ const domNavigationStamp = stampit()
      * unless the `data-fv-toggle-override-text` is set on the linked input with a value of 0.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
      * @param       {Boolean}     includeHidden     Flag indicating whether to add the 'hidden' class. Required.
      *
-     * @returns     {domNavigationStamp}
+     * @returns     {Formation.domNavigation}
      */
     hideDisableLinkedElement($element, includeHidden) {
       const clearValue = (
@@ -450,12 +528,13 @@ const domNavigationStamp = stampit()
      * not hidden nor disabled.
      *
      * @access      public
-     * @memberOf    {domNavigationStamp}
+     * @memberOf    {Formation.domNavigation}
+     * @mixes       {Formation.domNavigation}
      *
      * @param       {int}           index         The index of the element in the jQuery set.
      * @param       {jQuery}        element       The DOM element to check.
      *
-     * @returns     {boolean}
+     * @returns     {Boolean}
      */
     visibleEnabledFilter(index, element) {
       const $element = $(element);

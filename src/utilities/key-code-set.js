@@ -5,9 +5,8 @@
  *
  * @copyright     Copyright (c) 2016, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
- * @class         KeyCodeSet
- * @name          KeyCodeSet
  * @package       Formation
+ * @namespace     Formation.KeyCodeSet
  */
 const KeyCodeSet = {
   BACKSPACE: 8,

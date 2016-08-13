@@ -8,9 +8,9 @@ let stampit = require('stampit');
  *
  * @copyright     Copyright (c) 2016, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
- * @class         validityCheckStamp
- * @name          validityCheckStamp
  * @package       Formation
+ * @namespace     Formation.validityCheck
+ * @mixin         Formation.validityCheck
  */
 const validityCheckStamp = stampit()
   .methods({
@@ -18,7 +18,7 @@ const validityCheckStamp = stampit()
      * Returns true iff the string only contains numeric values.
      *
      * @access      public
-     * @memberOf    {validityCheckStamp}
+     * @memberOf    {Formation.validityCheck}
      *
      * @param       {String}        strToTest   The string to test. Required.
      *
@@ -34,7 +34,7 @@ const validityCheckStamp = stampit()
      * Returns true iff the string is a ZIP code, or the specified part of a ZIP code.
      *
      * @access      public
-     * @memberOf    {validityCheckStamp}
+     * @memberOf    {Formation.validityCheck}
      *
      * @param       {String}        strToTest   The string to test. Required.
      * @param       {int|null}      part        The part of ZIP code to check. Optional. Default null.
@@ -59,7 +59,7 @@ const validityCheckStamp = stampit()
      * Returns true if the string matches the format of an email address. Returns false otherwise.
      *
      * @access      public
-     * @memberOf    {validityCheckStamp}
+     * @memberOf    {Formation.validityCheck}
      *
      * @param       {String}        strToTest   The string to test. Required.
      *
@@ -77,7 +77,7 @@ const validityCheckStamp = stampit()
      * and `xxx-xxx-xxxx` as well. Returns false otherwise.
      *
      * @access      public
-     * @memberOf    {validityCheckStamp}
+     * @memberOf    {Formation.validityCheck}
      *
      * @param       {String}        strToTest   The string to test. Required.
      * @param       {Boolean}       multi       Flag indicating whether to allow multiple formats. Optional. False.
