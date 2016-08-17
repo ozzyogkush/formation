@@ -73,16 +73,7 @@ const formComponentStamp = stampit()
         throw new TypeError('The supplied `rule` object is not built from a `ruleStamp` stamp.');
       }
 
-      if (this.initialized()) {
-        // This is initialized, the default rules have been generated.
-        this.getRuleSetBySupportedElementType(elementType).add(rule);
-      }
-      else {
-        // Since this isn't initialized, the default rules have not been generated.
-        $(document).ready((elementType, rule) => {
-          this.getRuleSetBySupportedElementType(elementType).add(rule);
-        });
-      }
+      this.getRuleSetBySupportedElementType(elementType).add(rule);
     }
   })
   .init(function() {

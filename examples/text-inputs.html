@@ -3,20 +3,21 @@
   <head>
     <meta charset="UTF-8">
     <title>Formation - Text Inputs</title>
+    <link rel="stylesheet" href="./examples.css" />
     <script type="text/javascript" src="../dist/formation.js"></script>
   </head>
   <body>
     <h1>Formation - Text Inputs and TextAreas</h1>
-    <em>input[type="text"], textarea</em> - will handle the <u>validity-changed.formation</u> event:
+    <em>input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea</em>:
 
-    <h2>View Source To See DOM Code</h2>
     <form role="form" data-formation="1">
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-      </ul>
-      <div>
-        <label for="textTest">Input 1 - text</label> -
+      <div class="rule-example">
+        <label for="textTest">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest"
@@ -24,14 +25,16 @@
           data-fv-required="1" />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-        <li>data-fv-min-length = 5</li>
-        <li>data-fv-max-length = 15</li>
-      </ul>
-      <div>
-        <label for="textTest2">Input 2 - text - <em>loaded with passing value</em></label> -
+      <div class="rule-example">
+        <label for="textTest2">
+          <h4>Rules:</h4>
+          loaded with passing value<br />
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-min-length = 5</li>
+            <li>data-fv-max-length = 15</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest2"
@@ -42,13 +45,14 @@
           data-fv-max-length="15" />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-        <li>data-fv-format = email</li>
-      </ul>
-      <div>
-        <label for="textTest3">Input 3 - text</label> -
+      <div class="rule-example">
+        <label for="textTest3">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-format = email</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest3"
@@ -57,13 +61,14 @@
           data-fv-format="email" />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-        <li>data-fv-format = phone</li>
-      </ul>
-      <div>
-        <label for="textTest4">Input 4 - text</label> -
+      <div class="rule-example">
+        <label for="textTest4">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-format = phone</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest4"
@@ -72,13 +77,14 @@
           data-fv-format="phone" />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-        <li>data-fv-format = phone-multi</li>
-      </ul>
-      <div>
-        <label for="textTest5">Input 5 - text</label> -
+      <div class="rule-example">
+        <label for="textTest5">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-format = phone-multi</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest5"
@@ -87,13 +93,14 @@
           data-fv-format="phone-multi" />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-        <li>data-fv-format = zip</li>
-      </ul>
-      <div>
-        <label for="textTest6">Input 6 - format for ZIP code</label> -
+      <div class="rule-example">
+        <label for="textTest6">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-format = zip</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest6"
@@ -102,20 +109,26 @@
           data-fv-format="zip" />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-required = 1</li>
-        <li>data-fv-match-field = elementID</li>
-      </ul>
-      <div>
-        <label for="textTest7">Input 7 - must match Input 8's value</label> -
+      <div class="rule-example">
+        <label for="textTest7">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-match-field = textTest8</li>
+          </ul></label>
         <input
           type="text"
           name="textTest7"
           id="textTest7"
           data-fv-required="1"
           data-fv-match-field="textTest8" /><br />
-        <label for="textTest8">Input 8 - must match Input 7's value</label> -
+        <label for="textTest8">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-match-field = textTest7</li>
+          </ul>
+        </label>
         <input
           type="text"
           name="textTest8"
@@ -124,50 +137,45 @@
           data-fv-match-field="textTest7" /><br />
       </div>
 
-      <h4>Rules:</h4>
-      <ul>
-        <li>data-fv-optional = 1</li>
-        <li>data-fv-min-length = 25</li>
-      </ul>
-      <div>
-        <label for="textTest9">Textarea - OPTIONAL</label> -
+      <div class="rule-example">
+        <label for="textTest9">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-optional = 1</li>
+            <li>data-fv-min-length = 25</li>
+            <li>data-fv-at-least-5-capitals = 5
+<pre class="code">
+  // Match that at least 5
+  // chars are capitalized
+  Formation.registerRule(
+    'text',
+    'at-least-5-capitals',
+    function() { ... }
+  );
+</pre>
+            </li>
+          </ul>
+        </label>
         <textarea name="textTest9"
                   id="textTest9"
                   data-fv-optional="1"
-                  data-fv-min-length="25"></textarea>
+                  data-fv-min-length="25"
+                  data-fv-at-least-5-capitals="5"></textarea>
       </div>
 
       <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
-      <div>
+      <div class="submit">
         <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
+        <div id="form-valid"></div>
       </div>
-      <div id="form-valid"></div>
     </form>
   </body>
+  <script type="text/javascript" src="./examples.js"></script>
   <script type="text/javascript">
-    Formation.setDebug(true);
-    $('form').each(function() {
-      var $form = $(this);
-      var $formValid = $('#form-valid').css({ 'color' : 'white' });
-      $form.on(Formation.getValidityChangedEventName(), function() {
-        if (parseInt($form.attr('data-fv-valid')) === 1) {
-          $formValid.html('FORM VALID').css({'background-color' : '#008800'});
-        }
-        else {
-          $formValid.html('FORM NOT VALID').css({'background-color' : '#880000'});
-        }
-      });
-      Formation.findRequiredFields($form).add(Formation.findOptionalFields($form))
-        .on(Formation.getValidityChangedEventName(), function() {
-          var $this = $(this);
-          if (parseInt($this.attr('data-fv-valid')) === 1) {
-            $this.next('div.status').html('FIELD VALID').css({'background-color' : '#008800'});
-          }
-          else {
-            $this.next('div.status').html('FIELD NOT VALID').css({'background-color' : '#880000'});
-          }
-        })
-        .after($('<div></div>').addClass('status').css({ 'color' : 'white' }));
+    Formation.registerRule('text', 'at-least-5-capitals', function($element, attribute) {
+      var n = $element.attr(attribute);
+      var capitals = $element.val().match(/([A-Z])/g);
+      return capitals !== null && capitals.length >= n;
     });
   </script>
 </html>

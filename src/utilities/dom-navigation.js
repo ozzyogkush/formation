@@ -81,7 +81,7 @@ const domNavigationStamp = stampit()
      * @memberOf    {Formation.domNavigation}
      * @default     data-fv-group-container
      */
-    radioOrCheckboxContainerAttrKey : 'data-fv-group-container',
+    groupedElementsContainerAttrKey : 'data-fv-group-container',
 
     /**
      * The Bootstrap stateful element attribute whose value is used for setting the element's innerHTML

@@ -33,7 +33,7 @@ const radioDefaultRulesStamp = stampit()
      */
     dataFvDefault($radio, attribute) {
       const $checkedRadios = this
-        .getAllCheckboxesOrRadiosByName($radio.attr('name'))
+        .getAllCheckboxesOrRadiosByName($radio)
         .filter(':checked');
 
       return $checkedRadios.length == 1;

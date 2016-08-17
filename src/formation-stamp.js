@@ -166,15 +166,17 @@ const formationStamp = stampit()
       if (typeof ruleCallbackMethod !== 'function') {
         throw TypeError('Expected `ruleCallbackMethod` param to be a `Function`, was a `' + typeof ruleCallbackMethod + '`.');
       }
-      this.get$forms().each((index, form) => {
-        try {
-          const $form = $(form);
-          const rule = ruleStamp({name: ruleName, callback: ruleCallbackMethod});
-          this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
-        }
-        catch (exception) {
-          this.error(exception);
-        }
+      $(document).ready(() => {
+        this.get$forms().each((index, form) => {
+          try {
+            const $form = $(form);
+            const rule = ruleStamp({name: ruleName, callback: ruleCallbackMethod});
+            this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
+          }
+          catch (exception) {
+            this.error(exception);
+          }
+        });
       });
 
       return this;

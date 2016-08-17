@@ -127,6 +127,8 @@ const formEventsHandlerStamp = stampit()
     },
 
     /**
+     * Checks for linked input elements and shows/hides them based on the status of the radio.
+     *
      * Triggers a form validation check on the radio button whose value was just changed.
      *
      * The `this` object is expected to refer to an instance of this class.
@@ -139,6 +141,12 @@ const formEventsHandlerStamp = stampit()
      */
     radioChangeHandler(event) {
       const $radio = $(event.target);
+
+      // Check for linked elements and show/hide them appropriately.
+      this.getAllCheckboxesOrRadiosByName($radio).each((index, radio) => {
+        const $r = $(radio);
+        this.showOrHideLinkedElement($r, $r.is(':checked'));
+      });
 
       $radio.trigger(this.getValidationEventName());
     },

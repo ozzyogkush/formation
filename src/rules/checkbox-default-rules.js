@@ -33,7 +33,7 @@ const checkboxDefaultRulesStamp = stampit()
      */
     dataFvDefault($checkbox, attribute) {
       const $checkedCheckboxes = this
-        .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
+        .getAllCheckboxesOrRadiosByName($checkbox)
         .filter(':checked');
 
       return $checkedCheckboxes.length >= 1;
@@ -52,10 +52,10 @@ const checkboxDefaultRulesStamp = stampit()
      * @returns     {Boolean}
      */
     dataFvMinSelected($checkbox, attribute) {
-      const minSelected = parseInt(this.getCheckboxOrRadioContainer($checkbox).attr(attribute));
+      const minSelected = parseInt(this.getAttributeOwner($checkbox).attr(attribute));
 
       const $checkedCheckboxes = this
-        .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
+        .getAllCheckboxesOrRadiosByName($checkbox)
         .filter(':checked');
 
       return isNaN(minSelected) || $checkedCheckboxes.length >= minSelected;
@@ -75,10 +75,10 @@ const checkboxDefaultRulesStamp = stampit()
      * @returns     {Boolean}
      */
     dataFvMaxSelected($checkbox, attribute) {
-      const maxSelected = parseInt(this.getCheckboxOrRadioContainer($checkbox).attr(attribute));
+      const maxSelected = parseInt(this.getAttributeOwner($checkbox).attr(attribute));
 
       const $checkedCheckboxes = this
-        .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
+        .getAllCheckboxesOrRadiosByName($checkbox)
         .filter(':checked');
 
       return isNaN(maxSelected) || $checkedCheckboxes.length <= maxSelected;
