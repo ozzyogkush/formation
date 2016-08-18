@@ -129,10 +129,10 @@ const buttonComponentStamp = stampit()
     setSubmitting(submitting) {
       // TODO - the `button()` calls will throw an error until we get Bootstrap into the mix.
       if (submitting) {
-        this.$button.attr(this.submittingStateDataKey, 1).button('loading');
+        this.$button.attr(this.submittingStateDataKey, 1);//.button('loading');
       }
       else {
-        this.$button.removeAttr(this.submittingStateDataKey).button('reset');
+        this.$button.removeAttr(this.submittingStateDataKey);//.button('reset');
       }
 
       return this;

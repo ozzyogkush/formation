@@ -111,19 +111,38 @@ const formationStamp = stampit()
     initForm($form) {
       try {
         // Set up the Form but only if it has the proper DOM.
-        let formationComponent = formEventsHandlerStamp({
-          formationSelector: this.getFormationSelector(),
-          nodeEvents : this.nodeEvents
-        }).initLogging(this.getLogConsole());
+        let formationComponent = this.createFormationComponent();
+        const $singleForm = $form.eq(0);
 
-        formationComponent.initForm($form.eq(0));
+        formationComponent.initForm($singleForm);
         formationComponent.initFormEvents();
+
+        if (! this.get$forms().has($form.get(0))) {
+          this.get$forms().add($singleForm);
+        }
       }
       catch (exception) {
         this.error(exception);
       }
 
       return this;
+    },
+
+    /**
+     * Simple factory function to create a new `Formation.formEventsHandler`
+     * instance - this is purely for ease of unit testing.
+     *
+     * @access      public
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
+     *
+     * @returns     {Formation.formEventsHandler}
+     */
+    createFormationComponent() {
+      return formEventsHandlerStamp({
+        formationSelector: this.getFormationSelector(),
+        nodeEvents : this.nodeEvents
+      }).initLogging(this.getLogConsole());
     },
 
     /**
@@ -141,7 +160,8 @@ const formationStamp = stampit()
 
     /**
      * Attempt to register the `ruleName` rule with each form's formComponent.
-     * Handle when things go wrong.
+     * Handle when things go wrong. Adds a new `document.ready` method so it
+     * happens after initialization.
      *
      * @access      public
      * @memberOf    {Formation.formation}

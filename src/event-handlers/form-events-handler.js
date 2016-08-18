@@ -350,6 +350,19 @@ const formEventsHandlerStamp = stampit()
   .init(function() {
 
     /**
+     * Helper function that users of this Stamp can use to determine if an object is composed
+     * of this Stamp.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     *
+     * @returns     {Boolean}       true
+     */
+    this.isFormEventHandler = () => {
+      return true;
+    };
+
+    /**
      * Types of `input` elements that take in characters from the keyboard.
      *
      * @private

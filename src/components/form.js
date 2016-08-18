@@ -5,6 +5,7 @@ const checkboxDefaultRulesStamp = require('../rules/checkbox-default-rules');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
 const radioDefaultRulesStamp = require('../rules/radio-default-rules');
+const ruleSetStamp = require('../rules/rule-set');
 const selectDefaultRulesStamp = require('../rules/select-default-rules');
 const textDefaultRulesStamp = require('../rules/text-default-rules');
 
@@ -58,8 +59,7 @@ const formComponentStamp = stampit()
     },
 
     /**
-     * Register a Formation validation rule for the element type specified. If the form is not
-     * yet initialized, do it during document.ready so it happens after initialization.
+     * Register a Formation validation rule for the element type specified.
      *
      * @access      public
      * @memberOf    {Formation.formComponent}
@@ -425,11 +425,15 @@ const formComponentStamp = stampit()
      *
      * @private
      * @access      private
-     * @type        {Object|null}
+     * @type        {Object}
      * @memberOf    {Formation.formComponent}
-     * @default     null
      */
-    let __supportedElementTypesRuleSets = null;
+    let __supportedElementTypesRuleSets = {
+      'text' : ruleSetStamp(),
+      'checkbox' : ruleSetStamp(),
+      'radio' : ruleSetStamp(),
+      'select': ruleSetStamp()
+    };
 
     /**
      * Create default rule instances for the supported element types.

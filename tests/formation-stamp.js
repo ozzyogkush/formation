@@ -6,9 +6,10 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
 const eventEmitterStamp = require('../src/utilities/node-event-emitter-stamp');
 const formationStamp = require('../src/formation-stamp');
-const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
+const formEventsHandlerStamp = require('../src/event-handlers/form-events-handler');
 
 describe('Objects created using the `formationStamp`', function() {
   let formation;
@@ -59,6 +60,52 @@ describe('Objects created using the `formationStamp`', function() {
       });
     });
   });
+
+  describe('`initForm()`', function() {
+    it('initializes the form component and events', function() {
+      let formEventsHandler = formEventsHandlerStamp({
+        formationSelector: '[data-formation="1"]',
+        nodeEvents : formation.nodeEvents
+      });
+      let formEventsHandlerMock = sinon.mock(formEventsHandler);
+      let $form = $('<form data-formation="1"></form>');
+      let $allForms = $();
+      let $allFormsMock = sinon.mock($allForms);
+      let $formMock = sinon.mock($form);
+      let formationMock = sinon.mock(formation);
+
+      formationMock.expects('createFormationComponent').once().returns(formEventsHandler);
+      formEventsHandlerMock.expects('initForm').once().withArgs($form);
+      formEventsHandlerMock.expects('initFormEvents').once();
+      formationMock.expects('get$forms').twice().returns($allForms);
+      $formMock.expects('eq').once().withArgs(0).returns($form);
+      $allFormsMock.expects('has').once().withArgs($form.get(0)).returns(false);
+      $allFormsMock.expects('add').once().withArgs($form);
+
+      formation.initForm($form);
+
+      formationMock.verify();
+      $formMock.verify();
+      $allFormsMock.verify();
+      formEventsHandlerMock.verify();
+    });
+  });
+
+  describe('`createFormationComponent()`', function() {
+    it('generates a `formationComponent`', function() {
+      let formationMock = sinon.mock(formation);
+
+      formationMock.expects('getFormationSelector').once().returns('[data-formation="1"]');
+      formationMock.expects('getLogConsole').once().returns(true);
+
+      let formEventsHandler = formation.createFormationComponent();
+      assert.isTrue(formEventsHandler.isFormEventHandler());
+
+      formationMock.verify();
+    });
+  });
+
+  describe.skip('`registerRule()`', function() {});
 
   describe('`getDebug()`', function() {
     it('should return `false` when logging is disabled (as it is by default)', function() {
@@ -157,6 +204,8 @@ describe('Objects created using the `formationStamp`', function() {
     });
   });
 
+  describe.skip('`getSupportedElementTypes()`', function() {});
+
   describe('`initBodyEvents()`', function() {
     describe('when the body events have not yet been initialized', function() {
       it('logs initialization, and calls `setLogConsole()` and `addDefaultEventHandlers()` on the new instance', function() {
@@ -196,4 +245,6 @@ describe('Objects created using the `formationStamp`', function() {
       });
     });
   });
+
+  describe.skip('`initForms()`', function() {});
 });
