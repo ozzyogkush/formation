@@ -10,6 +10,7 @@ const buttonComponentStamp = require('../../src/components/button');
 const domNavigationStamp = require('../../src/utilities/dom-navigation');
 const eventEmitterEventsStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formEventsHandlerStamp = require('../../src/event-handlers/form-events-handler');
+const ruleSetStamp = require('../../src/rules/rule-set');
 
 describe('Objects created using the `formEventsHandlerStamp`', function() {
   let formEventsHandler;
@@ -148,11 +149,18 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
 
     describe('`radioChangeHandler()`', function() {
       it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+        let $radios = $('<input type="radio" />');
         jQueryEvent.target = $('<input type="radio" />').get(0);
         $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+        formEventsHandlerMock.expects('getAllCheckboxesOrRadiosByName')
+          .once().withArgs($(jQueryEvent.target)).returns($radios);
+        formEventsHandlerMock.expects('showOrHideLinkedElement')
+          .once().withArgs($($radios.get(0)), false).returns(formEventsHandler);
 
         formEventsHandler.radioChangeHandler(jQueryEvent);
         $fnMock.verify();
+        formEventsHandlerMock.verify();
       });
     });
 
@@ -162,6 +170,16 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
 
         formEventsHandler.selectChangeHandler(jQueryEvent);
+        $fnMock.verify();
+      });
+    });
+
+    describe('`inputTextareaChangeHandler()`', function() {
+      it('should trigger the `validation-handler.formation` event on the event target element', function() {
+        jQueryEvent.target = $('<textarea></textarea>').get(0);
+        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+
+        formEventsHandler.inputTextareaChangeHandler(jQueryEvent);
         $fnMock.verify();
       });
     });
@@ -234,6 +252,165 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
           formEventsHandlerMock.verify();
         });
       });
+    });
+  });
+
+  describe('`setValidationFlagHandler()` sets the current `data-fv-valid` value', function() {
+    describe('when the validity flag flips bits/changes values', function() {
+      it('triggers the `validity-changed.formation` event', function() {
+        jQueryEvent.target = $('<input type="text" data-fv-valid="1" />').get(0);
+        let $fnMock = sinon.mock($.fn);
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('getInputType')
+          .once().withArgs($(jQueryEvent.target)).returns('text');
+        formEventsHandlerMock.expects('getCheckboxOrRadioContainer').never();
+        $fnMock.expects('attr').once().withArgs('data-fv-valid').returns('1');
+        $fnMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($(jQueryEvent.target));
+        $fnMock.expects('trigger').once().withArgs('validity-changed.formation');
+
+        formEventsHandler.setValidationFlagHandler(jQueryEvent, false);
+
+        formEventsHandlerMock.verify();
+        $fnMock.verify();
+      });
+      it('triggers the `validity-changed.formation` event', function() {
+        jQueryEvent.target = $('<input type="text" />').get(0);
+        let $fnMock = sinon.mock($.fn);
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('getInputType')
+          .once().withArgs($(jQueryEvent.target)).returns('text');
+        formEventsHandlerMock.expects('getCheckboxOrRadioContainer').never();
+        $fnMock.expects('attr').once().withArgs('data-fv-valid').returns('0');
+        $fnMock.expects('attr').once().withArgs('data-fv-valid', 1).returns($(jQueryEvent.target));
+        $fnMock.expects('trigger').once().withArgs('validity-changed.formation');
+
+        formEventsHandler.setValidationFlagHandler(jQueryEvent, true);
+
+        formEventsHandlerMock.verify();
+        $fnMock.verify();
+      });
+    });
+    describe('when the validity flag does not flip bits/change values', function() {
+      it('does not trigger the `validity-changed.formation` event', function() {
+        jQueryEvent.target = $('<input type="checkbox" data-fv-valid="1" />').get(0);
+        let $fnMock = sinon.mock($.fn);
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('getInputType')
+          .once().withArgs($(jQueryEvent.target)).returns('checkbox');
+        formEventsHandlerMock.expects('getCheckboxOrRadioContainer')
+          .once().withArgs($(jQueryEvent.target)).returns($(jQueryEvent.target));
+        $fnMock.expects('attr').once().withArgs('data-fv-valid').returns('1');
+        $fnMock.expects('attr').once().withArgs('data-fv-valid', 1).returns($(jQueryEvent.target));
+        $fnMock.expects('trigger').never().withArgs('validity-changed.formation');
+
+        formEventsHandler.setValidationFlagHandler(jQueryEvent, true);
+
+        formEventsHandlerMock.verify();
+        $fnMock.verify();
+      });
+      it('does not trigger the `validity-changed.formation` event', function() {
+        jQueryEvent.target = $('<input type="checkbox" />').get(0);
+        let $fnMock = sinon.mock($.fn);
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('getInputType')
+          .once().withArgs($(jQueryEvent.target)).returns('checkbox');
+        formEventsHandlerMock.expects('getCheckboxOrRadioContainer')
+          .once().withArgs($(jQueryEvent.target)).returns($(jQueryEvent.target));
+        $fnMock.expects('attr').once().withArgs('data-fv-valid').returns('0');
+        $fnMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($(jQueryEvent.target));
+        $fnMock.expects('trigger').never().withArgs('validity-changed.formation');
+
+        formEventsHandler.setValidationFlagHandler(jQueryEvent, false);
+
+        formEventsHandlerMock.verify();
+        $fnMock.verify();
+      });
+    });
+  });
+
+  describe('`validate()`', function() {
+    describe('when the element type is not supported', function() {
+      it('warns the user and returns', function() {
+        let $el = $('<datalist></datalist>');
+        let $elMock = sinon.mock($el);
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        $elMock.expects('prop').once().withArgs('tagName').returns('datalist');
+        $elMock.expects('trigger').never();
+        formEventsHandlerMock.expects('getInputType').once().withArgs($el).returns(null);
+        formEventsHandlerMock.expects('warn').once().withArgs('No rules class exists for the tag `datalist`.')
+          .returns(formEventsHandler);
+        formEventsHandlerMock.expects('getRuleSetBySupportedElementType').never();
+        formEventsHandlerMock.expects('getSetValidationFlagEventName').never();
+
+        formEventsHandler.validate($el);
+
+        $elMock.verify();
+        formEventsHandlerMock.verify();
+      });
+    });
+    describe('when the element type is supported', function() {
+      it('processes the rules associated with the type, against the element', function() {
+        let $el = $('<input type="text" />');
+        let $elMock = sinon.mock($el);
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+        let ruleSet = ruleSetStamp();
+        let ruleSetMock = sinon.mock(ruleSet);
+
+        $elMock.expects('prop').once().withArgs('tagName').returns('input');
+        formEventsHandlerMock.expects('getInputType').once().withArgs($el).returns('text');
+        formEventsHandlerMock.expects('warn').never();
+        formEventsHandlerMock.expects('getRuleSetBySupportedElementType')
+          .once().withArgs('text').returns(ruleSet);
+        ruleSetMock.expects('process').once().withArgs($el).returns(true);
+        formEventsHandlerMock.expects('getSetValidationFlagEventName').once().returns('set-validation-flag.formation');
+        $elMock.expects('trigger').once().withArgs('set-validation-flag.formation', true).returns($el);
+
+        formEventsHandler.validate($el);
+
+        $elMock.verify();
+        formEventsHandlerMock.verify();
+        ruleSetMock.verify();
+      });
+    });
+  });
+
+  describe('`getInputTypesArr()`', function() {
+    it('returns the private `__inputTypes` var', function() {
+      assert.deepEqual(formEventsHandler.getInputTypesArr(), ['text', 'password', 'email', 'number', 'tel']);
+    });
+  });
+
+  describe('`getInputType()`', function() {
+    it('processes the rules associated with the type, against the element', function() {
+      let $el = $('<input type="text" />');
+      let $elMock = sinon.mock($el);
+
+      $elMock.expects('prop').once().withArgs('tagName').returns('input');
+      $elMock.expects('prop').once().withArgs('type').returns('text');
+      assert.equal(formEventsHandler.getInputType($el), 'text');
+
+      $elMock.expects('prop').once().withArgs('tagName').returns('input');
+      $elMock.expects('prop').once().withArgs('type').returns('checkbox');
+      assert.equal(formEventsHandler.getInputType($el), 'checkbox');
+
+      $elMock.expects('prop').once().withArgs('tagName').returns('input');
+      $elMock.expects('prop').once().withArgs('type').returns('radio');
+      assert.equal(formEventsHandler.getInputType($el), 'radio');
+
+      $elMock.expects('prop').once().withArgs('tagName').returns('select');
+      $elMock.expects('prop').once().withArgs('type').returns('');
+      assert.equal(formEventsHandler.getInputType($el), 'select');
+
+      $elMock.expects('prop').once().withArgs('tagName').returns('datalist');
+      $elMock.expects('prop').once().withArgs('type').returns('');
+      assert.isNull(formEventsHandler.getInputType($el));
+
+      $elMock.verify();
     });
   });
 

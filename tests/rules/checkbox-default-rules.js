@@ -20,9 +20,8 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           let $checkbox = $('<input type="checkbox" name="test" id="test1" checked="checked" />');
           let $checkboxMock = sinon.mock($checkbox);
 
-          $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($checkbox)
             .returns($checkbox);
           $checkboxMock.expects('filter').once().withArgs(':checked').returns($checkbox);
           assert.isTrue(checkboxRulesSet.dataFvDefault($checkbox, 'data-fv-default'));
@@ -36,9 +35,8 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           let $checkbox = $('<input type="checkbox" name="test" value="1" />');
           let $checkboxMock = sinon.mock($checkbox);
 
-          $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($checkbox)
             .returns($checkbox);
           $checkboxMock.expects('filter').once().withArgs(':checked').returns($());
           assert.isFalse(checkboxRulesSet.dataFvDefault($checkbox, 'data-fv-default'));
@@ -59,12 +57,11 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           let $checkboxMock = sinon.mock($checkbox);
           let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+          checkboxRulesSetMock.expects('getAttributeOwner').once()
             .withArgs($checkbox).returns($checkboxContainer);
           $checkboxContainerMock.expects('attr').once().withArgs('data-fv-min-selected').returns('1');
-          $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($checkbox)
             .returns($checkbox);
           assert.isTrue(checkboxRulesSet.dataFvMinSelected($checkbox, 'data-fv-min-selected'));
 
@@ -80,12 +77,11 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           let $checkboxMock = sinon.mock($checkbox);
           let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+          checkboxRulesSetMock.expects('getAttributeOwner').once()
             .withArgs($checkbox).returns($checkboxContainer);
           $checkboxContainerMock.expects('attr').once().withArgs('data-fv-min-selected').returns('2');
-          $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($checkbox)
             .returns($checkbox);
           assert.isFalse(checkboxRulesSet.dataFvMinSelected($checkbox, 'data-fv-min-selected'));
 
@@ -106,12 +102,11 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           let $checkboxMock = sinon.mock($checkbox);
           let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+          checkboxRulesSetMock.expects('getAttributeOwner').once()
             .withArgs($checkbox).returns($checkboxContainer);
           $checkboxContainerMock.expects('attr').once().withArgs('data-fv-max-selected').returns('1');
-          $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($checkbox)
             .returns($checkbox);
           assert.isTrue(checkboxRulesSet.dataFvMaxSelected($checkbox, 'data-fv-max-selected'));
 
@@ -127,12 +122,11 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
           let $checkboxMock = sinon.mock($checkbox);
           let $checkboxContainerMock = sinon.mock($checkboxContainer);
 
-          checkboxRulesSetMock.expects('getCheckboxOrRadioContainer').once()
+          checkboxRulesSetMock.expects('getAttributeOwner').once()
             .withArgs($checkbox).returns($checkboxContainer);
           $checkboxContainerMock.expects('attr').once().withArgs('data-fv-max-selected').returns('0');
-          $checkboxMock.expects('attr').once().withArgs('name').returns('test');
           checkboxRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($checkbox)
             .returns($checkbox);
           assert.isFalse(checkboxRulesSet.dataFvMaxSelected($checkbox, 'data-fv-max-selected'));
 
@@ -180,6 +174,22 @@ describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
 
         checkboxRulesSetMock.verify();
       });
+    });
+  });
+
+  describe('`getAttributeOwner()`', function() {
+    let $checkbox;
+    beforeEach(function() {
+      $checkbox = $('<input type="checkbox" name="test" id="test1" checked="checked" />');
+    });
+
+    it('should return the value returned from `getCheckboxOrRadioContainer()`', function() {
+      checkboxRulesSetMock.expects('getCheckboxOrRadioContainer')
+        .once().withArgs($checkbox)
+        .returns($checkbox);
+      assert.equal(checkboxRulesSet.getAttributeOwner($checkbox), $checkbox);
+
+      checkboxRulesSetMock.verify();
     });
   });
 });

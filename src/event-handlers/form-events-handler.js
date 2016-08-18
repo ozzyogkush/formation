@@ -384,18 +384,19 @@ const formEventsHandlerStamp = stampit()
      */
     this.getInputType = ($element) => {
       const lowerTag = $element.prop('tagName').toLowerCase();
+      const elementType = $element.prop('type');
 
       let type = null;
       if (lowerTag === 'textarea' ||
           (lowerTag === 'input' && $.inArray(
-            $element.prop('type'),
+            elementType,
             this.getInputTypesArr()) !== -1)) {
         type = 'text';
       }
-      else if ($element.prop('type') === 'checkbox') {
+      else if (elementType === 'checkbox') {
         type = 'checkbox';
       }
-      else if ($element.prop('type') === 'radio') {
+      else if (elementType === 'radio') {
         type = 'radio';
       }
       else if (lowerTag === 'select') {
