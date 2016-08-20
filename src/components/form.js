@@ -4,14 +4,26 @@ const buttonComponentStamp = require('./button');
 const checkboxDefaultRulesStamp = require('../rules/checkbox-default-rules');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
-const ruleSetStamp = require('../rules/rule-set');
 const radioDefaultRulesStamp = require('../rules/radio-default-rules');
+const ruleSetStamp = require('../rules/rule-set');
 const selectDefaultRulesStamp = require('../rules/select-default-rules');
 const textDefaultRulesStamp = require('../rules/text-default-rules');
 
 const stampit = require('stampit');
 const $ = require('jquery');
 
+/**
+ * Provides an interface for form button elements (`button`, `input:submit`, etc).
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.formComponent
+ * @mixin         Formation.formComponent
+ *
+ * @mixes         Formation.toggleableConsole
+ * @mixes         Formation.domNavigation
+ */
 const formComponentStamp = stampit()
   .refs({
 
@@ -20,39 +32,48 @@ const formComponentStamp = stampit()
      * a global Formation event emitter.
      *
      * @access      public
-     * @type        {eventEmitterStamp}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @type        {Formation.eventEmitter}
+     * @memberOf    {Formation.formComponent}
      * @default     null
      */
     nodeEvents : null
   })
   .methods({
+
+    /**
+     * Checks whether the Formation body keypress event should progress. If
+     * there is a submit button registered to the form, then we allow it;
+     * otherwise we do not.
+     *
+     * @access      public
+     * @memberOf    {Formation.formComponent}
+     * @mixes       {Formation.formComponent}
+     *
+     * @returns     {Boolean}       allowKeyEventToProgress
+     */
     shouldBodyKeyPressEventsProgress() {
-      // Does the current form have a submit button?
-      // If so, allow the event to proceed.
-      // If not, stop the event from propagating.
       const allowKeyEventToProgress = (
         this.getSubmitButton() !== null && this.getSubmitButton().exists()
       );
       return allowKeyEventToProgress;
     },
 
+    /**
+     * Register a Formation validation rule for the element type specified.
+     *
+     * @access      public
+     * @memberOf    {Formation.formComponent}
+     * @mixes       {Formation.formComponent}
+     *
+     * @param       {String}                  elementType         The element type to which the rule applies. Required.
+     * @param       {Formation.rule}          rule                An instance of the ruleStamp. Required.
+     */
     registerRule(elementType, rule) {
       if (typeof rule.isFormationRule !== 'function' || ! rule.isFormationRule()) {
         throw new TypeError('The supplied `rule` object is not built from a `ruleStamp` stamp.');
       }
 
-      if (this.initialized()) {
-        // This is initialized, the default rules have been generated.
-        this.getRuleSetBySupportedElementType(elementType).add(rule);
-      }
-      else {
-        // Since this isn't initialized, the default rules have not been generated.
-        $(document).ready((elementType, rule) => {
-          this.getRuleSetBySupportedElementType(elementType).add(rule);
-        });
-      }
+      this.getRuleSetBySupportedElementType(elementType).add(rule);
     }
   })
   .init(function() {
@@ -62,10 +83,9 @@ const formComponentStamp = stampit()
      * of this Stamp.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
-     * @returns   {Boolean}       true
+     * @returns     {Boolean}       true
      */
     this.isFormComponent = () => {
       return true;
@@ -77,8 +97,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {jQuery}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      * @default     $()
      */
     let __$form = $();
@@ -87,8 +106,7 @@ const formComponentStamp = stampit()
      * Returns the jQuery object containing the initialized form node.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {jQuery}       __$form
      */
@@ -102,8 +120,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {Boolean}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      * @default     false
      */
     let __initialized = false;
@@ -112,8 +129,7 @@ const formComponentStamp = stampit()
      * Returns the initialization status of this instance.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {boolean}       __initialized
      */
@@ -128,8 +144,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {Function}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
      */
@@ -159,12 +174,11 @@ const formComponentStamp = stampit()
      * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @param       {jQuery}        $form               jQuery wrapped `form` element to be managed by this instance. Required.
      *
-     * @returns     {formComponentStamp}
+     * @returns     {Formation.formComponent}
      */
     this.initForm = ($form) => {
       // Set the form so we can use it internally elsewhere.
@@ -195,8 +209,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {jQuery}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      * @default     $()
      */
     let __$requiredFields = $();
@@ -205,8 +218,7 @@ const formComponentStamp = stampit()
      * Returns the jQuery object containing the elements in this form that are required to be validated.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {jQuery}       __$requiredFields
      */
@@ -221,8 +233,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {Function}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      */
     let __setRequiredFields = () => {
       __$requiredFields = this.findRequiredFields(__$form);
@@ -238,8 +249,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {jQuery}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      * @default     $()
      */
     let __$optionalFields = $();
@@ -248,8 +258,7 @@ const formComponentStamp = stampit()
      * Returns the jQuery object containing the elements in this form that are optional to be validated.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {jQuery}       __$optionalFields
      */
@@ -263,8 +272,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {Function}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      */
     let __setOptionalFields = () => {
       __$optionalFields = this.findOptionalFields(__$form);
@@ -277,8 +285,7 @@ const formComponentStamp = stampit()
      * @private
      * @access      private
      * @type        {Function}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      */
     let __initFields = () => {
       this.get$form().attr(this.validAttrKey, 0);
@@ -291,9 +298,8 @@ const formComponentStamp = stampit()
      *
      * @private
      * @access      private
-     * @type        {buttonComponentStamp}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @type        {buttonComponent}
+     * @memberOf    {Formation.formComponent}
      * @default     null
      */
     let __submitButton = null;
@@ -302,10 +308,9 @@ const formComponentStamp = stampit()
      * Returns the `__submitButton`.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
-     * @returns     {buttonComponentStamp}       __submitButton
+     * @returns     {Formation.buttonComponent}       __submitButton
      */
     this.getSubmitButton = () => {
       return __submitButton;
@@ -316,9 +321,8 @@ const formComponentStamp = stampit()
      *
      * @private
      * @access      private
-     * @type        {buttonComponentStamp}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @type        {Formation.buttonComponent}
+     * @memberOf    {Formation.formComponent}
      * @default     null
      */
     let __previewButton = null;
@@ -327,15 +331,22 @@ const formComponentStamp = stampit()
      * Returns the `__previewButton`.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
-     * @returns     {buttonComponentStamp}       __previewButton
+     * @returns     {Formation.buttonComponent}       __previewButton
      */
     this.getPreviewButton = () => {
       return __previewButton;
     };
 
+    /**
+     * Get the submit button if it exists, otherwise get the preview button, if it exists.
+     *
+     * @access      public
+     * @memberOf    {Formation.formComponent}
+     *
+     * @returns     {Formation.buttonComponent|null}
+     */
     this.getSubmitWithFallbackPreviewButton = () => {
       const submitButton = this.getSubmitButton();
       if (submitButton !== null && submitButton.exists()) {
@@ -355,13 +366,12 @@ const formComponentStamp = stampit()
      * for this form, and set them to the private `__submitButton` and
      * `__previewButton` vars respectively.
      *
-     * TODO - make `setLoadingHTML()` optional
+     * TODO - make `setLoadingHTML()` optional with a new `data-fv` attribute on the button
      *
      * @private
      * @access      private
      * @type        {Function}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      */
     let __initFormButtons = () => {
       __submitButton = buttonComponentStamp({
@@ -371,6 +381,7 @@ const formComponentStamp = stampit()
       }).initLogging(this.getLogConsole())
         .addHandleFormSubmitListener()
         .setLoadingHTML();
+
       __previewButton = buttonComponentStamp({
         $button : this.findPreviewButton(__$form),
         loadingText : 'Rendering preview, please wait...',
@@ -388,8 +399,7 @@ const formComponentStamp = stampit()
      * @access      private
      * @const
      * @type        {Object}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      */
     const __supportedElementTypesMap = {
       'text' : 'input:text,input:password,input:email,input:tel,textarea',
@@ -402,8 +412,7 @@ const formComponentStamp = stampit()
      * Return the value of the private `__supportedElementTypesMap` object.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {Object}      __supportedElementTypesMap         Types of elements supported by Formation.
      */
@@ -416,20 +425,31 @@ const formComponentStamp = stampit()
      *
      * @private
      * @access      private
-     * @type        {Object|null}
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
-     * @default     null
+     * @type        {Object}
+     * @memberOf    {Formation.formComponent}
      */
-    let __supportedElementTypesRuleSets = null;
+    let __supportedElementTypesRuleSets = {
+      'text' : ruleSetStamp(),
+      'checkbox' : ruleSetStamp(),
+      'radio' : ruleSetStamp(),
+      'select': ruleSetStamp()
+    };
 
+    /**
+     * Create default rule instances for the supported element types.
+     *
+     * @private
+     * @access      private
+     * @type        {Function}
+     * @memberOf    {Formation.formComponent}
+     */
     let __initDefaultRules = () => {
       const formationSelector = this.formationSelector;
       __supportedElementTypesRuleSets = {
         'text' : textDefaultRulesStamp({formationSelector: formationSelector}),
         'checkbox' : checkboxDefaultRulesStamp({formationSelector: formationSelector}),
         'radio' : radioDefaultRulesStamp({formationSelector: formationSelector}),
-        'select': selectDefaultRulesStamp({formationSelector: formationSelector}),
+        'select': selectDefaultRulesStamp({formationSelector: formationSelector})
       };
     };
 
@@ -437,8 +457,7 @@ const formComponentStamp = stampit()
      * Get all the supported rule sets.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
      * @returns     {Object}
      */
@@ -450,12 +469,11 @@ const formComponentStamp = stampit()
      * Get the rule set to be applied to the specified supported element type.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {formComponent}
      *
      * @param       {String}          type          The supported element type whose rules we want. Required.
      *
-     * @returns     {ruleSetStamp}
+     * @returns     {Formation.ruleSet}
      */
     this.getRuleSetBySupportedElementType = (type) => {
       return __supportedElementTypesRuleSets[type];
@@ -465,11 +483,10 @@ const formComponentStamp = stampit()
      * Set the rule set to be applied to the specified supported element type.
      *
      * @access      public
-     * @memberOf    {formComponentStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formComponent}
      *
-     * @param       {String}          type          The supported element type. Required.
-     * @param       {ruleSetStamp}    rules         The rule set to be applied. Required.
+     * @param       {String}                    type          The supported element type. Required.
+     * @param       {Formation.ruleSet}         rules         The rule set to be applied. Required.
      */
     this.setSupportedElementTypeRuleSet = (type, rules) => {
       __supportedElementTypesRuleSets[type] = rules;

@@ -4,8 +4,18 @@ const ruleStamp = require('./rule');
 const ruleSetStamp = require('./rule-set');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
+/**
+ * Used for processing a set of `Formation.rule` objects against `input:checkbox` elements.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.checkboxDefaultRules
+ * @mixin         Formation.checkboxDefaultRules
+ *
+ * @mixes         Formation.ruleSet
+ */
 const checkboxDefaultRulesStamp = stampit()
   .methods({
 
@@ -13,8 +23,8 @@ const checkboxDefaultRulesStamp = stampit()
      * The default checkbox button elements rule is that at least one of them is checked.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.checkboxDefaultRules}
+     * @mixes       {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -23,7 +33,7 @@ const checkboxDefaultRulesStamp = stampit()
      */
     dataFvDefault($checkbox, attribute) {
       const $checkedCheckboxes = this
-        .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
+        .getAllCheckboxesOrRadiosByName($checkbox)
         .filter(':checked');
 
       return $checkedCheckboxes.length >= 1;
@@ -33,8 +43,8 @@ const checkboxDefaultRulesStamp = stampit()
      * The default checkbox button elements rule is that at least one of them is checked.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.checkboxDefaultRules}
+     * @mixes       {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -42,9 +52,10 @@ const checkboxDefaultRulesStamp = stampit()
      * @returns     {Boolean}
      */
     dataFvMinSelected($checkbox, attribute) {
-      const minSelected = parseInt($checkbox.attr(attribute));
+      const minSelected = parseInt(this.getAttributeOwner($checkbox).attr(attribute));
+
       const $checkedCheckboxes = this
-        .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
+        .getAllCheckboxesOrRadiosByName($checkbox)
         .filter(':checked');
 
       return isNaN(minSelected) || $checkedCheckboxes.length >= minSelected;
@@ -55,8 +66,8 @@ const checkboxDefaultRulesStamp = stampit()
      * the number specified in the attribute.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.checkboxDefaultRules}
+     * @mixes       {Formation.checkboxDefaultRules}
      *
      * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -64,9 +75,10 @@ const checkboxDefaultRulesStamp = stampit()
      * @returns     {Boolean}
      */
     dataFvMaxSelected($checkbox, attribute) {
-      const maxSelected = parseInt($checkbox.attr(attribute));
+      const maxSelected = parseInt(this.getAttributeOwner($checkbox).attr(attribute));
+
       const $checkedCheckboxes = this
-        .getAllCheckboxesOrRadiosByName($checkbox.attr('name'))
+        .getAllCheckboxesOrRadiosByName($checkbox)
         .filter(':checked');
 
       return isNaN(maxSelected) || $checkedCheckboxes.length <= maxSelected;
@@ -80,12 +92,10 @@ const checkboxDefaultRulesStamp = stampit()
      *
      * @private
      * @access      private
-     * @const
      * @type        Array
-     * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.checkboxDefaultRules}
      */
-    const __rules = [
+    let __rules = [
       ruleStamp({
         name : 'default',
         callback : ($checkbox, attribute) => this.dataFvDefault($checkbox, attribute)
@@ -104,13 +114,29 @@ const checkboxDefaultRulesStamp = stampit()
      * Return the value of the private `__rules` object.
      *
      * @access      public
-     * @memberOf    {checkboxDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.checkboxDefaultRules}
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */
     this.getRules = () => {
       return __rules;
+    };
+
+    /**
+     * Return the DOM element that the `formation` rule attributes and validity flag
+     * will be attached to for the element provided.
+     *
+     * An ancestor element holds attributes for Checkbox buttons.
+     *
+     * @access      public
+     * @memberOf    {Formation.checkboxDefaultRules}
+     *
+     * @param       {jQuery}    $element      The element to check. Required.
+     *
+     * @returns     {jQuery}
+     */
+    this.getAttributeOwner = ($element) => {
+      return this.getCheckboxOrRadioContainer($element);
     };
   });
 

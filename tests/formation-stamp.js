@@ -6,9 +6,11 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
 const eventEmitterStamp = require('../src/utilities/node-event-emitter-stamp');
 const formationStamp = require('../src/formation-stamp');
-const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
+const formEventsHandlerStamp = require('../src/event-handlers/form-events-handler');
+const ruleStamp = require('../src/rules/rule');
 
 describe('Objects created using the `formationStamp`', function() {
   let formation;
@@ -56,6 +58,130 @@ describe('Objects created using the `formationStamp`', function() {
         assert.equal(formation.enterFormation(), formation);
 
         formationMock.verify();
+      });
+    });
+  });
+
+  describe('`initForm()`', function() {
+    it('initializes the form component and events', function() {
+      let formEventsHandler = formEventsHandlerStamp({
+        formationSelector: '[data-formation="1"]',
+        nodeEvents : formation.nodeEvents
+      });
+      let formEventsHandlerMock = sinon.mock(formEventsHandler);
+      let $form = $('<form data-formation="1"></form>');
+      let $allForms = $();
+      let $allFormsMock = sinon.mock($allForms);
+      let $formMock = sinon.mock($form);
+      let formationMock = sinon.mock(formation);
+
+      formationMock.expects('createFormationComponent').once().returns(formEventsHandler);
+      formEventsHandlerMock.expects('initForm').once().withArgs($form);
+      formEventsHandlerMock.expects('initFormEvents').once();
+      formationMock.expects('get$forms').twice().returns($allForms);
+      $formMock.expects('eq').once().withArgs(0).returns($form);
+      $allFormsMock.expects('has').once().withArgs($form.get(0)).returns(false);
+      $allFormsMock.expects('add').once().withArgs($form);
+
+      formation.initForm($form);
+
+      formationMock.verify();
+      $formMock.verify();
+      $allFormsMock.verify();
+      formEventsHandlerMock.verify();
+    });
+  });
+
+  describe('`createFormationComponent()`', function() {
+    it('generates a `Formation.formEventsHandler`', function() {
+      let formationMock = sinon.mock(formation);
+
+      formationMock.expects('getFormationSelector').once().returns('[data-formation="1"]');
+      formationMock.expects('getLogConsole').once().returns(true);
+
+      let formEventsHandler = formation.createFormationComponent();
+      assert.isTrue(formEventsHandler.isFormEventHandler());
+
+      formationMock.verify();
+    });
+  });
+
+  describe('`createFormationRule()`', function() {
+    it('generates a `Formation.rule`', function() {
+      let rule = ruleStamp({name: 'a-good-rule', callback: function() {}});
+      let generatedRule = formation.createFormationRule(rule.name, rule.callback);
+
+      assert.isTrue(rule.isFormationRule());
+      assert.equal(generatedRule.name, rule.name);
+      assert.equal(generatedRule.callback, rule.callback);
+    });
+  });
+
+  describe('`registerRule()`', function() {
+    describe('when parameters are not valid', function() {
+      it('throws an error when `elementType` is incorrect', function() {
+        assert.throws(
+          () => formation.registerRule(),
+          TypeError,
+          'Expected `elementType` param to be a `String`, was a `undefined`.'
+        );
+        assert.throws(
+          () => formation.registerRule('bong'),
+          TypeError,
+          'Specified `elementType` `bong` is not supported.'
+        );
+      });
+      it('throws an error when `ruleName` is incorrect', function() {
+        assert.throws(
+          () => formation.registerRule('text'),
+          TypeError,
+          'Expected `ruleName` param to be a `String`, was a `undefined`.'
+        );
+      });
+      it('throws an error when `ruleCallbackMethod` is incorrect', function() {
+        assert.throws(
+          () => formation.registerRule('text', 'a-good-rule'),
+          TypeError,
+          'Expected `ruleCallbackMethod` param to be a `Function`, was a `undefined`.'
+        );
+        assert.throws(
+          () => formation.registerRule('text', 'a-good-rule', 'not-a-function'),
+          TypeError,
+          'Expected `ruleCallbackMethod` param to be a `Function`, was a `string`.'
+        );
+      });
+    });
+    describe('when parameters are valid', function() {
+      it('adds a `document.ready` callback', function() {
+        let jQueryMock = sinon.mock($.fn);
+
+        jQueryMock.expects('ready').once().withArgs(sinon.match.func);
+        assert.equal(formation.registerRule('text', 'a-good-rule', function() {}), formation);
+
+        jQueryMock.verify();
+      });
+    });
+    describe('when `document.ready` is called', function() {
+      // This is more of an integration test, but whatever.
+      it('registers the supplied rule for each registered form', function() {
+        let formationMock = sinon.mock(formation);
+        let $forms = $('<form data-formation="1" id="form1"></form>');
+        let formEventsHandler = formEventsHandlerStamp({
+          formationSelector: '[data-formation="1"]',
+          nodeEvents : formation.nodeEvents
+        });
+        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+        let rule = ruleStamp({name: 'a-good-rule', callback: function() {}});
+
+        formationMock.expects('get$forms').once().returns($forms);
+        formationMock.expects('getFormComponentOfCurrentElement').once().withArgs($($forms.get(0))).returns(formEventsHandler);
+        formationMock.expects('createFormationRule').once().withArgs('a-good-rule', rule.callback).returns(rule);
+        formEventsHandlerMock.expects('registerRule').once().withArgs('text', rule);
+
+        assert.equal(formation.registerRule('text', 'a-good-rule', rule.callback), formation);
+
+        formationMock.verify();
+        formEventsHandlerMock.verify();
       });
     });
   });
@@ -157,6 +283,8 @@ describe('Objects created using the `formationStamp`', function() {
     });
   });
 
+  describe.skip('`getSupportedElementTypes()`', function() {});
+
   describe('`initBodyEvents()`', function() {
     describe('when the body events have not yet been initialized', function() {
       it('logs initialization, and calls `setLogConsole()` and `addDefaultEventHandlers()` on the new instance', function() {
@@ -194,6 +322,21 @@ describe('Objects created using the `formationStamp`', function() {
         formationMock.verify();
         bodyEventsHandlerMock.verify();
       });
+    });
+  });
+
+  describe('`initForms()`', function() {
+    it('initialize its DOM and the various events which should be handled for each registered Formation form', function() {
+      let $forms = $('<form data-formation="1" id="form1"></form>');
+      $(document.body).append($forms);
+      formation = formationStamp({ nodeEvents: eventEmitterStamp() }).detectForms();
+      let formationMock = sinon.mock(formation);
+
+      formationMock.expects('initForm').once().withArgs($($forms.get(0))).returns(formation);
+
+      assert.equal(formation.initForms(), formation);
+
+      formationMock.verify();
     });
   });
 });

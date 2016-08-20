@@ -2,11 +2,23 @@
 
 const domNavigationStamp = require('../utilities/dom-navigation');
 const eventDefinitionsStamp = require('../event-handlers/event-definitions-stamp');
-const ruleStamp = require('./rule');
 const validityChecksStamp = require('../utilities/validity-checks');
 
 const stampit = require('stampit');
 
+/**
+ * Used for processing a set of `Formation.rule` objects against form DOM elements.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.ruleSet
+ * @mixin         Formation.ruleSet
+ *
+ * @mixes         Formation.domNavigation
+ * @mixes         Formation.eventDefinitions
+ * @mixes         Formation.validityChecks
+ */
 const ruleSetStamp = stampit()
   .init(function() {
 
@@ -15,8 +27,7 @@ const ruleSetStamp = stampit()
      * of this Stamp.
      *
      * @access      public
-     * @memberOf    {ruleSetStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.ruleSet}
      *
      * @returns     {Boolean}       true
      */
@@ -28,12 +39,11 @@ const ruleSetStamp = stampit()
      * Add a rule to this rule set.
      *
      * @access      public
-     * @memberOf    {ruleSetStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.ruleSet}
      *
-     * @param       {ruleStamp}         rule        The rule to add to this set. Required.
+     * @param       {Formation.rule}      rule        The rule to add to this set. Required.
      *
-     * @returns     {ruleSetStamp}      this
+     * @returns     {Formation.ruleSet}   this
      */
     this.add = (rule) => {
       // TODO - warn when the rule has already been added to this set
@@ -46,8 +56,7 @@ const ruleSetStamp = stampit()
      * Return an empty array. This method is a stub.
      *
      * @access      public
-     * @memberOf    {ruleSetStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.ruleSet}
      *
      * @returns     {Array}     An empty array;
      */
@@ -55,11 +64,40 @@ const ruleSetStamp = stampit()
       return [];
     };
 
+    /**
+     * Return the DOM element that the `formation` rule attributes and validity flag
+     * will be attached to for the element provided. By default, it is the
+     * element itself.
+     *
+     * @access      public
+     * @memberOf    {Formation.ruleSet}
+     *
+     * @param       {jQuery}    $element      The element to check. Required.
+     *
+     * @returns     {jQuery}    $element
+     */
+    this.getAttributeOwner = ($element) => {
+      return $element;
+    };
+
+    /**
+     * Process the element against the set of registered rules that are actually being
+     * requested by the element's `data-fv` attributes. Return true iff the field passes
+     * all rules; false otherwise.
+     *
+     * @access      public
+     * @memberOf    {Formation.ruleSet}
+     *
+     * @param       {jQuery}    $element                The element upon which to process the rules. Required.
+     *
+     * @returns     {boolean}   validAfterRuleCheck     Whether the element passes all specified rules.
+     */
     this.process = ($element) => {
       let validAfterRuleCheck = true;
+      const $attributeOwner = this.getAttributeOwner($element);
       for (const rule of this.getRules()) {
         const ruleAttribute = `data-fv-${rule.name}`;
-        if (rule.name === 'default' || $element.attr(ruleAttribute) !== undefined) {
+        if (rule.name === 'default' || $attributeOwner.attr(ruleAttribute) !== undefined) {
           validAfterRuleCheck = rule.callback($element, ruleAttribute);
           if (! validAfterRuleCheck) {
             break;

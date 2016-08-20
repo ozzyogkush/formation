@@ -176,4 +176,28 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
       });
     });
   });
+  describe('`bodyKeyUpHandler()`', function() {
+    it('returns false when the key is not space or enter', function() {
+      let event = {target: $(), which: keyCodes.LEFT};
+      assert.isFalse(bodyEventsHandler.bodyKeyUpHandler(event));
+    });
+    it('returns true when the key is space or enter', function() {
+      let event = {target: $(), which: keyCodes.SPACE};
+      let $fnMock = sinon.mock($.fn);
+      let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+
+      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget')
+        .once().withArgs($(event.target)).returns(false);
+      $fnMock.expects('trigger').never();
+      assert.equal(bodyEventsHandler.bodyKeyUpHandler(event), null);
+
+      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget')
+        .once().withArgs($(event.target)).returns(true);
+      $fnMock.expects('trigger').once().withArgs('click').returns($(event.target));
+      assert.equal(bodyEventsHandler.bodyKeyUpHandler(event), null);
+
+      bodyEventsHandlerMock.verify();
+      $fnMock.verify();
+    });
+  });
 });

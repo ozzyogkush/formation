@@ -4,8 +4,18 @@ const ruleStamp = require('./rule');
 const ruleSetStamp = require('./rule-set');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
+/**
+ * Used for processing a set of `Formation.rule` objects against `input:radio` elements.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.radioDefaultRules
+ * @mixin         Formation.radioDefaultRules
+ *
+ * @mixes         Formation.ruleSet
+ */
 const radioDefaultRulesStamp = stampit()
   .methods({
 
@@ -13,8 +23,8 @@ const radioDefaultRulesStamp = stampit()
      * The default radio button elements rule is that at least one of them is checked.
      *
      * @access      public
-     * @memberOf    {radioDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.radioDefaultRules}
+     * @mixes       {Formation.radioDefaultRules}
      *
      * @param       {jQuery}        $radio          The `radio` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -23,7 +33,7 @@ const radioDefaultRulesStamp = stampit()
      */
     dataFvDefault($radio, attribute) {
       const $checkedRadios = this
-        .getAllCheckboxesOrRadiosByName($radio.attr('name'))
+        .getAllCheckboxesOrRadiosByName($radio)
         .filter(':checked');
 
       return $checkedRadios.length == 1;
@@ -37,12 +47,10 @@ const radioDefaultRulesStamp = stampit()
      *
      * @private
      * @access      private
-     * @const
      * @type        Array
-     * @memberOf    {radioDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.radioDefaultRules}
      */
-    const __rules = [
+    let __rules = [
       ruleStamp({
         name : 'default',
         callback : ($radio, attribute) => this.dataFvDefault($radio, attribute)
@@ -53,13 +61,29 @@ const radioDefaultRulesStamp = stampit()
      * Return the value of the private `__rules` object.
      *
      * @access      public
-     * @memberOf    {radioDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.radioDefaultRules}
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */
     this.getRules = () => {
       return __rules;
+    };
+
+    /**
+     * Return the DOM element that the `formation` rule attributes and validity flag
+     * will be attached to for the element provided.
+     *
+     * An ancestor element holds attributes for Radio buttons.
+     *
+     * @access      public
+     * @memberOf    {Formation.radioDefaultRules}
+     *
+     * @param       {jQuery}    $element      The element to check. Required.
+     *
+     * @returns     {jQuery}
+     */
+    this.getAttributeOwner = ($element) => {
+      return this.getCheckboxOrRadioContainer($element);
     };
   });
 

@@ -2,24 +2,49 @@
 
 const stampit = require('stampit');
 
+/**
+ * Defines a rule, which contains a name used to identify when it's used,
+ * and a callback function to process the rule against an element.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.rule
+ * @mixin         Formation.rule
+ */
 const ruleStamp = stampit()
   .refs({
-    name : 'undefined',
 
     /**
-     * The method that will attempt to satisfy the rule against `$element`.
+     * The name of the rule, prefixed with `data-fv`, which will be used to
+     * reference it in a DOM element
      *
      * @throws      Error           The method for the rule is not implemented, so alert the user with an error
      * @access      public
-     * @memberOf    {ruleStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.rule}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    callback : function($element, attribute) {
+    name : 'undefined'
+  }).methods({
+
+    /**
+     * The method that will attempt to satisfy the rule against `$element`.
+     *
+     * @throws      Error           The method for the rule is not implemented, so alert the user with an error
+     * @access      public
+     * @memberOf    {Formation.rule}
+     * @mixes       {Formation.rule}
+     *
+     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {String}        attribute       The data attribute which may contain additional data. Required.
+     *
+     * @returns     {Boolean}
+     */
+    callback($element, attribute) {
       throw new Error(`Rule callback for \`${this.name}\` is not implemented`);
     }
   })
@@ -30,8 +55,7 @@ const ruleStamp = stampit()
      * of this Stamp.
      *
      * @access      public
-     * @memberOf    {ruleStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.rule}
      *
      * @returns     {Boolean}       true
      */

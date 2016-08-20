@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Formation - Text Inputs</title>
+    <link rel="stylesheet" href="./examples.css" />
+    <script type="text/javascript" src="../dist/formation.js"></script>
+  </head>
+  <body>
+    <h1>Formation - Select boxes</h1>
+    <em>select</em>:
+
+    <form role="form" data-formation="1">
+      <div class="rule-example">
+        <h4>Rules:</h4>
+        <ul>
+          <li>data-fv-required = 1</li>
+        </ul>
+        <select data-fv-required="1">
+          <option value="">&mdash; PICK ONE &mdash;</option>
+          <option value="1">Some</option>
+          <option value="2">Good</option>
+          <option value="3">Values</option>
+        </select>
+      </div>
+
+      <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
+      <div class="submit">
+        <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
+        <div id="form-valid"></div>
+      </div>
+    </form>
+  </body>
+  <script type="text/javascript" src="./examples.js"></script>
+</html>

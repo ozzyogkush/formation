@@ -20,9 +20,8 @@ describe('Objects created using the `radioDefaultRulesStamp`', function() {
           let $radio = $('<input type="radio" name="test" id="test1" value="1" checked="checked" />');
           let $radioMock = sinon.mock($radio);
 
-          $radioMock.expects('attr').once().withArgs('name').returns('test');
           radioRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($radio)
             .returns($radio);
           $radioMock.expects('filter').once().withArgs(':checked').returns($radio);
           assert.isTrue(radioRulesSet.dataFvDefault($radio, 'data-fv-default'));
@@ -36,9 +35,8 @@ describe('Objects created using the `radioDefaultRulesStamp`', function() {
           let $radio = $('<input type="radio" name="test" id="test1" value="1" />');
           let $radioMock = sinon.mock($radio);
 
-          $radioMock.expects('attr').once().withArgs('name').returns('test');
           radioRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs('test')
+            .once().withArgs($radio)
             .returns($radio);
           $radioMock.expects('filter').once().withArgs(':checked').returns($());
           assert.isFalse(radioRulesSet.dataFvDefault($radio, 'data-fv-default'));
@@ -68,6 +66,22 @@ describe('Objects created using the `radioDefaultRulesStamp`', function() {
 
         radioRulesSetMock.verify();
       });
+    });
+  });
+
+  describe('`getAttributeOwner()`', function() {
+    let $radio;
+    beforeEach(function() {
+      $radio = $('<input type="radio" name="test" id="test1" value="1" checked="checked" />');
+    });
+
+    it('should return the value returned from `getCheckboxOrRadioContainer()`', function() {
+      radioRulesSetMock.expects('getCheckboxOrRadioContainer')
+        .once().withArgs($radio)
+        .returns($radio);
+      assert.equal(radioRulesSet.getAttributeOwner($radio), $radio);
+
+      radioRulesSetMock.verify();
     });
   });
 });

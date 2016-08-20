@@ -15,4 +15,13 @@ Formation.initLogging(Formation.getDebug());
  */
 jQuery(document).ready($.proxy(Formation.readyDocument, Formation));
 
+/**
+ * Formation!
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @module        Formation
+ * @namespace     Formation
+ */
 module.exports = Formation;

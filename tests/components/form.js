@@ -6,8 +6,11 @@ const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
+const buttonComponentStamp = require('../../src/components/button');
 const eventEmitterStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formComponentStamp = require('../../src/components/form');
+const ruleStamp = require('../../src/rules/rule');
+const ruleSetStamp = require('../../src/rules/rule-set');
 
 describe('Objects created using the `formComponentStamp`', function() {
   let formComponent;
@@ -52,6 +55,42 @@ describe('Objects created using the `formComponentStamp`', function() {
 
         formComponentMock.verify();
         mockSubmitBtn.verify();
+      });
+    });
+  });
+
+  describe('`registerRule()`', function() {
+    describe('the rule is not an instance of a Formation Rule', function() {
+      it('throws an error', function() {
+        let rule = ruleStamp();
+        let ruleMock = sinon.mock(rule);
+
+        ruleMock.expects('isFormationRule').once().returns(false);
+
+        assert.throws(
+          () => {formComponent.registerRule('unimportant', rule);},
+          Error,
+          'The supplied `rule` object is not built from a `ruleStamp` stamp.'
+        );
+
+        ruleMock.verify();
+      });
+    });
+    describe('the rule is an instance of a Formation Rule', function() {
+      it('adds the rule to the appropriate supported type rule set', function() {
+        let rule = ruleStamp();
+        let ruleMock = sinon.mock(rule);
+        let ruleSet = ruleSetStamp();
+        let ruleSetMock = sinon.mock(ruleSet);
+
+        ruleMock.expects('isFormationRule').once().returns(true);
+        formComponentMock.expects('getRuleSetBySupportedElementType').once().withArgs('text').returns(ruleSet);
+        ruleSetMock.expects('add').once().withArgs(rule).returns(ruleSet);
+
+        formComponent.registerRule('text', rule);
+
+        ruleMock.verify();
+        ruleSetMock.verify();
       });
     });
   });
@@ -137,6 +176,22 @@ describe('Objects created using the `formComponentStamp`', function() {
     });
   });
 
+  describe('`get$requiredFields()`', function() {
+    describe('it has not been set', function() {
+      it('should return an empty jQuery object', function() {
+        assert.deepEqual(formComponent.get$requiredFields(), $());
+      });
+    });
+  });
+
+  describe('`get$optionalFields()`', function() {
+    describe('it has not been set', function() {
+      it('should return an empty jQuery object', function() {
+        assert.deepEqual(formComponent.get$optionalFields(), $());
+      });
+    });
+  });
+
   describe('`getSubmitButton()`', function() {
     describe('it has not been set', function() {
       it('should return null', function() {
@@ -150,6 +205,95 @@ describe('Objects created using the `formComponentStamp`', function() {
       it('should return null', function() {
         assert.isNull(formComponent.getPreviewButton());
       });
+    });
+  });
+
+  describe('`getSubmitWithFallbackPreviewButton()`', function() {
+    let button;
+    let buttonMock;
+    beforeEach(function() {
+      button = buttonComponentStamp({$button : $('<button></button>')});
+      buttonMock = sinon.mock(button);
+    });
+    describe('the submit button exists', function() {
+      it('returns the submit button', function() {
+        formComponentMock.expects('getSubmitButton').once().returns(button);
+        buttonMock.expects('exists').once().returns(true);
+        assert.equal(formComponent.getSubmitWithFallbackPreviewButton(), button);
+
+        formComponentMock.verify();
+        buttonMock.verify();
+      });
+    });
+    describe('the submit button does not exist', function() {
+      describe('the preview button exists', function() {
+        it('returns the preview button', function () {
+          formComponentMock.expects('getSubmitButton').once().returns(button);
+          buttonMock.expects('exists').once().returns(false);
+          formComponentMock.expects('getPreviewButton').once().returns(button);
+          buttonMock.expects('exists').once().returns(true);
+          assert.equal(formComponent.getSubmitWithFallbackPreviewButton(), button);
+
+          formComponentMock.verify();
+          buttonMock.verify();
+        });
+      });
+      describe('the preview button does not exist', function() {
+        it('returns null', function () {
+          formComponentMock.expects('getSubmitButton').once().returns(button);
+          buttonMock.expects('exists').once().returns(false);
+          formComponentMock.expects('getPreviewButton').once().returns(button);
+          buttonMock.expects('exists').once().returns(false);
+          assert.isNull(formComponent.getSubmitWithFallbackPreviewButton());
+
+          formComponentMock.verify();
+          buttonMock.verify();
+        });
+      });
+    });
+  });
+
+  describe('`getSupportedElementTypesMap()`', function() {
+    it('returns the value of the private `__supportedElementTypesMap` object', function() {
+      assert.deepEqual(
+        formComponent.getSupportedElementTypesMap(),
+        {
+          'text' : 'input:text,input:password,input:email,input:tel,textarea',
+          'checkbox' : 'input:checkbox',
+          'radio' : 'input:radio',
+          'select': 'select'
+        }
+      );
+    });
+  });
+
+  describe('`getSupportedElementTypeRuleSets()`', function() {
+    it('returns all the supported rule sets', function() {
+      const ruleSets = formComponent.getSupportedElementTypeRuleSets();
+      assert.property(ruleSets, 'text');
+      assert.isTrue(ruleSets.text.isFormationRuleSet());
+      assert.property(ruleSets, 'checkbox');
+      assert.isTrue(ruleSets.checkbox.isFormationRuleSet());
+      assert.property(ruleSets, 'radio');
+      assert.isTrue(ruleSets.radio.isFormationRuleSet());
+      assert.property(ruleSets, 'select');
+      assert.isTrue(ruleSets.select.isFormationRuleSet());
+    });
+  });
+
+  describe('`getRuleSetBySupportedElementType()`', function() {
+    it('returns the rule set of the requested type', function() {
+      assert.isTrue(formComponent.getRuleSetBySupportedElementType('text').isFormationRuleSet());
+    });
+  });
+
+  describe('`setSupportedElementTypeRuleSet()`', function() {
+    it('sets the rule set for the requested type', function() {
+      let ruleSet = ruleSetStamp();
+      formComponent.setSupportedElementTypeRuleSet('checkbox', ruleSet);
+      assert.strictEqual(
+        formComponent.getRuleSetBySupportedElementType('checkbox'), ruleSet
+      );
     });
   });
 });

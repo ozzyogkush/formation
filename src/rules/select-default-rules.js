@@ -4,8 +4,18 @@ const ruleStamp = require('./rule');
 const ruleSetStamp = require('./rule-set');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
+/**
+ * Used for processing a set of `Formation.rule` objects against `select` elements.
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.selectDefaultRules
+ * @mixin         Formation.selectDefaultRules
+ *
+ * @mixes         Formation.ruleSet
+ */
 const selectDefaultRulesStamp = stampit()
   .methods({
 
@@ -14,8 +24,8 @@ const selectDefaultRulesStamp = stampit()
      * must not be empty.
      *
      * @access      public
-     * @memberOf    {selectDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.selectDefaultRules}
+     * @mixes       {Formation.selectDefaultRules}
      *
      * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
@@ -34,12 +44,10 @@ const selectDefaultRulesStamp = stampit()
      *
      * @private
      * @access      private
-     * @const
      * @type        Array
-     * @memberOf    {selectDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.selectDefaultRules}
      */
-    const __rules = [
+    let __rules = [
       ruleStamp({
         name : 'default',
         callback : ($element, attribute) => this.dataFvDefault($element, attribute)
@@ -50,8 +58,7 @@ const selectDefaultRulesStamp = stampit()
      * Return the value of the private `__rules` object.
      *
      * @access      public
-     * @memberOf    {selectDefaultRulesStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.selectDefaultRules}
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */

@@ -1,0 +1,78 @@
+* {
+  font-family: Verdana, sans-serif;
+  box-sizing: border-box;
+}
+body.valid, div.valid {
+  background: #DDFFDD;
+}
+.status {
+  margin-top: 5px;
+  color: white;
+}
+div.valid .status {
+  background: #008800;
+}
+body.invalid, div.invalid {
+  background: #FFDDDD;
+}
+div.invalid .status {
+  background: #880000;
+}
+
+h4 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea {
+  display: block;
+  margin-left:auto;
+  margin-right:auto;
+  padding: 4px 6px;
+}
+
+div {
+  position: relative;
+  max-width: 500px;
+  padding: 4px 3px;
+}
+form {
+  margin-top: 10px;
+}
+div.rule-example {
+  border: 1px solid #2C2C2C;
+  border-radius: 4px;
+  vertical-align: top;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+label {
+  position: relative;
+}
+label > ul {
+  display: inline-block;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+button {
+  display: inline-block;
+  width: 50%;
+}
+pre.code {
+  padding: 8px 0px;
+  background-color: #a3820b;
+  border: 1px solid #2C2C2C;
+  border-radius: 4px;
+}
+.show {
+  display: block !important;
+}
+.hidden {
+  display: none !important;
+}

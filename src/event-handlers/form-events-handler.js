@@ -8,6 +8,20 @@ const formComponentStamp = require('../components/form');
 const stampit = require('stampit');
 const $ = require('jquery');
 
+/**
+ * Provides an interface for managing form element events
+ *
+ * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
+ * @package       Formation
+ * @namespace     Formation.formEventsHandler
+ * @mixin         Formation.formEventsHandler
+ *
+ * @mixes         Formation.formComponent
+ * @mixes         Formation.domNavigation
+ * @mixes         Formation.toggleableConsole
+ * @mixes         Formation.eventDefinitions
+ */
 const formEventsHandlerStamp = stampit()
   .refs({
 
@@ -16,9 +30,8 @@ const formEventsHandlerStamp = stampit()
      * a global Formation event emitter.
      *
      * @access      public
-     * @type        {eventEmitterStamp}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @type        {Formation.eventEmitter}
+     * @memberOf    {Formation.formEventsHandler}
      * @default     null
      */
     nodeEvents : null
@@ -29,10 +42,10 @@ const formEventsHandlerStamp = stampit()
      * Emit a node event when the form is submitted.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event       jQuery `submit` event object. Required.
+     * @param       {jQuery.Event}       event       jQuery `submit` event object. Required.
      *
      * @returns     {Boolean}     true
      */
@@ -55,10 +68,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}         event         jQuery `check-form-validity` event object. Required.
+     * @param       {jQuery.Event}         event         jQuery `check-form-validity` event object. Required.
      */
     checkFormValidityHandler(event) {
       if (event.namespace === undefined || event.namespace !== "formation") {
@@ -98,10 +111,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `change` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
      */
     checkBoxChangeHandler(event) {
       let $checkbox = $(event.target);
@@ -114,18 +127,26 @@ const formEventsHandlerStamp = stampit()
     },
 
     /**
+     * Checks for linked input elements and shows/hides them based on the status of the radio.
+     *
      * Triggers a form validation check on the radio button whose value was just changed.
      *
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `change` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
      */
     radioChangeHandler(event) {
       const $radio = $(event.target);
+
+      // Check for linked elements and show/hide them appropriately.
+      this.getAllCheckboxesOrRadiosByName($radio).each((index, radio) => {
+        const $r = $(radio);
+        this.showOrHideLinkedElement($r, $r.is(':checked'));
+      });
 
       $radio.trigger(this.getValidationEventName());
     },
@@ -136,10 +157,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `change` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
      */
     selectChangeHandler(event) {
       const $select = $(event.target);
@@ -154,10 +175,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `change` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
      */
     inputTextareaChangeHandler(event) {
       const $target = $(event.target);
@@ -172,10 +193,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `keyup` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `keyup` event object. Required.
      */
     inputTextareaKeyUpHandler(event) {
       const $target = $(event.target);
@@ -189,10 +210,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `focus` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `focus` event object. Required.
      */
     inputFocusHandler(event) {
       const $input = $(event.target);
@@ -209,10 +230,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}       event         jQuery `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
+     * @param       {jQuery.Event}       event         jQuery `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
      */
     validateFormFields(event) {
       let $fields = $().add(this.get$requiredFields()).add(this.get$optionalFields());
@@ -224,10 +245,10 @@ const formEventsHandlerStamp = stampit()
      * element/type specific validation.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @returns     {formEventsHandlerStamp}
+     * @returns     {Formation.formEventsHandler}
      */
     triggerValidationCheck() {
       this.getAllInputElementsToValidate().trigger(this.getValidationEventName());
@@ -242,10 +263,10 @@ const formEventsHandlerStamp = stampit()
      * The `this` object is expected to refer to an instance of this class.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @param       {Event}         event         jQuery `validation-handler` Formation event object. Required.
+     * @param       {jQuery.Event}         event         jQuery `validation-handler` Formation event object. Required.
      */
     inputElementValidationHandler(event) {
       if (event.namespace === null || event.namespace !== "formation") {
@@ -260,14 +281,36 @@ const formEventsHandlerStamp = stampit()
       this.get$form().trigger(this.getCheckFormValidityEventName());
     },
 
+    /**
+     * Set the state of validation on the element with the new value.
+     *
+     * If the validity state actually changes, trigger the `validity-changed` event.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
+     *
+     * @param       {jQuery.Event}          event                   jQuery `set-validation-flag` Formation event object. Required.
+     * @param       {Boolean}               validAfterRuleCheck     Flag indicating whether the event target is now valid. Required.
+     */
     setValidationFlagHandler(event, validAfterRuleCheck) {
       let $element = $(event.target);
-      const validBeforeRuleCheck = (parseInt($element.attr(this.validAttrKey)) === 1);
+      const type = this.getInputType($element);
+      let $elementToCheckAndSetAttr = $element;
+
+      // TODO - re-use `ruleSetStamp.getAttributeOwner()` for this check
+      if ($.inArray(type, ['checkbox', 'radio']) !== -1) {
+        $elementToCheckAndSetAttr = this.getCheckboxOrRadioContainer($element);
+      }
+
+      const validBeforeRuleCheck = (parseInt($elementToCheckAndSetAttr.attr(this.validAttrKey)) === 1);
 
       // Set the value
-      $element.attr(this.validAttrKey, (validAfterRuleCheck === true ? 1 : 0));
+      $elementToCheckAndSetAttr.attr(this.validAttrKey, (validAfterRuleCheck === true ? 1 : 0));
 
-      // If the value changed, trigger the validity changed event
+      // If the value changed, trigger the validity changed event on the EVENT element
       const validityChanged = (
         (validBeforeRuleCheck && ! validAfterRuleCheck) ||
         (! validBeforeRuleCheck && validAfterRuleCheck)
@@ -277,25 +320,21 @@ const formEventsHandlerStamp = stampit()
       }
     },
 
+    /**
+     * Attempt to validate the specified form element. When done, trigger an event
+     * to set the state of validation on the element with the result of the check.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
+     *
+     * @param       {jQuery}            $element      The jQuery wrapped element to validate. Required.
+     */
     validate($element) {
       const lowerTag = $element.prop('tagName').toLowerCase();
-
-      let type = null;
-      if (lowerTag === 'textarea' ||
-          (lowerTag === 'input' && $.inArray(
-            $element.prop('type'),
-            this.getInputTypesArr()) !== -1)) {
-        type = 'text';
-      }
-      else if ($element.prop('type') === 'checkbox') {
-        type = 'checkbox';
-      }
-      else if ($element.prop('type') === 'radio') {
-        type = 'radio';
-      }
-      else if (lowerTag === 'select') {
-        type = 'select';
-      }
+      const type = this.getInputType($element);
 
       if (type === null) {
         this.warn(`No rules class exists for the tag \`${lowerTag}\`.`);
@@ -305,19 +344,23 @@ const formEventsHandlerStamp = stampit()
       const registeredRules = this.getRuleSetBySupportedElementType(type);
       const validAfterRuleCheck = registeredRules.process($element);
 
-      if ($.inArray(type, ['checkbox', 'radio']) !== -1) {
-        this
-          .getButtonGroup($element)
-          .trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
-      }
-      else {
-        // Text and selects set it on the input itself
-        $element
-          .trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
-      }
+      $element.trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
     }
   })
   .init(function() {
+
+    /**
+     * Helper function that users of this Stamp can use to determine if an object is composed
+     * of this Stamp.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     *
+     * @returns     {Boolean}       true
+     */
+    this.isFormEventHandler = () => {
+      return true;
+    };
 
     /**
      * Types of `input` elements that take in characters from the keyboard.
@@ -326,22 +369,54 @@ const formEventsHandlerStamp = stampit()
      * @access      private
      * @const
      * @type        {Array}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
      */
-    const __inputTypes = ['text', 'password', 'email', 'tel'];
+    const __inputTypes = ['text', 'password', 'email', 'number', 'tel'];
 
     /**
      * Return the private `__inputTypes` var.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
      *
      * @returns     {Array}       __inputTypes
      */
     this.getInputTypesArr = () => {
       return __inputTypes;
+    };
+
+    /**
+     * Return a Formation-friendly string indicating the type of an element.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     *
+     * @param       {jQuery}            $element      The jQuery wrapped element to check. Required.
+     *
+     * @returns     {String|null}       type          The determined input type.
+     */
+    this.getInputType = ($element) => {
+      const lowerTag = $element.prop('tagName').toLowerCase();
+      const elementType = $element.prop('type');
+
+      let type = null;
+      if (lowerTag === 'textarea' ||
+          (lowerTag === 'input' && $.inArray(
+            elementType,
+            this.getInputTypesArr()) !== -1)) {
+        type = 'text';
+      }
+      else if (elementType === 'checkbox') {
+        type = 'checkbox';
+      }
+      else if (elementType === 'radio') {
+        type = 'radio';
+      }
+      else if (lowerTag === 'select') {
+        type = 'select';
+      }
+
+      return type;
     };
 
     /**
@@ -351,8 +426,7 @@ const formEventsHandlerStamp = stampit()
      * @private
      * @access      private
      * @type        {Function}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
      *
      * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
      */
@@ -380,10 +454,9 @@ const formEventsHandlerStamp = stampit()
      * iff that has not already taken place.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
      *
-     * @returns     {formEventsHandlerStamp}
+     * @returns     {Formation.formEventsHandler}
      */
     this.initFormEvents = () => {
       if (__formEventsAlreadyInitialized()) {
@@ -406,8 +479,7 @@ const formEventsHandlerStamp = stampit()
      * @access      private
      * @const
      * @type        {Array}
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
      */
     const __inputElementTypesToValidate = ['input', 'textarea', 'select'];
 
@@ -416,13 +488,13 @@ const formEventsHandlerStamp = stampit()
      * jQuery object containing them.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
      *
      * @returns     {jQuery}
      */
     this.getAllInputElementsToValidate = () => {
       const inputElementTypesToValidate = __inputElementTypesToValidate.join(', ');
+
       return this.get$form().find(inputElementTypesToValidate);
     };
 
@@ -434,24 +506,29 @@ const formEventsHandlerStamp = stampit()
      * Sets the initialized flag to be `true`.
      *
      * @access      public
-     * @memberOf    {formEventsHandlerStamp}
-     * @since       0.1.0
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
      *
-     * @returns     {formEventsHandlerStamp}    this        Return the instance of the generated object so we can chain methods.
+     * @returns     {Formation.formEventsHandler}     this        Return the instance of the generated object so we can chain methods.
      */
     this.addDefaultEventHandlers = () => {
-      const allInputElementsSelector = __inputElementTypesToValidate.join(', ');
+      const joinStr = ', ';
+      const allInputElementsSelector = __inputElementTypesToValidate.join(joinStr);
       const mouseMoveTouchEvents = [
         this.getMouseEnterEventName(),
         this.getMouseLeaveEventName(),
         this.getTouchStartEventName()
-      ].join(', ');
+      ].join(joinStr);
+
+      const textElementsSelector = __inputTypes
+          .map(type => `input[type="${type}"]`)
+          .join(joinStr) + `, textarea`;
 
       this.get$form()
         .submit((event) => this.formSubmitHandler(event))
         .on(this.getChangeEventName(), 'input:checkbox', (event) => this.checkBoxChangeHandler(event))
         .on(this.getChangeEventName(), 'input:radio', (event) => this.radioChangeHandler(event))
-        .on(this.getChangeEventName(), 'input:text, textarea', (event) => this.inputTextareaChangeHandler(event))
+        .on(this.getChangeEventName(), textElementsSelector, (event) => this.inputTextareaChangeHandler(event))
         .on(this.getChangeEventName(), 'select', (event) => this.selectChangeHandler(event))
         .on(this.getKeyUpEventName(), 'input, textarea', (event) => this.inputTextareaKeyUpHandler(event))
         .on(this.getFocusEventName(), allInputElementsSelector, (event) => this.inputFocusHandler(event))

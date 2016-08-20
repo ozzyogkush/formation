@@ -18,6 +18,17 @@ describe('Objects created using the `domNavigationStamp`', function() {
   });
 
   describe('`findCurrentFormByTarget()`', function() {
+    it('should return the same element if it is what we are looking for', function() {
+      let $form = $('<form data-formation="1"></form>');
+
+      let $fnMock = sinon.mock($.fn);
+      $fnMock.expects('closest').never();
+      $fnMock.expects('prop').once().withArgs('tagName').returns('form');
+      $fnMock.expects('attr').once().withArgs('data-formation').returns('1');
+      assert.equal(domNavigation.findCurrentFormByTarget($form), $form);
+
+      $fnMock.verify();
+    });
     it('should return the closest jQuery wrapped element in the DOM using the `formationSelector`', function() {
       let $empty = $();
       let $form = $('<form data-formation="1"></form>');
@@ -267,6 +278,46 @@ describe('Objects created using the `domNavigationStamp`', function() {
         $elementMock.verify();
         domNavigationMock.verify();
       });
+    });
+  });
+
+  describe('`getCheckboxOrRadioContainer()`', function() {
+    it('looks for the DOM element which acts as a container for a set of input elements with the same name as `$element`', function() {
+      let $input = $('<input class="btn-checkbox" name="checkboxes" id="a" />');
+      let $inputMock = sinon.mock($input);
+      let $form = $('<form></form>');
+      let $formMock = sinon.mock($form);
+      domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($input).returns($form);
+      $inputMock.expects('attr').once().withArgs('name').returns('checkboxes');
+      $formMock.expects('find')
+        .once().withArgs('[data-fv-group-container="checkboxes"]')
+        .returns($input);
+
+      assert.equal(domNavigation.getCheckboxOrRadioContainer($input), $input);
+
+      domNavigationMock.verify();
+      $formMock.verify();
+      $inputMock.verify();
+    });
+  });
+
+  describe('`getAllCheckboxesOrRadiosByName()`', function() {
+    it('looks for all input elements in the current form with the same name as `$element`', function() {
+      let $input = $('<input class="btn-checkbox" name="checkboxes" id="a" />');
+      let $inputMock = sinon.mock($input);
+      let $form = $('<form></form>');
+      let $formMock = sinon.mock($form);
+      domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($input).returns($form);
+      $inputMock.expects('attr').once().withArgs('name').returns('checkboxes');
+      $formMock.expects('find')
+        .once().withArgs('input[name="checkboxes"]')
+        .returns($input);
+
+      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName($input), $input);
+
+      domNavigationMock.verify();
+      $formMock.verify();
+      $inputMock.verify();
     });
   });
 
