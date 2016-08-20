@@ -143,13 +143,13 @@
           <ul>
             <li>data-fv-optional = 1</li>
             <li>data-fv-min-length = 25</li>
-            <li>data-fv-at-least-5-capitals = 5
+            <li>data-fv-at-least-n-capitals = 5
 <pre class="code">
   // Match that at least 5
   // chars are capitalized
   Formation.registerRule(
     'text',
-    'at-least-5-capitals',
+    'at-least-n-capitals',
     function() { ... }
   );
 </pre>
@@ -160,7 +160,7 @@
                   id="textTest9"
                   data-fv-optional="1"
                   data-fv-min-length="25"
-                  data-fv-at-least-5-capitals="5"></textarea>
+                  data-fv-at-least-n-capitals="5"></textarea>
       </div>
 
       <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
@@ -172,7 +172,7 @@
   </body>
   <script type="text/javascript" src="./examples.js"></script>
   <script type="text/javascript">
-    Formation.registerRule('text', 'at-least-5-capitals', function($element, attribute) {
+    Formation.registerRule('text', 'at-least-n-capitals', function($element, attribute) {
       var n = $element.attr(attribute);
       var capitals = $element.val().match(/([A-Z])/g);
       return capitals !== null && capitals.length >= n;
