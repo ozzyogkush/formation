@@ -6,6 +6,12 @@ Dependencies:
 
 - [`jQuery`](http://jquery.com) - included in distribution files
 
+## Installation
+
+The names `formation` and `formation-js` were already taken in NPM, so we've chosen to use `js-formation`.
+
+    npm install --save js-formation --only=prod
+
 ## Usage
 
 1. Include `dist/formation.js` or `dist/formation-min.js` in your DOM
@@ -176,7 +182,7 @@ Some useful DOM navigation methods (see `./src/utilities/dom-navigation.js`):
 
 ## License
 
-TODO
+This software uses the [MIT](https://opensource.org/licenses/MIT) license (see `LICENSE.md`).
 
 ## Contributing
 
