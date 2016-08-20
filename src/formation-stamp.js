@@ -146,6 +146,20 @@ const formationStamp = stampit()
     },
 
     /**
+     * Simple factory function to create a new `Formation.formEventsHandler`
+     * instance - this is purely for ease of unit testing.
+     *
+     * @access      public
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
+     *
+     * @returns     {Formation.rule}
+     */
+    createFormationRule(name, callback) {
+      return ruleStamp({name: name, callback: callback});
+    },
+
+    /**
      * Construct a CSS selector used to find Formation forms.
      *
      * @access      public
@@ -186,16 +200,13 @@ const formationStamp = stampit()
       if (typeof ruleCallbackMethod !== 'function') {
         throw TypeError('Expected `ruleCallbackMethod` param to be a `Function`, was a `' + typeof ruleCallbackMethod + '`.');
       }
+
+      // Add the new DOMREADY event.
       $(document).ready(() => {
         this.get$forms().each((index, form) => {
-          try {
-            const $form = $(form);
-            const rule = ruleStamp({name: ruleName, callback: ruleCallbackMethod});
-            this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
-          }
-          catch (exception) {
-            this.error(exception);
-          }
+          const $form = $(form);
+          const rule = this.createFormationRule(ruleName, ruleCallbackMethod);
+          this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
         });
       });
 
@@ -259,18 +270,18 @@ const formationStamp = stampit()
      * @memberOf    {Formation.formation}
      * @default     $()
      */
-    let $forms = $();
+    let __$forms = $();
 
     /**
-     * Return the value of the private `$forms` object.
+     * Return the value of the private `__$forms` object.
      *
      * @access      public
      * @memberOf    {Formation.formation}
      *
-     * @returns     {jQuery}        $forms           A set of jQuery extended `form` elements to be managed by Formation.
+     * @returns     {jQuery}        __$forms           A set of jQuery extended `form` elements to be managed by Formation.
      */
     this.get$forms = () => {
-      return $forms;
+      return __$forms;
     };
 
     /**
@@ -283,7 +294,7 @@ const formationStamp = stampit()
      * @returns     {Formation.formation}  this            Return the instance of the generated object so we can chain methods.
      */
     this.detectForms = () => {
-      $forms = $('form').filter(this.formFilter);
+      __$forms = $('form').filter(this.formFilter);
 
       // So we can chain methods.
       return this;
@@ -387,7 +398,7 @@ const formationStamp = stampit()
      */
     this.initForms = () => {
       // Set up the individual forms.
-      $forms.each((index, form) => {
+      __$forms.each((index, form) => {
         let $form = $(form);
 
         this.initForm($form);
