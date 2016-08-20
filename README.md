@@ -98,13 +98,13 @@ supplied rules. When all required fields are valid, it will enable the `submit` 
   - `format` : `string` - The trimmed value must match the specified format
     - Valid formats:
 
-        zip5
-        zip4
-        zip
-        email
-        phone
-        phone-multi
-        REGEX
+            zip5
+            zip4
+            zip
+            email
+            phone
+            phone-multi
+            REGEX
 
   - `match-field` : `string` - ID of another `text` element. The trimmed value must match the trimmed value of the other element 
 
