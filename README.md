@@ -14,6 +14,11 @@ The names `formation` and `formation-js` were already taken in NPM, so we've cho
 
 ## Usage
 
+1. Include jQuery in your DOM via:
+  - the `dist/vendor.js` file
+  - the `dist/vendor.min.js` file
+  - through a CDN
+  - or however your build process includes this project 
 1. Include `dist/formation.js` or `dist/formation-min.js` in your DOM
 1. For each form you wish to support:
   - add the `data-formation="1"` attribute
