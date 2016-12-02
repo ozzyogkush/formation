@@ -1,7 +1,5 @@
 'use strict';
 
-const defaultWebpackConfig = require('./webpack.config.js');
-const webpack = require('webpack');
 const os = require('os');
 
 const isWindows = os.type().toLowerCase().match(/windows/);
@@ -13,6 +11,9 @@ const isWindows = os.type().toLowerCase().match(/windows/);
  */
 module.exports = function(grunt) {
   // Project configuration.
+  const defaultWebpackConfig = require('./webpack.config.js');
+  const webpack = require('webpack');
+
   grunt.initConfig({
     pkg : grunt.file.readJSON('package.json'),
 
@@ -56,7 +57,8 @@ module.exports = function(grunt) {
             mangle: {
               except: ['jQuery', '$', 'exports', 'require', 'Formation']
             }
-          })
+          }),
+          new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.min.js')
         ]
       }
     },
