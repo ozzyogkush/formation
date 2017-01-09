@@ -101,4 +101,8 @@ npm-debug.log
 # Folders to ignore
 node_modules/
 
+# Jeykll
+docs/_site/
+.jekyll-metadata
+
 test-results/

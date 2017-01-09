@@ -19,7 +19,7 @@ The names `formation` and `formation-js` were already taken in NPM, so we've cho
   - the `dist/vendor.min.js` file
   - through a CDN
   - or however your build process includes this project 
-1. Include `dist/formation.js` or `dist/formation-min.js` in your DOM
+1. Include `dist/formation.js` or `dist/formation.min.js` in your DOM
 1. For each form you wish to support:
   - add the `data-formation="1"` attribute
   - add a submit button with a `data-fv-submit="1"` attribute, and a `disabled="disabled"` attribute
@@ -33,7 +33,8 @@ supplied rules. When all required fields are valid, it will enable the `submit` 
 
 ```html
 <head>
-  <script type="text/javascript" src="formation-min.js"></script>
+  <script type="text/javascript" src="vendor.min.js"></script>
+  <script type="text/javascript" src="formation.min.js"></script>
 </head>
 <body>
   <form data-formation="1">
