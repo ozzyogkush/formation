@@ -29,7 +29,8 @@ The names `formation` and `formation-js` were already taken in NPM, so we've cho
 1. For each form input element that is required, add the `data-fv-required="1"` attribute and the validation rules
 1. Add any validation change event handlers required
 
-Formation will handle the rest! Form elements will become valid or invalid during user interaction based on the supplied rules. When all required fields are valid, it will enable the `submit` button and let the user proceed.
+Formation will handle the rest! Form elements will become valid or invalid during user interaction based on the supplied 
+ rules. When all required fields are valid, it will enable the `submit` button and let the user proceed.
 
 ## Supported Form Element Types, Rules, and Examples:
 
@@ -37,6 +38,18 @@ Formation will handle the rest! Form elements will become valid or invalid durin
 - [`checkbox`](elements/checkbox)
 - [`radio`](elements/radio)
 - [`select`](elements/select)
+
+## Advanced Usage
+
+See the [advanced usage](advanced) page.
+
+## API
+
+See the [API](api) page.
+
+## Contributing
+
+See the [contributing](contributing) page.
 
 ## License
 
