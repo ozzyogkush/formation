@@ -1,1 +1,4 @@
 theme: jekyll-theme-modernist
+
+title: Formation - a JavaScript Form Validation Library
+description: DRY - Easy form validation by specifying rules for the inputs on your form

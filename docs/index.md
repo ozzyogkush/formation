@@ -1,5 +1,4 @@
 ---
-title: Formation - a JavaScript Form Validation Library
 ---
 
 # Formation
@@ -32,7 +31,12 @@ The names `formation` and `formation-js` were already taken in NPM, so we've cho
 
 Formation will handle the rest! Form elements will become valid or invalid during user interaction based on the supplied rules. When all required fields are valid, it will enable the `submit` button and let the user proceed.
 
-For more details, see the available [rules](rules) and [live examples](examples).
+## Supported Form Element Types, Rules, and Examples:
+
+- [`text`](elements/text)
+- [`checkbox`](elements/checkbox)
+- [`radio`](elements/radio)
+- [`select`](elements/select)
 
 ## License
 
