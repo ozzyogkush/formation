@@ -1,5 +1,7 @@
 # Formation
 
+[![1.1.0](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
+
 A JavaScript library for websites to make form validation easy.
 
 ## Documentation
@@ -8,7 +10,7 @@ Visit http://ozzyogkush.github.io/formation for full documentation.
 
 ## Installation
 
-The names `formation` and `formation-js` were already taken in NPM, so we've chosen to use `js-formation`.
+Install from NPM:
 
     npm install --save js-formation --only=prod
 
