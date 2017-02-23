@@ -102,6 +102,7 @@ npm-debug.log
 node_modules/
 
 # Jeykll
+docs/Gemfile.lock
 docs/_site/
 docs/.sass-cache/
 .jekyll-metadata
