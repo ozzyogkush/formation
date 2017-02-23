@@ -24,13 +24,13 @@ description: Supported rules and basic example of text-based form inputs
   - `format` : `string` - The trimmed value must match the specified format
     - Valid formats:
 
-        zip5
-        zip4
-        zip
-        email
-        phone
-        phone-multi
-        REGEX
+            zip5
+            zip4
+            zip
+            email
+            phone
+            phone-multi
+            REGEX
 
   - `match-field` : `string` - ID of another `text` element. The trimmed value must match the trimmed value of the other element
 
@@ -49,3 +49,5 @@ description: Supported rules and basic example of text-based form inputs
   </form>
 </body>
 ```
+
+See a [live example](../examples/text-inputs). 

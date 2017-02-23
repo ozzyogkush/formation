@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Formation - Checkbox Inputs Example</title>
+    <link rel="stylesheet" href="./css/examples.css" />
+    <script type="text/javascript" src="./js/vendor.min.js"></script>
+    <script type="text/javascript" src="./js/formation.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  </head>
+  <body>
+    <h1>Formation - Checkboxes</h1>
+    <em>input[type="checkbox"]</em>:
+
+    <form role="form" data-formation="1">
+      <div class="rule-example">
+        <div
+          data-fv-required="1"
+          data-fv-min-selected="1"
+          data-fv-max-selected="3"
+          data-fv-group-container="testInputs">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-min-selected = 1</li>
+            <li>data-fv-max-selected = 3</li>
+            <li>data-fv-linked-input = linkedElement</li>
+          </ul>
+          <label for="testInputs1">
+            1: <input type="checkbox" name="testInputs" id="testInputs1">
+          </label>
+          <label for="testInputs2">
+            2: <input type="checkbox" name="testInputs" id="testInputs2">
+          </label>
+          <label for="testInputs3">
+            3: <input type="checkbox" name="testInputs" id="testInputs3">
+          </label>
+          <label for="testInputs4">
+            4: <input type="checkbox" name="testInputs" id="testInputs4">
+          </label>
+          <label for="testInputs5">
+            5 (linkedElement): <input type="checkbox" name="testInputs" id="testInputs5" data-fv-linked-input="linkedElement">
+          </label>
+        </div>
+      </div>
+      <div class="rule-example">
+        LINKED ELEMENT
+        <h4>Rules:</h4>
+        <ul>
+          <li>data-fv-required = 1</li>
+        </ul>
+        <input
+          type="text"
+          id="linkedElement"
+          data-fv-required="1"
+          class="hidden disabled"
+          disabled="disabled" />
+      </div>
+
+      <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
+      <div class="submit">
+        <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
+        <div id="form-valid"></div>
+      </div>
+    </form>
+  </body>
+  <script type="text/javascript" src="./js/examples.js"></script>
+</html>

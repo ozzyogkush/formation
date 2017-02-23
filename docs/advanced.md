@@ -10,7 +10,7 @@ You can add a custom rule to any supported element type using:
 
 You can then use that rule on a supported element by adding `data-fv-{ruleName}="{valueToCheck}"`. 
 
-Example `at-least-n-capital`:
+Example `at-least-n-capitals`:
 
 ```html
 <head>

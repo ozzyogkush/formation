@@ -35,3 +35,5 @@ description: Supported rules and basic example of select form inputs
   </form>
 </body>
 ```
+
+See a [live example](../examples/select-boxes).

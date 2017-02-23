@@ -18,6 +18,7 @@ module.exports = function(grunt) {
     pkg : grunt.file.readJSON('package.json'),
 
     paths : {
+      docs : 'docs',
       jsSrc : 'src',
       jsTestSrc : 'tests',
       jsTestResultsSrc : 'test-results',
@@ -92,11 +93,26 @@ module.exports = function(grunt) {
           coverageFolder: 'test-results'
         }
       }
+    },
+
+    /* Copy compiled JS files to docs examples JS folder so GitHub Pages site has newest version. */
+    copy : {
+      toDocs : {
+        files : [
+          {
+            expand: true,
+            cwd: './<%= paths.jsOut %>',
+            src: '*.*',
+            dest: './<%= paths.docs %>/examples/js'
+          }
+        ]
+      }
     }
   });
 
   // Load up all appropriate Tasks
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-mocha-test');
@@ -115,6 +131,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['dev', 'unitTests']);
 
   // Our production build will first unit test all development code before producing production output.
-  grunt.registerTask('build', ['test', 'webpack:build']);
+  grunt.registerTask('build', ['test', 'webpack:build', 'copy:toDocs']);
 
 };

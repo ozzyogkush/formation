@@ -103,6 +103,7 @@ node_modules/
 
 # Jeykll
 docs/_site/
+docs/.sass-cache/
 .jekyll-metadata
 
 test-results/
