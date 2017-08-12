@@ -6,7 +6,8 @@
     "curly" : true, /* Force curly braces where optional */
     "jquery" : true, /* Make jQuery globals available */
     "console" : true, /* Make console object global available */
-    "module" : true /* Make module object global available */
+    "module" : true /* Make module object global available */,
+    "KeyboardEvent": true
   },
   "node" : true, /* Allow node stuff like `require()` */
   "mocha" : true, /* Allow mocha methods like `describe()`, `it()`, etc */
