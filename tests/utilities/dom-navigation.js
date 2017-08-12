@@ -18,31 +18,21 @@ describe('Objects created using the `domNavigationStamp`', function() {
   });
 
   describe('`findCurrentFormByTarget()`', function() {
-    it('should return the same element if it is what we are looking for', function() {
-      let $form = $('<form data-formation="1"></form>');
+    it('should return the same form element if it is what we are looking for', function() {
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
 
-      let $fnMock = sinon.mock($.fn);
-      $fnMock.expects('closest').never();
-      $fnMock.expects('prop').once().withArgs('tagName').returns('form');
-      $fnMock.expects('attr').once().withArgs('data-formation').returns('1');
-      assert.equal(domNavigation.findCurrentFormByTarget($form), $form);
-
-      $fnMock.verify();
+      assert.equal(domNavigation.findCurrentFormByTarget(form), form);
     });
-    it('should return the closest jQuery wrapped element in the DOM using the `formationSelector`', function() {
-      let $empty = $();
-      let $form = $('<form data-formation="1"></form>');
-      let $element = $('<div></div>');
+    it('should return the closest form element in the DOM using the `formationSelector`, or null if not found', function() {
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
 
-      let $fnMock = sinon.mock($.fn);
-      $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($empty);
-      assert.equal(domNavigation.findCurrentFormByTarget($element), $empty);
+      const div = document.createElement('div');
+      assert.equal(domNavigation.findCurrentFormByTarget(div), null);
 
-      $element.wrap($form);
-      $fnMock.expects('closest').once().withArgs('[data-formation="1"]').returns($form);
-      assert.equal(domNavigation.findCurrentFormByTarget($element), $form);
-
-      $fnMock.verify();
+      form.appendChild(div);
+      assert.equal(domNavigation.findCurrentFormByTarget(div), form);
     });
   });
 
@@ -122,116 +112,100 @@ describe('Objects created using the `domNavigationStamp`', function() {
 
   describe('`findRequiredFields()`', function() {
     describe('when there are no required fields inside the specified `form` node', function() {
-      it('should return an empty jQuery set', function() {
-        let $input = $('<input type="text" />');
-        let $form = $('<form data-formation="1"></form>');
-        $input.wrap($form);
-        let $formMock = sinon.mock($form);
+      it('should return an empty NodeList', function() {
+        const form = document.createElement('form');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        form.appendChild(input);
 
-        $formMock.expects('find').once().withArgs('[data-fv-required="1"]').returns($());
-        domNavigation.findRequiredFields($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findRequiredFields(form).length, 0);
       });
     });
     describe('when there are required fields inside the specified `form` node', function() {
-      it('should return a non-empty jQuery set', function() {
-        let $element = $('<input type="text" data-fv-required="1" />');
-        let $form = $('<form data-formation="1"></form>');
-        $element.wrap($form);
-        let $formMock = sinon.mock($form);
+      it('should return a non-empty NodeList', function() {
+        const form = document.createElement('form');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('data-fv-required', '1');
+        form.appendChild(input);
 
-        $formMock.expects('find').once().withArgs('[data-fv-required="1"]').returns($element);
-        domNavigation.findRequiredFields($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findRequiredFields(form).length, 1);
+        assert.equal(domNavigation.findRequiredFields(form)[0], input);
       });
     });
   });
 
   describe('`findOptionalFields()`', function() {
     describe('when there are no optional fields inside the specified `form` node', function() {
-      it('should return an empty jQuery set', function() {
-        let $input = $('<input type="text" />');
-        let $form = $('<form data-formation="1"></form>');
-        $input.wrap($form);
-        let $formMock = sinon.mock($form);
+      it('should return an empty NodeList', function() {
+        const form = document.createElement('form');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        form.appendChild(input);
 
-        $formMock.expects('find').once().withArgs('[data-fv-optional="1"]').returns($());
-        domNavigation.findOptionalFields($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findOptionalFields(form).length, 0);
       });
     });
     describe('when there are optional fields inside the specified `form` node', function() {
-      it('should return a non-empty jQuery set', function() {
-        let $element = $('<input type="text" data-fv-optional="1" />');
-        let $form = $('<form data-formation="1"></form>');
-        $element.wrap($form);
-        let $formMock = sinon.mock($form);
+      it('should return a non-empty NodeList', function() {
+        const form = document.createElement('form');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('data-fv-optional', '1');
+        form.appendChild(input);
 
-        $formMock.expects('find').once().withArgs('[data-fv-optional="1"]').returns($element);
-        domNavigation.findOptionalFields($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findOptionalFields(form).length, 1);
+        assert.equal(domNavigation.findOptionalFields(form)[0], input);
       });
     });
   });
 
   describe('`findSubmitButton()`', function() {
     describe('when there is no Formation submit button inside the specified `form` node', function() {
-      it('should return an empty jQuery set', function() {
-        let $button = $('<button type="submit">Go</button>');
-        let $form = $('<form data-formation="1"></form>');
-        $button.wrap($form);
-        let $formMock = sinon.mock($form);
+      it('should return an empty NodeList', function() {
+        const form = document.createElement('form');
+        const button = document.createElement('button');
+        button.setAttribute('type', 'button');
+        form.appendChild(button);
 
-        $formMock.expects('find').once().withArgs('[data-fv-form-submit]').returns($());
-        domNavigation.findSubmitButton($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findSubmitButton(form).length, 0);
       });
     });
     describe('when there is a Formation submit button inside the specified `form` node', function() {
-      it('should return a non-empty jQuery set', function() {
-        let $button = $('<button type="submit" data-fv-form-submit="1">Go</button>');
-        let $form = $('<form data-formation="1"></form>');
-        $button.wrap($form);
-        let $formMock = sinon.mock($form);
+      it('should return a non-empty NodeList', function() {
+        const form = document.createElement('form');
+        const button = document.createElement('button');
+        button.setAttribute('type', 'button');
+        button.setAttribute('data-fv-form-submit', '1');
+        form.appendChild(button);
 
-        $formMock.expects('find').once().withArgs('[data-fv-form-submit]').returns($button);
-        domNavigation.findSubmitButton($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findSubmitButton(form).length, 1);
+        assert.equal(domNavigation.findSubmitButton(form)[0], button);
       });
     });
   });
 
   describe('`findPreviewButton()`', function() {
-    describe('when there is no Formation submit button inside the specified `form` node', function() {
-      it('should return an empty jQuery set', function() {
-        let $button = $('<button type="button">Preview</button>');
-        let $form = $('<form data-formation="1"></form>');
-        $button.wrap($form);
-        let $formMock = sinon.mock($form);
+    describe('when there is no Formation preview button inside the specified `form` node', function() {
+      it('should return an empty NodeList', function() {
+        const form = document.createElement('form');
+        const button = document.createElement('button');
+        button.setAttribute('type', 'button');
+        form.appendChild(button);
 
-        $formMock.expects('find').once().withArgs('[data-fv-form-preview]').returns($());
-        domNavigation.findPreviewButton($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findPreviewButton(form).length, 0);
       });
     });
-    describe('when there is a Formation submit button inside the specified `form` node', function() {
-      it('should return a non-empty jQuery set', function() {
-        let $button = $('<button type="button" data-fv-form-preview="1">Preview</button>');
-        let $form = $('<form data-formation="1"></form>');
-        $button.wrap($form);
-        let $formMock = sinon.mock($form);
+    describe('when there is a Formation preview button inside the specified `form` node', function() {
+      it('should return a non-empty NodeList', function() {
+        const form = document.createElement('form');
+        const button = document.createElement('button');
+        button.setAttribute('type', 'button');
+        button.setAttribute('data-fv-form-preview', '1');
+        form.appendChild(button);
 
-        $formMock.expects('find').once().withArgs('[data-fv-form-preview]').returns($button);
-        domNavigation.findPreviewButton($form);
-
-        $formMock.verify();
+        assert.equal(domNavigation.findPreviewButton(form).length, 1);
+        assert.equal(domNavigation.findPreviewButton(form)[0], button);
       });
     });
   });
@@ -239,145 +213,175 @@ describe('Objects created using the `domNavigationStamp`', function() {
   describe('`elementIsCustomRadioOrCheckboxWidget()`', function() {
     describe('when the element is not inside a Formation `form`', function() {
       it('should return false', function() {
-        let $element = $('<div></div>');
-        domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($());
-
-        domNavigation.elementIsCustomRadioOrCheckboxWidget($element);
-
-        domNavigationMock.verify();
+        const element = document.createElement('div');
+        assert.equal(domNavigation.elementIsCustomRadioOrCheckboxWidget(element), false);
       });
     });
     describe('when the element is inside a Formation `form` but is not a custom radio or checkbox widget', function() {
       it('should return false', function() {
-        let $element = $('<div></div>');
-        let $elementMock = sinon.mock($element);
-        let $form = $('<form></form>');
+        const element = document.createElement('div');
+        const form = document.createElement('form');
+        form.setAttribute('data-formation', 1);
+        form.appendChild(element);
 
-        $elementMock.expects('hasClass').once().withArgs('btn-checkbox').returns(false);
-        $elementMock.expects('hasClass').once().withArgs('btn-radio').returns(false);
-        domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($form);
-
-        domNavigation.elementIsCustomRadioOrCheckboxWidget($element);
-
-        $elementMock.verify();
-        domNavigationMock.verify();
+        assert.equal(domNavigation.elementIsCustomRadioOrCheckboxWidget(element), false);
       });
     });
     describe('when the element is inside a Formation `form` and is a custom radio or checkbox widget', function() {
       it('should return true', function() {
-        let $element = $('<label class="btn-checkbox"></label>');
-        let $elementMock = sinon.mock($element);
-        let $form = $('<form></form>');
+        const element = document.createElement('div');
+        element.classList.add('btn-checkbox');
+        const form = document.createElement('form');
+        form.setAttribute('data-formation', 1);
+        form.appendChild(element);
 
-        $elementMock.expects('hasClass').once().withArgs('btn-checkbox').returns(true);
-        $elementMock.expects('hasClass').never().withArgs('btn-radio');
-        domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($form);
+        assert.equal(domNavigation.elementIsCustomRadioOrCheckboxWidget(element), true);
 
-        domNavigation.elementIsCustomRadioOrCheckboxWidget($element);
-
-        $elementMock.verify();
-        domNavigationMock.verify();
+        element.classList.replace('btn-checkbox', 'btn-radio');
+        assert.equal(domNavigation.elementIsCustomRadioOrCheckboxWidget(element), true);
       });
     });
   });
 
-  describe('`getCheckboxOrRadioContainer()`', function() {
-    it('looks for the DOM element which acts as a container for a set of input elements with the same name as `$element`', function() {
-      let $input = $('<input class="btn-checkbox" name="checkboxes" id="a" />');
-      let $inputMock = sinon.mock($input);
-      let $form = $('<form></form>');
-      let $formMock = sinon.mock($form);
-      domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($input).returns($form);
-      $inputMock.expects('attr').once().withArgs('name').returns('checkboxes');
-      $formMock.expects('find')
-        .once().withArgs('[data-fv-group-container="checkboxes"]')
-        .returns($input);
+  describe('`getCheckboxOrRadioContainer()` looks for the DOM element container for a set of input elements with the same name as `input`', function() {
+    it('returns null when the DOM element is not in a Formation `form`', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
 
-      assert.equal(domNavigation.getCheckboxOrRadioContainer($input), $input);
+      assert.equal(domNavigation.getCheckboxOrRadioContainer(input), null);
+    });
 
-      domNavigationMock.verify();
-      $formMock.verify();
-      $inputMock.verify();
+    it('returns an empty NodeList when the DOM element is not found in the current form', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
+
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
+
+      form.appendChild(input);
+      assert.equal(domNavigation.getCheckboxOrRadioContainer(input).length, 0);
+    });
+
+    it('returns a NodeList with the DOM element when it is found', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
+      const groupContainer = document.createElement('div');
+      groupContainer.setAttribute('data-fv-group-container', 'checkboxes');
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
+
+      groupContainer.appendChild(input);
+      form.appendChild(groupContainer);
+      assert.equal(domNavigation.getCheckboxOrRadioContainer(input).length, 1);
+      assert.equal(domNavigation.getCheckboxOrRadioContainer(input)[0], groupContainer);
     });
   });
 
-  describe('`getAllCheckboxesOrRadiosByName()`', function() {
-    it('looks for all input elements in the current form with the same name as `$element`', function() {
-      let $input = $('<input class="btn-checkbox" name="checkboxes" id="a" />');
-      let $inputMock = sinon.mock($input);
-      let $form = $('<form></form>');
-      let $formMock = sinon.mock($form);
-      domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($input).returns($form);
-      $inputMock.expects('attr').once().withArgs('name').returns('checkboxes');
-      $formMock.expects('find')
-        .once().withArgs('input[name="checkboxes"]')
-        .returns($input);
+  describe('`getAllCheckboxesOrRadiosByName()` looks for all input elements in the current form with the same name as `input`', function() {
+    it('returns null when the DOM element is not in a Formation `form`', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
 
-      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName($input), $input);
+      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName(input), null);
+    });
 
-      domNavigationMock.verify();
-      $formMock.verify();
-      $inputMock.verify();
+    it('returns a NodeList with the matching DOM elements when they are found', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
+      const input2 = document.createElement('input');
+      input2.classList.add('btn-checkbox');
+      input2.setAttribute('name', 'checkboxes');
+      input2.setAttribute('id', 'b');
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
+
+      form.appendChild(input);
+      form.appendChild(input2);
+      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName(input).length, 2);
+      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName(input)[0], input);
+      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName(input)[1], input2);
     });
   });
 
-  describe('`getInputElementLabel()`', function() {
-    it('looks for a `label` element for the supplied input', function() {
-      let $input = $('<input class="btn-checkbox" id="a" /><label for="a"></label>');
-      let $form = $('<form></form>');
-      let $formMock = sinon.mock($form);
+  describe('`getInputElementLabel()` looks for a `label` element for the supplied input', function() {
+    it('returns null when the DOM element is not in a Formation `form`', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
 
-      domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($input).returns($form);
-      $formMock.expects('find').once().withArgs('label[for="a"]').returns($input.siblings('label[for="a"]'));
+      assert.equal(domNavigation.getInputElementLabel(input), null);
+    });
 
-      domNavigation.getInputElementLabel($input);
+    it('returns a NodeList with the matching DOM element(s) when they are found', function() {
+      const input = document.createElement('input');
+      input.classList.add('btn-checkbox');
+      input.setAttribute('name', 'checkboxes');
+      input.setAttribute('id', 'a');
+      const label = document.createElement('label');
+      label.setAttribute('for', 'a');
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
 
-      $formMock.verify();
-      domNavigationMock.verify();
+      form.appendChild(input);
+      form.appendChild(label);
+      assert.equal(domNavigation.getInputElementLabel(input).length, 1);
+      assert.equal(domNavigation.getInputElementLabel(input)[0], label);
     });
   });
 
   describe('`getLinkedElement()`', function() {
     describe('when the linked element is not expected', function() {
       it('returns null', function() {
-        let $source = $('<input type="checkbox" />');
-        let $sourceMock = sinon.mock($source);
+        const source = document.createElement('input');
+        source.setAttribute('type', 'checkbox');
 
-        $sourceMock.expects('attr').once().withArgs('data-fv-linked-input').returns(undefined);
-
-        assert.isNull(domNavigation.getLinkedElement($source));
-
-        $sourceMock.verify();
+        assert.equal(domNavigation.getLinkedElement(source), null);
       });
     });
     describe('when the linked element is expected but not found in the DOM', function() {
       it('throws an error', function() {
-        let $source = $('<input type="checkbox" data-fv-linked-input="some-other-id" />');
-        let $sourceMock = sinon.mock($source);
+        const source = document.createElement('input');
+        source.setAttribute('type', 'checkbox');
+        source.setAttribute('data-fv-linked-input', 'linked');
+        const form = document.createElement('form');
 
-        $sourceMock.expects('attr').once().withArgs('data-fv-linked-input').returns('some-other-id');
+        form.appendChild(source);
+        document.body.appendChild(form);
 
         assert.throws(
-          () => { domNavigation.getLinkedElement($source); },
+          () => { domNavigation.getLinkedElement(source); },
           Error,
-          'Expected an element with a `data-fv-linked-input` attribute equal to "some-other-id".'
+          'Expected an element with a `data-fv-linked-input` attribute equal to "linked".'
         );
-
-        $sourceMock.verify();
+        document.body.removeChild(form);
       });
     });
     describe('when the linked element is expected and found in the DOM', function() {
       it('returns the linked element', function() {
-        let $someOtherElement = $('<input id="some-other-id" />');
-        $('body').append($someOtherElement);
-        let $source = $('<input type="checkbox" data-fv-linked-input="some-other-id" />');
-        let $sourceMock = sinon.mock($source);
+        const source = document.createElement('input');
+        source.setAttribute('type', 'checkbox');
+        source.setAttribute('data-fv-linked-input', 'linked');
+        const linkedElement = document.createElement('input');
+        linkedElement.setAttribute('id', 'linked');
+        const form = document.createElement('form');
 
-        $sourceMock.expects('attr').once().withArgs('data-fv-linked-input').returns('some-other-id');
+        form.appendChild(source);
+        form.appendChild(linkedElement);
+        document.body.appendChild(form);
 
-        assert.deepEqual(domNavigation.getLinkedElement($source), $('#some-other-id'));
-
-        $sourceMock.verify();
+        assert.equal(domNavigation.getLinkedElement(source), linkedElement);
+        document.body.removeChild(form);
       });
     });
   });
@@ -385,28 +389,22 @@ describe('Objects created using the `domNavigationStamp`', function() {
   describe('`enableOrDisableElement()`', function() {
     describe('when the `enable` param is true', function() {
       it('removes the `disabled` property and class name from the element', function() {
-        let $element = $('<input type="text" disabled="disabled" class="disabled" />');
-        let $elementMock = sinon.mock($element);
+        const input = document.createElement('input');
+        input.classList.add('disabled');
+        input.setAttribute('disabled', 'disabled');
 
-        $elementMock.expects('removeProp').once().withArgs('disabled').returns($element);
-        $elementMock.expects('removeClass').once().withArgs('disabled').returns($element);
-
-        assert.equal(domNavigation.enableOrDisableElement($element, true), domNavigation);
-
-        $elementMock.verify();
+        assert.equal(domNavigation.enableOrDisableElement(input, true), domNavigation);
+        assert.equal(input.hasAttribute('disabled'), false);
+        assert.equal(input.classList.contains('disabled'), false);
       });
     });
     describe('when the `enable` param is false', function() {
       it('sets the `disabled` property and adds the `disabled` class name to the element', function() {
-        let $element = $('<input type="text" />');
-        let $elementMock = sinon.mock($element);
+        const input = document.createElement('input');
 
-        $elementMock.expects('prop').once().withArgs('disabled', 'disabled').returns($element);
-        $elementMock.expects('addClass').once().withArgs('disabled').returns($element);
-
-        assert.equal(domNavigation.enableOrDisableElement($element, false), domNavigation);
-
-        $elementMock.verify();
+        assert.equal(domNavigation.enableOrDisableElement(input, false), domNavigation);
+        assert.equal(input.getAttribute('disabled'), 'disabled');
+        assert.equal(input.classList.contains('disabled'), true);
       });
     });
   });
@@ -414,72 +412,91 @@ describe('Objects created using the `domNavigationStamp`', function() {
   describe('`showOrHideElement()`', function() {
     describe('when the `show` param is true', function() {
       it('removes the `hidden` class name from the element', function() {
-        let $element = $('<input type="text" class="hidden" />');
-        let $elementMock = sinon.mock($element);
+        const input = document.createElement('input');
+        input.classList.add('hidden');
 
-        $elementMock.expects('removeClass').once().withArgs('hidden').returns($element);
-
-        assert.equal(domNavigation.showOrHideElement($element, true), domNavigation);
-
-        $elementMock.verify();
+        assert.equal(domNavigation.showOrHideElement(input, true), domNavigation);
+        assert.equal(input.classList.contains('hidden'), false);
       });
     });
     describe('when the `show` param is false', function() {
       it('adds the `hidden` class name to the element', function() {
-        let $element = $('<input type="text" />');
-        let $elementMock = sinon.mock($element);
+        const input = document.createElement('input');
 
-        $elementMock.expects('addClass').once().withArgs('hidden').returns($element);
-
-        assert.equal(domNavigation.showOrHideElement($element, false), domNavigation);
-
-        $elementMock.verify();
+        assert.equal(domNavigation.showOrHideElement(input, false), domNavigation);
+        assert.equal(input.classList.contains('hidden'), true);
       });
     });
   });
 
   describe('`showOrHideLinkedElement()`', function() {
-    describe('when there is no element linked with the `$element` param', function() {
-      it('returns from the method', function() {
-        let $element = $('<input type="text" />');
+    describe('when there is no element linked with the `element` param', function() {
+      it('takes no action', function() {
+        const input = document.createElement('input');
 
-        domNavigationMock.expects('getLinkedElement').once().withArgs($element).returns(null);
-        assert.equal(domNavigation.showOrHideLinkedElement($element), domNavigation);
+        domNavigationMock.expects('closest').never();
+        domNavigationMock.expects('showOrHideElement').never();
+        domNavigationMock.expects('enableOrDisableLinkedElement').never();
+
+        assert.equal(domNavigation.showOrHideLinkedElement(input), domNavigation);
 
         domNavigationMock.verify();
       });
     });
-    describe('when there is an element linked with the `$element` param', function() {
+    describe('when there is an element linked with the `element` param', function() {
       describe('when the linked element is not in a form group', function() {
-        it('returns from the method', function() {
-          let $element = $('<input type="text" />');
-          let $linkedElement = $('<input type="checkbox" />');
-          let $linkedElementMock = sinon.mock($linkedElement);
+        it('enables or disables the linked element', function() {
+          const input = document.createElement('input');
+          input.setAttribute('type', 'checkbox');
+          input.setAttribute('data-fv-linked-input', 'linked');
+          const linkedElement = document.createElement('input');
+          linkedElement.setAttribute('id', 'linked');
+          const form = document.createElement('form');
 
-          $linkedElementMock.expects('closest').once().withArgs('.form-group').returns($());
-          domNavigationMock.expects('getLinkedElement').once().withArgs($element).returns($linkedElement);
-          domNavigationMock.expects('enableOrDisableLinkedElement').once().withArgs($linkedElement, false, true).returns($linkedElement);
-          assert.equal(domNavigation.showOrHideLinkedElement($element, false), domNavigation);
+          form.appendChild(input);
+          form.appendChild(linkedElement);
+          document.body.appendChild(form);
 
-          $linkedElementMock.verify();
-          domNavigationMock.verify();
+          assert.equal(domNavigation.showOrHideLinkedElement(input, true), domNavigation);
+          assert.equal(linkedElement.hasAttribute('disabled'), false);
+          assert.equal(linkedElement.classList.contains('disabled'), false);
+
+          domNavigation.showOrHideLinkedElement(input, false);
+          assert.equal(linkedElement.getAttribute('disabled'), 'disabled');
+          assert.equal(linkedElement.classList.contains('disabled'), true);
+
+          document.body.removeChild(form)
         });
       });
       describe('when the linked element is in a form group', function() {
-        it('returns from the method', function() {
-          let $element = $('<input type="text" />');
-          let $linkedElement = $('<input type="checkbox" />');
-          let $formGroup = $linkedElement.wrap($('<div class="form-group"></div>'));
-          let $linkedElementMock = sinon.mock($linkedElement);
+        it('enables or disables the linked element and linked form group', function() {
+          const input = document.createElement('input');
+          input.setAttribute('type', 'checkbox');
+          input.setAttribute('data-fv-linked-input', 'linked');
+          const linkedElement = document.createElement('input');
+          linkedElement.setAttribute('id', 'linked');
+          const formGroup = document.createElement('div');
+          formGroup.classList.add('form-group');
+          const form = document.createElement('form');
 
-          $linkedElementMock.expects('closest').once().withArgs('.form-group').returns($formGroup);
-          domNavigationMock.expects('getLinkedElement').once().withArgs($element).returns($linkedElement);
-          domNavigationMock.expects('showOrHideElement').once().withArgs($formGroup, true).returns(domNavigation);
-          domNavigationMock.expects('enableOrDisableLinkedElement').once().withArgs($linkedElement, true, false).returns($linkedElement);
-          assert.equal(domNavigation.showOrHideLinkedElement($element, true), domNavigation);
+          formGroup.appendChild(linkedElement);
+          form.appendChild(input);
+          form.appendChild(formGroup);
+          document.body.appendChild(form);
 
-          $linkedElementMock.verify();
-          domNavigationMock.verify();
+          assert.equal(domNavigation.showOrHideLinkedElement(input, true), domNavigation);
+          assert.equal(formGroup.classList.contains('hidden'), false);
+          assert.equal(linkedElement.hasAttribute('disabled'), false);
+          assert.equal(linkedElement.classList.contains('disabled'), false);
+          assert.equal(linkedElement.classList.contains('hidden'), false);
+
+          domNavigation.showOrHideLinkedElement(input, false);
+          assert.equal(formGroup.classList.contains('hidden'), true);
+          assert.equal(linkedElement.getAttribute('disabled'), 'disabled');
+          assert.equal(linkedElement.classList.contains('disabled'), true);
+          assert.equal(linkedElement.classList.contains('hidden'), false);
+
+          document.body.removeChild(form);
         });
       });
     });
@@ -487,139 +504,150 @@ describe('Objects created using the `domNavigationStamp`', function() {
 
   describe('`enableOrDisableLinkedElement()`', function() {
     describe('when the `enableAndShow` param is true', function() {
-      it('calls `showEnableLinkedElement()` with the supplied $linkedElement and `elementHandlesHidden` flag', function() {
-        let $element = $('<input type="text" />');
+      it('calls `showEnableLinkedElement()` with the supplied linkedElement and `elementHandlesHidden` flag', function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
 
-        domNavigationMock.expects('showEnableLinkedElement').once().withArgs($element, true).returns(domNavigation);
-        assert.equal(domNavigation.enableOrDisableLinkedElement($element, true, true), domNavigation);
-
-        domNavigationMock.verify();
+        assert.equal(domNavigation.enableOrDisableLinkedElement(input, true, true), domNavigation);
+        assert.equal(input.hasAttribute('disabled'), false);
+        assert.equal(input.classList.contains('disabled'), false);
+        assert.equal(input.classList.contains('hidden'), false);
       });
     });
     describe('when the `enableAndShow` param is false', function() {
-      it('calls `hideDisableLinkedElement()` with the supplied $linkedElement and `elementHandlesHidden` flag', function() {
-        let $element = $('<input type="text" />');
+      it('calls `hideDisableLinkedElement()` with the supplied linkedElement and `elementHandlesHidden` flag', function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
 
-        domNavigationMock.expects('hideDisableLinkedElement').once().withArgs($element, true).returns(domNavigation);
-        assert.equal(domNavigation.enableOrDisableLinkedElement($element, false, true), domNavigation);
-
-        domNavigationMock.verify();
+        assert.equal(domNavigation.enableOrDisableLinkedElement(input, false, true), domNavigation);
+        assert.equal(input.getAttribute('disabled'), 'disabled');
+        assert.equal(input.classList.contains('disabled'), true);
+        assert.equal(input.classList.contains('hidden'), true);
       });
     });
   });
 
   describe('`showEnableLinkedElement()` calls `enableOrDisableElement()` with the supplied $element and `true` flag', function() {
     describe('when the `removeHidden` param is false', function() {
-      it('does not call `showOrHideElement()`', function () {
-        let $element = $('<input type="text" />');
+      it('does not call `showOrHideElement()`', function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.classList.add('hidden');
 
-        domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, true).returns(domNavigation);
-        domNavigationMock.expects('showOrHideElement').never();
-        assert.equal(domNavigation.showEnableLinkedElement($element, false), domNavigation);
-
-        domNavigationMock.verify();
+        assert.equal(domNavigation.showEnableLinkedElement(input, false), domNavigation);
+        assert.equal(input.hasAttribute('disabled'), false);
+        assert.equal(input.classList.contains('disabled'), false);
+        assert.equal(input.classList.contains('hidden'), true);
       });
     });
     describe('when the `removeHidden` param is true', function() {
-      it('calls `showOrHideElement()` with the supplied $element and `true` flag', function () {
-        let $element = $('<input type="text" />');
+      it('calls `showOrHideElement()` with the supplied element and `true` flag', function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.classList.add('hidden');
 
-        domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, true).returns(domNavigation);
-        domNavigationMock.expects('showOrHideElement').once().withArgs($element, true).returns(domNavigation);
-        assert.equal(domNavigation.showEnableLinkedElement($element, true), domNavigation);
-
-        domNavigationMock.verify();
+        assert.equal(domNavigation.showEnableLinkedElement(input, true), domNavigation);
+        assert.equal(input.hasAttribute('disabled'), false);
+        assert.equal(input.classList.contains('disabled'), false);
+        assert.equal(input.classList.contains('hidden'), false);
       });
     });
   });
 
   describe('`hideDisableLinkedElement()`', function() {
-    describe('when it is not set to clear the value, it does not clear the value or set the valid attribute to 0', function() {
+    const listenerHandler = e => { console.log('listenerHandler() called');e.currentTarget.setAttribute('eventTriggered', true); };
+
+    describe('when it is not set to clear the value, it does not clear the value or dispatch the validation event', function() {
       describe('when the `includeHidden` param is false', function() {
-        it('does not call `showOrHideElement()`', function () {
-          let $element = $('<input type="text" />');
-          let $elementMock = sinon.mock($element);
+        it('does not attempt to show or hide the element', function() {
+          const input = document.createElement('input');
+          input.value = 'TESTING';
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-toggle-override-text', 0);
+          input.addEventListener(domNavigation.getSetValidationFlagEventName(), listenerHandler);
+          document.body.appendChild(input);
 
-          $elementMock.expects('attr').twice().withArgs('data-fv-toggle-override-text').returns('0');
-          domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
-          domNavigationMock.expects('showOrHideElement').never().returns(domNavigation);
-          assert.equal(domNavigation.hideDisableLinkedElement($element, false), domNavigation);
+          assert.equal(domNavigation.hideDisableLinkedElement(input, false), domNavigation);
+          assert.equal(input.hasAttribute('eventTriggered'), false);
+          assert.equal(input.value, 'TESTING');
+          assert.equal(input.getAttribute('disabled'), 'disabled');
+          assert.equal(input.classList.contains('disabled'), true);
+          assert.equal(input.classList.contains('hidden'), false);
 
-          domNavigationMock.verify();
-          $elementMock.verify();
+          input.removeEventListener(domNavigation.getSetValidationFlagEventName(), listenerHandler);
+          document.body.innerHTML = '';
         });
       });
       describe('when the `includeHidden` param is true', function() {
-        it('calls `showOrHideElement()` with the supplied $element and `true` flag', function () {
-          let $element = $('<input type="text" />');
-          let $elementMock = sinon.mock($element);
+        it('attempts to show or hide the element', function() {
+          const input = document.createElement('input');
+          input.value = 'TESTING';
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-toggle-override-text', 0);
+          input.addEventListener(domNavigation.getSetValidationFlagEventName(), listenerHandler);
+          document.body.appendChild(input);
 
-          $elementMock.expects('attr').twice().withArgs('data-fv-toggle-override-text').returns('0');
-          domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
-          domNavigationMock.expects('showOrHideElement').once().withArgs($element, false).returns(domNavigation);
-          assert.equal(domNavigation.hideDisableLinkedElement($element, true), domNavigation);
+          assert.equal(domNavigation.hideDisableLinkedElement(input, true), domNavigation);
+          assert.equal(input.hasAttribute('eventTriggered'), false);
+          assert.equal(input.value, 'TESTING');
+          assert.equal(input.getAttribute('disabled'), 'disabled');
+          assert.equal(input.classList.contains('disabled'), true);
+          assert.equal(input.classList.contains('hidden'), true);
 
-          domNavigationMock.verify();
-          $elementMock.verify();
+          input.removeEventListener(domNavigation.getSetValidationFlagEventName(), listenerHandler);
+          document.body.innerHTML = '';
         });
       });
     });
     describe('when it is set to clear the value', function() {
-      it('clears the value and sets the valid attribute to 0', function () {
-        let $element = $('<input type="text" />');
-        let $elementMock = sinon.mock($element);
+      it('clears the value and sets the valid attribute to 0', function() {
+        const input = document.createElement('input');
+        input.value = 'TESTING';
+        input.setAttribute('type', 'text');
+        input.setAttribute('data-fv-toggle-override-text', 1);
+        input.addEventListener(domNavigation.getSetValidationFlagEventName(), listenerHandler);
+        document.body.appendChild(input);
 
-        $elementMock.expects('attr').once().withArgs('data-fv-toggle-override-text').returns(undefined);
-        $elementMock.expects('val').once().withArgs('').returns($element);
-        $elementMock.expects('trigger').once().withArgs('set-validation-flag.formation', false);
-        domNavigationMock.expects('enableOrDisableElement').once().withArgs($element, false).returns(domNavigation);
-        domNavigationMock.expects('showOrHideElement').never().returns(domNavigation);
-        assert.equal(domNavigation.hideDisableLinkedElement($element, false), domNavigation);
+        assert.equal(domNavigation.hideDisableLinkedElement(input, false), domNavigation);
+        assert.equal(input.hasAttribute('eventTriggered'), true);
+        assert.equal(input.value, '');
+        assert.equal(input.getAttribute('disabled'), 'disabled');
+        assert.equal(input.classList.contains('disabled'), true);
+        assert.equal(input.classList.contains('hidden'), false);
 
-        domNavigationMock.verify();
-        $elementMock.verify();
+        input.removeEventListener(domNavigation.getSetValidationFlagEventName(), listenerHandler);
+        document.body.innerHTML = '';
       });
     });
   });
 
   describe('`visibleEnabledFilter()`', function() {
-    let element;
-    let $fnMock;
+    let input;
     beforeEach(function() {
-      let $element = $('<select></select>');
-      $fnMock = sinon.mock($.fn);
-      element = $element.get(0);
+      input = document.createElement('select');
     });
     describe('when the element is hidden', function() {
       it('returns false', function() {
-        $fnMock.expects('hasClass').once().withArgs('hidden').returns(true);
-        $fnMock.expects('prop').never();
-        assert.isFalse(domNavigation.visibleEnabledFilter(0, element));
-        $fnMock.verify();
+        input.classList.add('hidden');
+
+        assert.equal(domNavigation.visibleEnabledFilter(input), false);
       });
     });
     describe('when the element is disabled', function() {
       it('returns false', function() {
-        $fnMock.expects('hasClass').once().withArgs('hidden').returns(false);
-        $fnMock.expects('prop').once().withArgs('disabled').returns('disabled');
-        assert.isFalse(domNavigation.visibleEnabledFilter(0, element));
-        $fnMock.verify();
+        input.setAttribute('disabled', 'disabled');
+
+        assert.equal(domNavigation.visibleEnabledFilter(input), false);
       });
       it('returns false', function() {
-        $fnMock.expects('hasClass').once().withArgs('hidden').returns(false);
-        $fnMock.expects('prop').once().withArgs('disabled').returns(undefined);
-        $fnMock.expects('hasClass').once().withArgs('disabled').returns(true);
-        assert.isFalse(domNavigation.visibleEnabledFilter(0, element));
-        $fnMock.verify();
+        input.classList.add('disabled');
+
+        assert.equal(domNavigation.visibleEnabledFilter(input), false);
       });
     });
     describe('when the element is neither disabled nor hidden', function() {
       it('returns true', function() {
-        $fnMock.expects('hasClass').once().withArgs('hidden').returns(false);
-        $fnMock.expects('prop').once().withArgs('disabled').returns(undefined);
-        $fnMock.expects('hasClass').once().withArgs('disabled').returns(false);
-        assert.isTrue(domNavigation.visibleEnabledFilter(0, element));
-        $fnMock.verify();
+        assert.equal(domNavigation.visibleEnabledFilter(input), true);
       });
     });
   });
