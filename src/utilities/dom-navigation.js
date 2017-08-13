@@ -113,16 +113,6 @@ const domNavigationStamp = stampit()
     optionalFieldsSelector : '[data-fv-optional="1"]',
 
     /**
-     * The CSS selector used to find the form's preview button element.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {Formation.domNavigation}
-     * @default     [data-fv-form-preview]
-     */
-    previewButtonSelector : '[data-fv-form-preview]',
-
-    /**
      * The CSS selector used to find the form's required input elements.
      *
      * @access      public
@@ -195,37 +185,6 @@ const domNavigationStamp = stampit()
     },
 
     /**
-     * Find the `formComponent` for the `form` element in which the `$element` resides.
-     *
-     * @throws      TypeError                         if the `formComponent` is undefined, has no `isFormComponent` or `isFormComponent()` returns false
-     * @access      public
-     * @memberOf    {Formation.domNavigation}
-     * @mixes       {Formation.domNavigation}
-     *
-     * @param       {jQuery}                          $element            The jQuery wrapped element for which to find the `formComponent` instance. Required.
-     *
-     * @returns     {Formation.formComponent|null}    formationForm       The `formComponent` if it is there, or null otherwise.
-     */
-    getFormComponentOfCurrentElement($element) {
-      let $currentForm = this.findCurrentFormByTarget($element);
-      let formComponent = null;
-
-      // if the element is not inside a formation form, don't bother checking the data, and return null.
-      if ($currentForm.length) {
-        formComponent = $currentForm.data(this.formationDataKey);
-        // TODO - use custom error classes
-        if (formComponent === undefined) {
-          throw new TypeError(`The \`${this.formationDataKey}\` data object is not set.`);
-        }
-        else if (typeof formComponent.isFormComponent !== 'function' || ! formComponent.isFormComponent()) {
-          throw new TypeError(`The \`${this.formationDataKey}\` data object is not built from a \`formComponent\` stamp.`);
-        }
-      }
-
-      return formComponent;
-    },
-
-    /**
      * Find the required fields in the specified `form` element.
      *
      * @access      public
@@ -234,10 +193,10 @@ const domNavigationStamp = stampit()
      *
      * @param       {Element}               form                The `form` element. Required.
      *
-     * @returns     {NodeList}              The set of required fields in the form.
+     * @returns     {Array}                 The set of required fields in the form.
      */
     findRequiredFields(form) {
-      return form.querySelectorAll(this.requiredFieldsSelector);
+      return Array.from(form.querySelectorAll(this.requiredFieldsSelector));
     },
 
     /**
@@ -249,10 +208,10 @@ const domNavigationStamp = stampit()
      *
      * @param       {Element}               form               The `form` element. Required.
      *
-     * @returns     {NodeList}              The set of optional fields in the form.
+     * @returns     {Array}                 The set of optional fields in the form.
      */
     findOptionalFields(form) {
-      return form.querySelectorAll(this.optionalFieldsSelector);
+      return Array.from(form.querySelectorAll(this.optionalFieldsSelector));
     },
 
     /**
@@ -264,26 +223,10 @@ const domNavigationStamp = stampit()
      *
      * @param       {Element}               form               The `form` element. Required.
      *
-     * @returns     {NodeList}              The Formation submit button in the form.
+     * @returns     {Array}                 The Formation submit button in the form.
      */
     findSubmitButton(form) {
-      return form.querySelectorAll(this.submitButtonSelector);
-    },
-
-    /**
-     * Find the Formation preview button in the specified `form` element.
-     *
-     *
-     * @access      public
-     * @memberOf    {Formation.domNavigation}
-     * @mixes       {Formation.domNavigation}
-     *
-     * @param       {Element}               form               The `form` element. Required.
-     *
-     * @returns     {NodeList}              The Formation preview button in the form.
-     */
-    findPreviewButton(form) {
-      return form.querySelectorAll(this.previewButtonSelector);
+      return Array.from(form.querySelectorAll(this.submitButtonSelector));
     },
 
     /**
@@ -316,13 +259,13 @@ const domNavigationStamp = stampit()
      *
      * @param       {Element}       element        The element whose container we want to find. Required.
      *
-     * @returns     {NodeList|null}
+     * @returns     {Element|null}
      */
     getCheckboxOrRadioContainer(element) {
       const currentForm = this.findCurrentFormByTarget(element);
       if (currentForm === null) { return null; }
 
-      return currentForm.querySelectorAll(`[${this.groupedElementsContainerAttrKey}="${element.getAttribute('name')}"]`);
+      return currentForm.querySelector(`[${this.groupedElementsContainerAttrKey}="${element.getAttribute('name')}"]`);
     },
 
     /**
@@ -334,13 +277,13 @@ const domNavigationStamp = stampit()
      *
      * @param       {Element}       element        The element whose name we want to find all elements for. Required.
      *
-     * @returns     {NodeList|null}
+     * @returns     {Array}
      */
     getAllCheckboxesOrRadiosByName(element) {
       const currentForm = this.findCurrentFormByTarget(element);
-      if (currentForm === null) { return null; }
+      if (currentForm === null) { return []; }
 
-      return currentForm.querySelectorAll(`input[name="${element.getAttribute('name')}"]`);
+      return Array.from(currentForm.querySelectorAll(`input[name="${element.getAttribute('name')}"]`));
     },
 
     /**
@@ -352,13 +295,13 @@ const domNavigationStamp = stampit()
      *
      * @param       {Element}       input      The source element used to find a `label` element. Required.
      *
-     * @returns     {NodeList|null}
+     * @returns     {Array}
      */
     getInputElementLabel(input) {
       const currentForm = this.findCurrentFormByTarget(input);
-      if (currentForm === null) { return null; }
+      if (currentForm === null) { return []; }
 
-      return currentForm.querySelectorAll(`label[for="${input.getAttribute('id')}"]`);
+      return Array.from(currentForm.querySelectorAll(`label[for="${input.getAttribute('id')}"]`));
     },
 
     /**
@@ -555,7 +498,7 @@ const domNavigationStamp = stampit()
     },
 
     /**
-     * Helper function to filter a NodeList to return only elements that are
+     * Helper function to filter an array of elements to return only those that are
      * not hidden nor disabled.
      *
      * @access      public

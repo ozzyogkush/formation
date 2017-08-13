@@ -4,12 +4,11 @@ const ruleStamp = require('./rule');
 const ruleSetStamp = require('./rule-set');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
 /**
  * Used for processing a set of `Formation.rule` objects against `select` elements.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.textDefaultRules
@@ -28,13 +27,13 @@ const textDefaultRulesStamp = stampit()
      * @memberOf    {Formation.textDefaultRules}
      * @mixes       {Formation.textDefaultRules}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    dataFvDefault($element, attribute) {
-      return $element.val().trim() !== '';
+    dataFvDefault(element, attribute) {
+      return element.value.trim() !== '';
     },
 
     /**
@@ -45,17 +44,15 @@ const textDefaultRulesStamp = stampit()
      * @memberOf    {Formation.textDefaultRules}
      * @mixes       {Formation.textDefaultRules}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    dataFvMinLength($element, attribute) {
-      const minChars = $element.attr(attribute);
+    dataFvMinLength(element, attribute) {
+      const minChars = element.getAttribute(attribute);
 
-      return (
-        $element.val().trim().length >= parseInt(minChars)
-      );
+      return (element.value.trim().length >= parseInt(minChars));
     },
 
     /**
@@ -66,17 +63,15 @@ const textDefaultRulesStamp = stampit()
      * @memberOf    {Formation.textDefaultRules}
      * @mixes       {Formation.textDefaultRules}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    dataFvMaxLength($element, attribute) {
-      const maxChars = $element.attr(attribute);
+    dataFvMaxLength(element, attribute) {
+      const maxChars = element.getAttribute(attribute);
 
-      return (
-        $element.val().trim().length <= parseInt(maxChars)
-      );
+      return (element.value.trim().length <= parseInt(maxChars));
     },
 
     /**
@@ -89,15 +84,15 @@ const textDefaultRulesStamp = stampit()
      * @memberOf    {Formation.textDefaultRules}
      * @mixes       {Formation.textDefaultRules}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}       valid
      */
-    dataFvFormat($element, attribute) {
-      const format = $element.attr(attribute);
+    dataFvFormat(element, attribute) {
+      const format = element.getAttribute(attribute);
       let valid = true;
-      const trimmedVal = $element.val().trim();
+      const trimmedVal = element.value.trim();
       switch (format) {
         case 'zip5' :
           valid = this.isValidZip(trimmedVal, 5);
@@ -138,27 +133,29 @@ const textDefaultRulesStamp = stampit()
      * @memberOf    {Formation.textDefaultRules}
      * @mixes       {Formation.textDefaultRules}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}       valid
      */
-    dataFvMatchField($element, attribute) {
-      const matchOtherFieldID = $element.attr(attribute);
-      const $otherField = $(`#${matchOtherFieldID}`);
-      if ($otherField.length === 0) {
-        throw new Error(
-          `Expected an element with an ID equal to "${matchOtherFieldID}" on this form.`
-        );
+    dataFvMatchField(element, attribute) {
+      const matchOtherFieldID = element.getAttribute(attribute);
+      const otherField = document.getElementById(matchOtherFieldID);
+      if (otherField === null) {
+        throw new Error(`Expected an element with an ID equal to "${matchOtherFieldID}" on this form.`);
       }
 
-      const trimmedVal = $element.val().trim();
-      const otherFieldTrimmedVal = $otherField.val().trim();
-      let valid = (trimmedVal === otherFieldTrimmedVal);
+      const trimmedVal = element.value.trim();
+      const otherFieldTrimmedVal = otherField.value.trim();
+      const valid = (trimmedVal === otherFieldTrimmedVal);
 
-      if (parseInt($otherField.attr('data-fv-required')) === 1) {
+      if (parseInt(otherField.getAttribute('data-fv-required')) === 1) {
         // Set the valid flag on the matched field
-        $otherField.trigger(this.getSetValidationFlagEventName(), valid);
+        const setValidationFlagEvent = new CustomEvent(
+          this.getSetValidationFlagEventName(),
+          { bubbles: true, cancelable: true, validAfterRuleCheck: valid }
+        );
+        otherField.dispatchEvent(setValidationFlagEvent);
       }
 
       return valid;
@@ -178,23 +175,23 @@ const textDefaultRulesStamp = stampit()
     let __rules = [
       ruleStamp({
         name : 'default',
-        callback : ($element, attribute) => this.dataFvDefault($element, attribute)
+        callback : (element, attribute) => this.dataFvDefault(element, attribute)
       }),
       ruleStamp({
         name : 'min-length',
-        callback : ($element, attribute) => this.dataFvMinLength($element, attribute)
+        callback : (element, attribute) => this.dataFvMinLength(element, attribute)
       }),
       ruleStamp({
         name : 'max-length',
-        callback : ($element, attribute) => this.dataFvMaxLength($element, attribute)
+        callback : (element, attribute) => this.dataFvMaxLength(element, attribute)
       }),
       ruleStamp({
         name : 'format',
-        callback : ($element, attribute) => this.dataFvFormat($element, attribute)
+        callback : (element, attribute) => this.dataFvFormat(element, attribute)
       }),
       ruleStamp({
         name : 'match-field',
-        callback : ($element, attribute) => this.dataFvMatchField($element, attribute)
+        callback : (element, attribute) => this.dataFvMatchField(element, attribute)
       })
     ];
 
@@ -206,9 +203,7 @@ const textDefaultRulesStamp = stampit()
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */
-    this.getRules = () => {
-      return __rules;
-    };
+    this.getRules = () => __rules;
   });
 
 module.exports = ruleSetStamp.compose(textDefaultRulesStamp);

@@ -6,7 +6,7 @@ const stampit = require('stampit');
  * Defines a rule, which contains a name used to identify when it's used,
  * and a callback function to process the rule against an element.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.rule
@@ -39,12 +39,12 @@ const ruleStamp = stampit()
      * @memberOf    {Formation.rule}
      * @mixes       {Formation.rule}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    callback($element, attribute) {
+    callback(element, attribute) {
       throw new Error(`Rule callback for \`${this.name}\` is not implemented`);
     }
   })

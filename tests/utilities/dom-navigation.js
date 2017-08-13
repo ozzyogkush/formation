@@ -1,13 +1,10 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
 const domNavigationStamp = require('../../src/utilities/dom-navigation');
-const formComponentStamp = require('../../src/components/form');
 
 describe('Objects created using the `domNavigationStamp`', function() {
   let domNavigation;
@@ -33,80 +30,6 @@ describe('Objects created using the `domNavigationStamp`', function() {
 
       form.appendChild(div);
       assert.equal(domNavigation.findCurrentFormByTarget(div), form);
-    });
-  });
-
-  describe('`getFormComponentOfCurrentElement()`', function() {
-    describe('when the element is not inside a Formation `formComponent`', function() {
-      it('returns null', function() {
-        let $empty = $();
-        let $element = $('<div></div>');
-
-        domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($empty);
-        assert.isNull(domNavigation.getFormComponentOfCurrentElement($element));
-
-        domNavigationMock.verify();
-      });
-    });
-    describe('when the element is inside a Formation `formComponent`', function() {
-      let formComponent;
-      let formComponentMock;
-      let $element;
-      let $form;
-      let $formMock;
-      beforeEach(function() {
-        formComponent = formComponentStamp();
-        formComponentMock = sinon.mock(formComponent);
-        $element = $('<div></div>');
-        $form = $('<form data-formation="1"></form>');
-        $element.wrap($form);
-        $formMock = sinon.mock($form);
-      });
-      describe('the `formation-form` data object is undefined (ie not set)', function() {
-        it('throws a TypeError explaining that it has not yet been set', function() {
-          domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($form);
-          $formMock.expects('data').once().withArgs(domNavigation.formationDataKey).returns(undefined);
-
-          assert.throws(
-            () => { domNavigation.getFormComponentOfCurrentElement($element); },
-            TypeError,
-            'The `formation-form` data object is not set.'
-          );
-
-          $formMock.verify();
-          domNavigationMock.verify();
-        });
-      });
-      describe('the `formation-form` data object is set but is not a `formComponent`', function() {
-        it('throws a TypeError explaining that it is not built from the correct stamp', function() {
-          domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($form);
-          $formMock.expects('data').once().withArgs(domNavigation.formationDataKey).returns(formComponent);
-          formComponentMock.expects('isFormComponent').once().returns(false);
-
-          assert.throws(
-            () => { domNavigation.getFormComponentOfCurrentElement($element); },
-            TypeError,
-            'The `formation-form` data object is not built from a `formComponent` stamp.'
-          );
-
-          $formMock.verify();
-          domNavigationMock.verify();
-          formComponentMock.verify();
-        });
-      });
-      describe('the `formation-form` data object is set and is a `formComponent`', function() {
-        it('successfully returns the `formComponent` object', function() {
-          domNavigationMock.expects('findCurrentFormByTarget').once().withArgs($element).returns($form);
-          $formMock.expects('data').once().withArgs(domNavigation.formationDataKey).returns(formComponent);
-          formComponentMock.expects('isFormComponent').once().returns(true);
-
-          assert.equal(domNavigation.getFormComponentOfCurrentElement($element), formComponent);
-
-          $formMock.verify();
-          domNavigationMock.verify();
-          formComponentMock.verify();
-        });
-      });
     });
   });
 
@@ -185,31 +108,6 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
   });
 
-  describe('`findPreviewButton()`', function() {
-    describe('when there is no Formation preview button inside the specified `form` node', function() {
-      it('should return an empty NodeList', function() {
-        const form = document.createElement('form');
-        const button = document.createElement('button');
-        button.setAttribute('type', 'button');
-        form.appendChild(button);
-
-        assert.equal(domNavigation.findPreviewButton(form).length, 0);
-      });
-    });
-    describe('when there is a Formation preview button inside the specified `form` node', function() {
-      it('should return a non-empty NodeList', function() {
-        const form = document.createElement('form');
-        const button = document.createElement('button');
-        button.setAttribute('type', 'button');
-        button.setAttribute('data-fv-form-preview', '1');
-        form.appendChild(button);
-
-        assert.equal(domNavigation.findPreviewButton(form).length, 1);
-        assert.equal(domNavigation.findPreviewButton(form)[0], button);
-      });
-    });
-  });
-
   describe('`elementIsCustomRadioOrCheckboxWidget()`', function() {
     describe('when the element is not inside a Formation `form`', function() {
       it('should return false', function() {
@@ -253,7 +151,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
       assert.equal(domNavigation.getCheckboxOrRadioContainer(input), null);
     });
 
-    it('returns an empty NodeList when the DOM element is not found in the current form', function() {
+    it('returns null when the DOM element is not found in the current form', function() {
       const input = document.createElement('input');
       input.classList.add('btn-checkbox');
       input.setAttribute('name', 'checkboxes');
@@ -263,10 +161,10 @@ describe('Objects created using the `domNavigationStamp`', function() {
       form.setAttribute('data-formation', 1);
 
       form.appendChild(input);
-      assert.equal(domNavigation.getCheckboxOrRadioContainer(input).length, 0);
+      assert.equal(domNavigation.getCheckboxOrRadioContainer(input), null);
     });
 
-    it('returns a NodeList with the DOM element when it is found', function() {
+    it('returns the DOM element when it is found', function() {
       const input = document.createElement('input');
       input.classList.add('btn-checkbox');
       input.setAttribute('name', 'checkboxes');
@@ -278,22 +176,21 @@ describe('Objects created using the `domNavigationStamp`', function() {
 
       groupContainer.appendChild(input);
       form.appendChild(groupContainer);
-      assert.equal(domNavigation.getCheckboxOrRadioContainer(input).length, 1);
-      assert.equal(domNavigation.getCheckboxOrRadioContainer(input)[0], groupContainer);
+      assert.equal(domNavigation.getCheckboxOrRadioContainer(input), groupContainer);
     });
   });
 
   describe('`getAllCheckboxesOrRadiosByName()` looks for all input elements in the current form with the same name as `input`', function() {
-    it('returns null when the DOM element is not in a Formation `form`', function() {
+    it('returns an empty array when the DOM element is not in a Formation `form`', function() {
       const input = document.createElement('input');
       input.classList.add('btn-checkbox');
       input.setAttribute('name', 'checkboxes');
       input.setAttribute('id', 'a');
 
-      assert.equal(domNavigation.getAllCheckboxesOrRadiosByName(input), null);
+      assert.deepEqual(domNavigation.getAllCheckboxesOrRadiosByName(input), []);
     });
 
-    it('returns a NodeList with the matching DOM elements when they are found', function() {
+    it('returns an array with the matching DOM elements when they are found', function() {
       const input = document.createElement('input');
       input.classList.add('btn-checkbox');
       input.setAttribute('name', 'checkboxes');
@@ -314,16 +211,16 @@ describe('Objects created using the `domNavigationStamp`', function() {
   });
 
   describe('`getInputElementLabel()` looks for a `label` element for the supplied input', function() {
-    it('returns null when the DOM element is not in a Formation `form`', function() {
+    it('returns an empty array when the DOM element is not in a Formation `form`', function() {
       const input = document.createElement('input');
       input.classList.add('btn-checkbox');
       input.setAttribute('name', 'checkboxes');
       input.setAttribute('id', 'a');
 
-      assert.equal(domNavigation.getInputElementLabel(input), null);
+      assert.deepEqual(domNavigation.getInputElementLabel(input), []);
     });
 
-    it('returns a NodeList with the matching DOM element(s) when they are found', function() {
+    it('returns an array with the matching DOM element(s) when they are found', function() {
       const input = document.createElement('input');
       input.classList.add('btn-checkbox');
       input.setAttribute('name', 'checkboxes');
@@ -465,7 +362,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
           assert.equal(linkedElement.getAttribute('disabled'), 'disabled');
           assert.equal(linkedElement.classList.contains('disabled'), true);
 
-          document.body.removeChild(form)
+          document.body.removeChild(form);
         });
       });
       describe('when the linked element is in a form group', function() {

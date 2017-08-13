@@ -9,7 +9,7 @@ const stampit = require('stampit');
 /**
  * Used for processing a set of `Formation.rule` objects against form DOM elements.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.ruleSet
@@ -31,9 +31,17 @@ const ruleSetStamp = stampit()
      *
      * @returns     {Boolean}       true
      */
-    this.isFormationRuleSet = () => {
-      return true;
-    };
+    this.isFormationRuleSet = () => true;
+
+    /**
+     * An empty set of rules by default.
+     *
+     * @private
+     * @access      private
+     * @type        Array
+     * @memberOf    {Formation.ruleSet}
+     */
+    let __rules = [];
 
     /**
      * Add a rule to this rule set.
@@ -45,7 +53,7 @@ const ruleSetStamp = stampit()
      *
      * @returns     {Formation.ruleSet}   this
      */
-    this.add = (rule) => {
+    this.add = rule => {
       // TODO - warn when the rule has already been added to this set
       this.getRules().push(rule);
 
@@ -58,10 +66,10 @@ const ruleSetStamp = stampit()
      * @access      public
      * @memberOf    {Formation.ruleSet}
      *
-     * @returns     {Array}     An empty array;
+     * @returns     {Array}     __rules       The empty array of rules.
      */
     this.getRules = () => {
-      return [];
+      return __rules;
     };
 
     /**
@@ -72,13 +80,11 @@ const ruleSetStamp = stampit()
      * @access      public
      * @memberOf    {Formation.ruleSet}
      *
-     * @param       {jQuery}    $element      The element to check. Required.
+     * @param       {Element}   element         The element to check. Required.
      *
-     * @returns     {jQuery}    $element
+     * @returns     {Element}   element
      */
-    this.getAttributeOwner = ($element) => {
-      return $element;
-    };
+    this.getAttributeOwner = element => element;
 
     /**
      * Process the element against the set of registered rules that are actually being
@@ -88,19 +94,21 @@ const ruleSetStamp = stampit()
      * @access      public
      * @memberOf    {Formation.ruleSet}
      *
-     * @param       {jQuery}    $element                The element upon which to process the rules. Required.
+     * @param       {Element}   element                 The element upon which to process the rules. Required.
      *
      * @returns     {boolean}   validAfterRuleCheck     Whether the element passes all specified rules.
      */
-    this.process = ($element) => {
+    this.process = element => {
       let validAfterRuleCheck = true;
-      const $attributeOwner = this.getAttributeOwner($element);
-      for (const rule of this.getRules()) {
-        const ruleAttribute = `data-fv-${rule.name}`;
-        if (rule.name === 'default' || $attributeOwner.attr(ruleAttribute) !== undefined) {
-          validAfterRuleCheck = rule.callback($element, ruleAttribute);
-          if (! validAfterRuleCheck) {
-            break;
+      const attributeOwner = this.getAttributeOwner(element);
+      if (attributeOwner !== null) {
+        for (const rule of this.getRules()) {
+          const ruleAttribute = `data-fv-${rule.name}`;
+          if (rule.name === 'default' || attributeOwner.hasAttribute(ruleAttribute)) {
+            validAfterRuleCheck = rule.callback(element, ruleAttribute);
+            if (! validAfterRuleCheck) {
+              break;
+            }
           }
         }
       }

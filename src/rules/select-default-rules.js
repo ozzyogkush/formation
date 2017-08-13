@@ -8,7 +8,7 @@ const stampit = require('stampit');
 /**
  * Used for processing a set of `Formation.rule` objects against `select` elements.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.selectDefaultRules
@@ -27,13 +27,13 @@ const selectDefaultRulesStamp = stampit()
      * @memberOf    {Formation.selectDefaultRules}
      * @mixes       {Formation.selectDefaultRules}
      *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+     * @param       {Element}       element         The element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    dataFvDefault($element, attribute) {
-      return $element.val().trim() !== '';
+    dataFvDefault(element, attribute) {
+      return element.value.trim() !== '';
     }
   })
   .init(function() {
@@ -50,7 +50,7 @@ const selectDefaultRulesStamp = stampit()
     let __rules = [
       ruleStamp({
         name : 'default',
-        callback : ($element, attribute) => this.dataFvDefault($element, attribute)
+        callback : (element, attribute) => this.dataFvDefault(element, attribute)
       })
     ];
 
@@ -62,9 +62,7 @@ const selectDefaultRulesStamp = stampit()
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */
-    this.getRules = () => {
-      return __rules;
-    };
+    this.getRules = () => __rules;
   });
 
 module.exports = ruleSetStamp.compose(selectDefaultRulesStamp);
