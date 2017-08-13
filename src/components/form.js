@@ -5,17 +5,15 @@ const checkboxDefaultRulesStamp = require('../rules/checkbox-default-rules');
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
 const radioDefaultRulesStamp = require('../rules/radio-default-rules');
-const ruleSetStamp = require('../rules/rule-set');
 const selectDefaultRulesStamp = require('../rules/select-default-rules');
 const textDefaultRulesStamp = require('../rules/text-default-rules');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
 /**
  * Provides an interface for form button elements (`button`, `input:submit`, etc).
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formComponent
@@ -36,7 +34,17 @@ const formComponentStamp = stampit()
      * @memberOf    {Formation.formComponent}
      * @default     null
      */
-    nodeEvents : null
+    nodeEvents : null,
+
+    /**
+     * A method for retrieving the formComponent of an element.
+     *
+     * @access      public
+     * @type        {function}
+     * @memberOf    {Formation.formComponent}
+     * @default     null
+     */
+    getFormComponentOfCurrentElement : null
   })
   .methods({
 
@@ -92,26 +100,26 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * The jQuery object containing the initialized form node.
+     * The initialized form node.
      *
      * @private
      * @access      private
-     * @type        {jQuery}
+     * @type        {Element}
      * @memberOf    {Formation.formComponent}
-     * @default     $()
+     * @default     null
      */
-    let __$form = $();
+    let __form = null;
 
     /**
-     * Returns the jQuery object containing the initialized form node.
+     * Returns the initialized form node.
      *
      * @access      public
      * @memberOf    {Formation.formComponent}
      *
-     * @returns     {jQuery}       __$form
+     * @returns     {Element}     __form
      */
-    this.get$form = () => {
-      return __$form;
+    this.getForm = () => {
+      return __form;
     };
 
     /**
@@ -139,95 +147,93 @@ const formComponentStamp = stampit()
 
     /**
      * Checks whether this instance has been initialized, or if there is a `formComponent` attached to
-     * the `$form` element already which has been initialized.
+     * the `form` element already which has been initialized.
      *
      * @private
      * @access      private
      * @type        {Function}
      * @memberOf    {Formation.formComponent}
      *
-     * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
+     * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `form`, have been initialized.
      */
-    let __formAlreadyInitialized = () => {
+    const __formAlreadyInitialized = () => {
       let alreadyInit = this.initialized();
       try {
         let formComponent;
-        const $form = this.get$form();
+        const form = this.getForm();
         alreadyInit = (
           alreadyInit || (
-            (formComponent = this.getFormComponentOfCurrentElement($form)) !== null &&
+            form !== null &&
+            (formComponent = this.getFormComponentOfCurrentElement(form)) !== null &&
             formComponent.initialized()
           )
         );
       }
       catch (e) {
-        // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
         this.info(e);
       }
       return alreadyInit;
     };
 
     /**
-     * The meat of this Stamp. Will initialize a jQuery wrapped `form` and assign it internally,
-     * setting all the required and optional fields, the form buttons (such as submit and preview),
+     * The meat of this Stamp. Will initialize a `form` and assign it internally,
+     * setting all the required and optional fields, the form submit button,
      * and initializing the fields' current validation status. If everything went without error,
-     * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`.
+     * sets the `__initialized` flag to `true` so that we can't re-initialize the `form`.
      *
      * @access      public
      * @memberOf    {Formation.formComponent}
      *
-     * @param       {jQuery}        $form               jQuery wrapped `form` element to be managed by this instance. Required.
+     * @param       {Element}         form               The `form` element to be managed by this instance. Required.
      *
      * @returns     {Formation.formComponent}
      */
-    this.initForm = ($form) => {
+    this.initForm = (form) => {
       // Set the form so we can use it internally elsewhere.
-      __$form = $form;
+      __form = form;
 
       if (__formAlreadyInitialized()) {
         this.warn('This `formComponent` is already initialized, skipping.');
         return this;
       }
 
-      // Get the required and optional fields, and the submit and preview buttons present in the form.
+      // Get the required and optional fields, and the submit button present in the form.
       __setRequiredFields();
       __setOptionalFields();
       __initFields();
       __initFormButtons();
-      __initDefaultRules();
 
-      // There were no problems initializing the form, set the data and the private vars.
-      __$form.data(this.formationDataKey, this);
+      // There were no problems initializing the form, set the private vars.
       __initialized = true;
 
       return this;
     };
 
     /**
-     * The jQuery object containing the elements in this form that are required to be validated.
+     * The NodeList containing the elements in this form that are required to be validated.
      *
      * @private
      * @access      private
-     * @type        {jQuery}
+     * @type        {NodeList}
      * @memberOf    {Formation.formComponent}
-     * @default     $()
+     * @default     null
      */
-    let __$requiredFields = $();
+    let __requiredFields = null;
 
     /**
-     * Returns the jQuery object containing the elements in this form that are required to be validated.
+     * Returns the NodeList containing the elements in this form that are required to be validated.
      *
      * @access      public
      * @memberOf    {Formation.formComponent}
      *
-     * @returns     {jQuery}       __$requiredFields
+     * @returns     {NodeList}       __requiredFields
      */
-    this.get$requiredFields = () => {
-      return __$requiredFields;
+    this.getRequiredFields = () => {
+      return __requiredFields;
     };
 
     /**
-     * Find the required fields and set them to the private `__$requiredFields` var.
+     * Find the required fields and set them to the private `__requiredFields` var.
      *
      * @throws      Error       iff the set of required fields is empty.
      * @private
@@ -235,47 +241,47 @@ const formComponentStamp = stampit()
      * @type        {Function}
      * @memberOf    {Formation.formComponent}
      */
-    let __setRequiredFields = () => {
-      __$requiredFields = this.findRequiredFields(__$form);
-      if (! __$requiredFields.length) {
+    const __setRequiredFields = () => {
+      __requiredFields = this.findRequiredFields(__form);
+      if (! __requiredFields.length) {
         // TODO - use a custom error type here
         throw new Error('No required fields found, cannot proceed.');
       }
     };
 
     /**
-     * The jQuery object containing the elements in this form that are optional to be validated.
+     * The NodeList containing the elements in this form that are optional to be validated.
      *
      * @private
      * @access      private
-     * @type        {jQuery}
+     * @type        {NodeList}
      * @memberOf    {Formation.formComponent}
-     * @default     $()
+     * @default     null
      */
-    let __$optionalFields = $();
+    let __optionalFields = null;
 
     /**
-     * Returns the jQuery object containing the elements in this form that are optional to be validated.
+     * Returns the NodeList containing the elements in this form that are optional to be validated.
      *
      * @access      public
      * @memberOf    {Formation.formComponent}
      *
-     * @returns     {jQuery}       __$optionalFields
+     * @returns     {NodeList}       __optionalFields
      */
-    this.get$optionalFields = () => {
-      return __$optionalFields;
+    this.getOptionalFields = () => {
+      return __optionalFields;
     };
 
     /**
-     * Find the optional fields and set them to the private `__$optionalFields` var.
+     * Find the optional fields and set them to the private `__optionalFields` var.
      *
      * @private
      * @access      private
      * @type        {Function}
      * @memberOf    {Formation.formComponent}
      */
-    let __setOptionalFields = () => {
-      __$optionalFields = this.findOptionalFields(__$form);
+    const __setOptionalFields = () => {
+      __optionalFields = this.findOptionalFields(__form);
     };
 
     /**
@@ -287,10 +293,10 @@ const formComponentStamp = stampit()
      * @type        {Function}
      * @memberOf    {Formation.formComponent}
      */
-    let __initFields = () => {
-      this.get$form().attr(this.validAttrKey, 0);
-      __$requiredFields.attr(this.validAttrKey, 0);
-      __$optionalFields.attr(this.validAttrKey, 0);
+    const __initFields = () => {
+      this.getForm().setAttribute(this.validAttrKey, 0);
+      __requiredFields.forEach(required => { required.setAttribute(this.validAttrKey, 0); });
+      __optionalFields.forEach(optional => { optional.setAttribute(this.validAttrKey, 0); });
     };
 
     /**
@@ -298,7 +304,7 @@ const formComponentStamp = stampit()
      *
      * @private
      * @access      private
-     * @type        {buttonComponent}
+     * @type        {Formation.buttonComponent}
      * @memberOf    {Formation.formComponent}
      * @default     null
      */
@@ -317,54 +323,8 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * The jQuery object containing the form's optional preview button.
-     *
-     * @private
-     * @access      private
-     * @type        {Formation.buttonComponent}
-     * @memberOf    {Formation.formComponent}
-     * @default     null
-     */
-    let __previewButton = null;
-
-    /**
-     * Returns the `__previewButton`.
-     *
-     * @access      public
-     * @memberOf    {Formation.formComponent}
-     *
-     * @returns     {Formation.buttonComponent}       __previewButton
-     */
-    this.getPreviewButton = () => {
-      return __previewButton;
-    };
-
-    /**
-     * Get the submit button if it exists, otherwise get the preview button, if it exists.
-     *
-     * @access      public
-     * @memberOf    {Formation.formComponent}
-     *
-     * @returns     {Formation.buttonComponent|null}
-     */
-    this.getSubmitWithFallbackPreviewButton = () => {
-      const submitButton = this.getSubmitButton();
-      if (submitButton !== null && submitButton.exists()) {
-        return submitButton;
-      }
-      const previewButton = this.getPreviewButton();
-      if (previewButton !== null && previewButton.exists()) {
-        return previewButton;
-      }
-
-      // We don't have a submit or preview button, so there's really nothing to do.
-      return null;
-    };
-
-    /**
-     * Create new `buttonComponents` to manage the Submit and Preview buttons
-     * for this form, and set them to the private `__submitButton` and
-     * `__previewButton` vars respectively.
+     * Create new `buttonComponents` to manage the Submit button
+     * for this form, and set them to the private `__submitButton` var.
      *
      * TODO - make `setLoadingHTML()` optional with a new `data-fv` attribute on the button
      *
@@ -373,18 +333,10 @@ const formComponentStamp = stampit()
      * @type        {Function}
      * @memberOf    {Formation.formComponent}
      */
-    let __initFormButtons = () => {
+    const __initFormButtons = () => {
       __submitButton = buttonComponentStamp({
-        $button : this.findSubmitButton(__$form),
+        button : this.findSubmitButton(__form)[0],
         loadingText : 'Submitting, please wait...',
-        nodeEvents : this.nodeEvents
-      }).initLogging(this.getLogConsole())
-        .addHandleFormSubmitListener()
-        .setLoadingHTML();
-
-      __previewButton = buttonComponentStamp({
-        $button : this.findPreviewButton(__$form),
-        loadingText : 'Rendering preview, please wait...',
         nodeEvents : this.nodeEvents
       }).initLogging(this.getLogConsole())
         .addHandleFormSubmitListener()
@@ -428,29 +380,11 @@ const formComponentStamp = stampit()
      * @type        {Object}
      * @memberOf    {Formation.formComponent}
      */
-    let __supportedElementTypesRuleSets = {
-      'text' : ruleSetStamp(),
-      'checkbox' : ruleSetStamp(),
-      'radio' : ruleSetStamp(),
-      'select': ruleSetStamp()
-    };
-
-    /**
-     * Create default rule instances for the supported element types.
-     *
-     * @private
-     * @access      private
-     * @type        {Function}
-     * @memberOf    {Formation.formComponent}
-     */
-    let __initDefaultRules = () => {
-      const formationSelector = this.formationSelector;
-      __supportedElementTypesRuleSets = {
-        'text' : textDefaultRulesStamp({formationSelector: formationSelector}),
-        'checkbox' : checkboxDefaultRulesStamp({formationSelector: formationSelector}),
-        'radio' : radioDefaultRulesStamp({formationSelector: formationSelector}),
-        'select': selectDefaultRulesStamp({formationSelector: formationSelector})
-      };
+    const __supportedElementTypesRuleSets = {
+      'text' : textDefaultRulesStamp({formationSelector: this.formationSelector}),
+      'checkbox' : checkboxDefaultRulesStamp({formationSelector: this.formationSelector}),
+      'radio' : radioDefaultRulesStamp({formationSelector: this.formationSelector}),
+      'select': selectDefaultRulesStamp({formationSelector: this.formationSelector})
     };
 
     /**

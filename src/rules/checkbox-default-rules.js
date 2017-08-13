@@ -73,7 +73,7 @@ const checkboxDefaultRulesStamp = stampit()
      * @memberOf    {Formation.checkboxDefaultRules}
      * @mixes       {Formation.checkboxDefaultRules}
      *
-     * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
+     * @param       {jQuery}        checkbox        The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}

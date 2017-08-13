@@ -414,7 +414,6 @@ const domNavigationStamp = stampit()
      * Convenience method which, for the supplied `linkedElement`, shows and enables
      * it, or hides and disables it, based on the params.
      *
-     *
      * @access      public
      * @memberOf    {Formation.domNavigation}
      * @mixes       {Formation.domNavigation}

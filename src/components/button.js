@@ -79,7 +79,7 @@ const buttonComponentStamp = stampit()
     },
 
     /**
-     * Check whether the `$button` is currently in a 'submitting' state.
+     * Check whether the `button` is currently in a 'submitting' state.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
@@ -98,13 +98,13 @@ const buttonComponentStamp = stampit()
     },
 
     /**
-     * Will enable or disable the `$button` based on the `enable` param.
+     * Will enable or disable the `button` based on the `enable` param.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
      * @mixes       {Formation.buttonComponent}
      *
-     * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$button`. Required.
+     * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `button`. Required.
      *
      * @returns     {Formation.buttonComponent}
      */
@@ -115,14 +115,14 @@ const buttonComponentStamp = stampit()
     },
 
     /**
-     * Will set the `$button` to a `submitting` state or undo it depending on
+     * Will set the `button` to a `submitting` state or undo it depending on
      * the `submitting` param.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
      * @mixes       {Formation.buttonComponent}
      *
-     * @param       {Boolean}       submitting      Whether to set the `$button` to a submitting state (true) or not (false). Required.
+     * @param       {Boolean}       submitting      Whether to set the `button` to a submitting state (true) or not (false). Required.
      *
      * @returns     {Formation.buttonComponent}
      */

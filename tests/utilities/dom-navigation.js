@@ -452,7 +452,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
   });
 
   describe('`hideDisableLinkedElement()`', function() {
-    const listenerHandler = e => { console.log('listenerHandler() called');e.currentTarget.setAttribute('eventTriggered', true); };
+    const listenerHandler = e => { e.currentTarget.setAttribute('eventTriggered', true); };
 
     describe('when it is not set to clear the value, it does not clear the value or dispatch the validation event', function() {
       describe('when the `includeHidden` param is false', function() {

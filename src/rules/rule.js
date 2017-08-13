@@ -17,22 +17,18 @@ const ruleStamp = stampit()
 
     /**
      * The name of the rule, prefixed with `data-fv`, which will be used to
-     * reference it in a DOM element
+     * reference it in a DOM element.
      *
-     * @throws      Error           The method for the rule is not implemented, so alert the user with an error
      * @access      public
+     * @type        {String}
      * @memberOf    {Formation.rule}
-     *
-     * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
-     * @param       {String}        attribute       The data attribute which may contain additional data. Required.
-     *
-     * @returns     {Boolean}
+     * @default     'undefined
      */
     name : 'undefined'
   }).methods({
 
     /**
-     * The method that will attempt to satisfy the rule against `$element`.
+     * The method that will attempt to satisfy the rule against `element`.
      *
      * @throws      Error           The method for the rule is not implemented, so alert the user with an error
      * @access      public

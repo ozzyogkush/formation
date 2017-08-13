@@ -4,7 +4,6 @@ const stampit = require('stampit');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
-const keyCodes = require('../../src/utilities/key-code-set');
 const bodyEventsHandlerStamp = require('../../src/event-handlers/body-events-handler');
 const formComponentStamp = require('../../src/components/form');
 

@@ -68,7 +68,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __checkFormValidityEventName = 'check-form-validity.formation';
+    const __checkFormValidityEventName = 'check-form-validity';
 
     /**
      * Returns the private `__checkFormValidityEventName` property.
@@ -91,7 +91,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __changeEventName = 'change.formation';
+    const __changeEventName = 'change';
 
     /**
      * Returns the private `__changeEventName` property.
@@ -114,7 +114,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __keyPressEventName = 'keypress.formation';
+    const __keyPressEventName = 'keypress';
 
     /**
      * Returns the private `__keyPressEventName` property.
@@ -137,7 +137,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __keyUpEventName = 'keyup.formation';
+    const __keyUpEventName = 'keyup';
 
     /**
      * Returns the private `__keyUpEventName` property.
@@ -160,7 +160,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __focusEventName = 'focus.formation';
+    const __focusEventName = 'focus';
 
     /**
      * Returns the private `__focusEventName` property.
@@ -183,7 +183,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __blurEventName = 'blur.formation';
+    const __blurEventName = 'blur';
 
     /**
      * Returns the private `__blurEventName` property.
@@ -206,7 +206,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __mouseEnterEventName = 'mouseenter.formation';
+    const __mouseEnterEventName = 'mouseenter';
 
     /**
      * Returns the private `__mouseEnterEventName` property.
@@ -229,7 +229,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __mouseLeaveEventName = 'mouseleave.formation';
+    const __mouseLeaveEventName = 'mouseleave';
 
     /**
      * Returns the private `__mouseLeaveEventName` property.
@@ -252,7 +252,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __touchStartEventName = 'touchstart.formation';
+    const __touchStartEventName = 'touchstart';
 
     /**
      * Returns the private `__touchStartEventName` property.
@@ -276,7 +276,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __validationEventName = 'validation-handler.formation';
+    const __validationEventName = 'validation-handler';
 
     /**
      * Returns the private `__validationEventName` property.
@@ -300,7 +300,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __setValidationFlagEventName = 'set-validation-flag.formation';
+    const __setValidationFlagEventName = 'set-validation-flag';
 
     /**
      * Returns the private `__setValidationFlagEventName` property.
@@ -323,7 +323,7 @@ const eventDefinitionsStamp = stampit()
      * @type        {String}
      * @memberOf    {Formation.eventDefinitions}
      */
-    const __validityChangedEventName = 'validity-changed.formation';
+    const __validityChangedEventName = 'validity-changed';
 
     /**
      * Returns the private `__validityChangedEventName` property.
