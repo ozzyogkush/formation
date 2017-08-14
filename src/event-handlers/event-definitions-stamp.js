@@ -5,7 +5,7 @@ const stampit = require('stampit');
 /**
  * Provides an interface for defining Formation DOM events. 
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.eventDefinitions

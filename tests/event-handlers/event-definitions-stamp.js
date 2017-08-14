@@ -1,8 +1,6 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
@@ -46,61 +44,61 @@ describe('Objects created using the `eventDefinitionsStamp`', function() {
 
   describe('`getCheckFormValidityEventName()`', function() {
     it('should return the value of the private `__checkFormValidityEventName` var', function() {
-      assert.equal(eventDefinitions.getCheckFormValidityEventName(), 'check-form-validity.formation');
+      assert.equal(eventDefinitions.getCheckFormValidityEventName(), 'check-form-validity');
     });
   });
 
   describe('`getChangeEventName()`', function() {
     it('should return the value of the private `__changeEventName` var', function() {
-      assert.equal(eventDefinitions.getChangeEventName(), 'change.formation');
+      assert.equal(eventDefinitions.getChangeEventName(), 'change');
     });
   });
 
   describe('`getKeyPressEventName()`', function() {
     it('should return the value of the private `__keyPressEventName` var', function() {
-      assert.equal(eventDefinitions.getKeyPressEventName(), 'keypress.formation');
+      assert.equal(eventDefinitions.getKeyPressEventName(), 'keypress');
     });
   });
 
   describe('`getKeyUpEventName()`', function() {
     it('should return the value of the private `__keyUpEventName` var', function() {
-      assert.equal(eventDefinitions.getKeyUpEventName(), 'keyup.formation');
+      assert.equal(eventDefinitions.getKeyUpEventName(), 'keyup');
     });
   });
 
   describe('`getFocusEventName()`', function() {
     it('should return the value of the private `__focusEventName` var', function() {
-      assert.equal(eventDefinitions.getFocusEventName(), 'focus.formation');
+      assert.equal(eventDefinitions.getFocusEventName(), 'focus');
     });
   });
 
   describe('`getBlurEventName()`', function() {
     it('should return the value of the private `__blurEventName` var', function() {
-      assert.equal(eventDefinitions.getBlurEventName(), 'blur.formation');
+      assert.equal(eventDefinitions.getBlurEventName(), 'blur');
     });
   });
 
   describe('`getMouseEnterEventName()`', function() {
     it('should return the value of the private `__mouseEnterEventName` var', function() {
-      assert.equal(eventDefinitions.getMouseEnterEventName(), 'mouseenter.formation');
+      assert.equal(eventDefinitions.getMouseEnterEventName(), 'mouseenter');
     });
   });
 
   describe('`getMouseLeaveEventName()`', function() {
     it('should return the value of the private `__mouseLeaveEventName` var', function() {
-      assert.equal(eventDefinitions.getMouseLeaveEventName(), 'mouseleave.formation');
+      assert.equal(eventDefinitions.getMouseLeaveEventName(), 'mouseleave');
     });
   });
 
   describe('`getTouchStartEventName()`', function() {
     it('should return the value of the private `__touchStartEventName` var', function() {
-      assert.equal(eventDefinitions.getTouchStartEventName(), 'touchstart.formation');
+      assert.equal(eventDefinitions.getTouchStartEventName(), 'touchstart');
     });
   });
 
   describe('`getValidationEventName()`', function() {
     it('should return the value of the private `__validationEventName` var', function() {
-      assert.equal(eventDefinitions.getValidationEventName(), 'validation-handler.formation');
+      assert.equal(eventDefinitions.getValidationEventName(), 'validation-handler');
     });
   });
 });

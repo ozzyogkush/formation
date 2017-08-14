@@ -15,108 +15,122 @@ const ruleSetStamp = require('../../src/rules/rule-set');
 describe('Objects created using the `formEventsHandlerStamp`', function() {
   let formEventsHandler;
   let jQueryEvent;
+  let formEvent;
   beforeEach(function() {
     jQueryEvent = new $.Event();
-    formEventsHandler = formEventsHandlerStamp();
+    formEvent = document.createEvent('Event');
+    formEventsHandler = formEventsHandlerStamp({nodeEvents : eventEmitterEventsStamp()});
   });
 
   describe('`formSubmitHandler()`', function() {
     it('should emit a `formationFormSubmit` node event', function() {
-      const nodeEvents = eventEmitterEventsStamp();
-      const nodeEventsMock = sinon.mock(nodeEvents);
+      let eventTriggered = false;
+      formEventsHandler.nodeEvents.on('formationFormSubmit', e => {eventTriggered = true;});
 
-      nodeEventsMock.expects('emit').once().withArgs('formationFormSubmit', jQueryEvent);
-      formEventsHandler = formEventsHandlerStamp({nodeEvents : nodeEvents});
+      formEvent.initEvent('submit', true, true);
+      formEventsHandler.formSubmitHandler(formEvent);
 
-      assert.isTrue(formEventsHandler.formSubmitHandler(jQueryEvent));
-
-      nodeEventsMock.verify();
+      assert.equal(eventTriggered, true);
     });
   });
 
   describe('`checkFormValidityHandler()`', function() {
-    beforeEach(function() { jQueryEvent.namespace = 'formation'; });
     describe('nothing should happen', function() {
-      it('when the event namespace is undefined or not `formation`', function() {
-        delete jQueryEvent.namespace; // so it's `undefined`
-        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
-        jQueryEvent.namespace = 'randomjibberish';
-        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
-      });
-      it('when the continue (submit or preview) button cannot be found for the form', function() {
-        let formEventsHandlerMock = sinon.mock(formEventsHandler);
-        formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(null);
+      it('when the submit button cannot be found for the form', function() {
+        const button = buttonComponentStamp({ button: document.createElement('button')});
+        const buttonMock = sinon.mock(button);
+        const formEventsHandlerMock = sinon.mock(formEventsHandler);
 
-        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
+        buttonMock.expects('isSubmitting').never();
+        buttonMock.expects('exists').never();
+        formEventsHandlerMock.expects('getRequiredFields').never();
+        formEventsHandlerMock.expects('getForm').never();
 
-        formEventsHandlerMock.verify();
-      });
-      it('when continue button is already in a `submitting` state', function() {
-        let formEventsHandlerMock = sinon.mock(formEventsHandler);
-        let button = buttonComponentStamp();
-        let buttonMock = sinon.mock(button);
-
-        formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(button);
-        buttonMock.expects('isSubmitting').once().returns(true);
-        assert.isUndefined(formEventsHandler.checkFormValidityHandler(jQueryEvent));
+        formEvent.initEvent('check-form-validity', true, true);
+        assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
 
         formEventsHandlerMock.verify();
         buttonMock.verify();
       });
+      it('when continue button is already in a `submitting` state', function() {
+        const button = buttonComponentStamp({ button: document.createElement('button')});
+        button.setEnabled(false);
+        button.setSubmitting(true);
+        const formEventsHandlerMock = sinon.mock(formEventsHandler);
+
+        formEventsHandlerMock.expects('getRequiredFields').never();
+        formEventsHandlerMock.expects('getForm').never();
+
+        formEvent.initEvent('check-form-validity', true, true);
+        assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
+
+        formEventsHandlerMock.verify();
+      });
     });
     describe('something should happen', function() {
       let formEventsHandlerMock;
-      let button;
-      let buttonMock;
-      let $visibleRequired;
-      let $visibleRequiredMock;
+      let form;
+      let visibleRequired;
+      let submitButton;
       beforeEach(function() {
         formEventsHandlerMock = sinon.mock(formEventsHandler);
-        button = buttonComponentStamp();
-        buttonMock = sinon.mock(button);
-        $visibleRequired = $('<input />,<select></select>,<textarea></textarea>');
-        $visibleRequiredMock = sinon.mock($visibleRequired);
+        form = document.createElement('form');
+        form.setAttribute('data-formation', 1);
+        visibleRequired = [
+          document.createElement('input'),
+          document.createElement('select'),
+          document.createElement('textarea')
+        ];
+        visibleRequired.forEach(vr => {
+          vr.setAttribute('data-fv-required', 1);
+          form.appendChild(vr);
+        });
+        submitButton = document.createElement('button');
+        submitButton.setAttribute('data-fv-form-submit', 1);
+        form.appendChild(submitButton);
       });
-      describe('when all elements are not valid', function() {
-        it('disables the `continue` button', function() {
-          let $validRequiredFields = $('<input />,<select></select>');
+      describe('when not all elements are valid', function() {
+        it('disables the `submit` button and triggers a `set-validation-flag` event with a `validAfterRuleCheck` = false', function() {
+          let validAfterRuleCheck = null;
+          visibleRequired[0].setAttribute('type', 'text');
+          form.addEventListener('set-validation-flag', e => {
+            validAfterRuleCheck = e.detail.validAfterRuleCheck;
+          });
+          formEventsHandler.initForm(form);
+          visibleRequired[0].setAttribute('data-fv-valid', 1);
+          formEventsHandler.getSubmitButton().setEnabled(true);
+          formEventsHandler.getSubmitButton().setSubmitting(false);
+          formEvent.initEvent('check-form-validity', true, true);
 
-          formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(button);
-          buttonMock.expects('isSubmitting').once().returns(false);
-          formEventsHandlerMock.expects('get$requiredFields').once().returns($visibleRequired);
-          $visibleRequiredMock.expects('filter')
-            .once().withArgs(domNavigationStamp().visibleEnabledFilter)
-            .returns($visibleRequired);
-          $visibleRequiredMock.expects('filter')
-            .once().withArgs('[data-fv-valid="1"]')
-            .returns($validRequiredFields);
-          buttonMock.expects('setEnabled').once().withArgs(false);
-
-          formEventsHandler.checkFormValidityHandler(jQueryEvent);
+          formEventsHandlerMock.expects('getForm').once().returns(form);
+          assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
+          assert.equal(validAfterRuleCheck, false);
+          assert.equal(formEventsHandler.getSubmitButton().button.getAttribute('disabled'), 'disabled');
+          assert.equal(formEventsHandler.getSubmitButton().button.classList.contains('disabled'), true);
 
           formEventsHandlerMock.verify();
-          buttonMock.verify();
-          $visibleRequiredMock.verify();
         });
       });
       describe('when all elements are valid', function() {
-        it('enables the `continue` button', function() {
-          formEventsHandlerMock.expects('getSubmitWithFallbackPreviewButton').once().returns(button);
-          buttonMock.expects('isSubmitting').once().returns(false);
-          formEventsHandlerMock.expects('get$requiredFields').once().returns($visibleRequired);
-          $visibleRequiredMock.expects('filter')
-            .once().withArgs(domNavigationStamp().visibleEnabledFilter)
-            .returns($visibleRequired);
-          $visibleRequiredMock.expects('filter')
-            .once().withArgs('[data-fv-valid="1"]')
-            .returns($visibleRequired);
-          buttonMock.expects('setEnabled').once().withArgs(true);
+        it('enables the `submit` button and triggers a `set-validation-flag` event with a `validAfterRuleCheck` = true', function() {
+          let validAfterRuleCheck = null;
+          visibleRequired[0].setAttribute('type', 'text');
+          form.addEventListener('set-validation-flag', e => {
+            validAfterRuleCheck = e.detail.validAfterRuleCheck;
+          });
+          formEventsHandler.initForm(form);
+          visibleRequired.forEach(vr => { vr.setAttribute('data-fv-valid', 1); });
+          formEventsHandler.getSubmitButton().setEnabled(false);
+          formEventsHandler.getSubmitButton().setSubmitting(false);
+          formEvent.initEvent('check-form-validity', true, true);
 
-          formEventsHandler.checkFormValidityHandler(jQueryEvent);
+          formEventsHandlerMock.expects('getForm').once().returns(form);
+          assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
+          assert.equal(validAfterRuleCheck, true);
+          assert.equal(formEventsHandler.getSubmitButton().button.hasAttribute('disabled'), false);
+          assert.equal(formEventsHandler.getSubmitButton().button.classList.contains('disabled'), false);
 
           formEventsHandlerMock.verify();
-          buttonMock.verify();
-          $visibleRequiredMock.verify();
         });
       });
     });
@@ -131,126 +145,144 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
       $fnMock.restore();
     });
     describe('`checkBoxChangeHandler()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        let validationEventTriggered = null;
+        const checkbox = document.createElement('input');
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('checked', 'checked');
+        checkbox.addEventListener('validation-handler', e => { validationEventTriggered = true; });
 
-        jQueryEvent.target = $('<input type="checkbox" />').get(0);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
-        $fnMock.expects('is').once().withArgs(':checked').returns(false);
-        formEventsHandlerMock.expects('showOrHideLinkedElement')
-          .once().withArgs($(jQueryEvent.target), false);
-
-        formEventsHandler.checkBoxChangeHandler(jQueryEvent);
-
-        $fnMock.verify();
-        formEventsHandlerMock.verify();
+        formEvent.initEvent('change', true, true);
+        checkbox.dispatchEvent(formEvent);
+        assert.equal(formEventsHandler.checkBoxChangeHandler(formEvent), undefined);
+        assert.equal(validationEventTriggered, true);
       });
     });
 
     describe('`radioChangeHandler()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        let formEventsHandlerMock = sinon.mock(formEventsHandler);
-        let $radios = $('<input type="radio" />');
-        jQueryEvent.target = $('<input type="radio" />').get(0);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
-        formEventsHandlerMock.expects('getAllCheckboxesOrRadiosByName')
-          .once().withArgs($(jQueryEvent.target)).returns($radios);
-        formEventsHandlerMock.expects('showOrHideLinkedElement')
-          .once().withArgs($($radios.get(0)), false).returns(formEventsHandler);
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        let validationEventTriggered = null;
+        const radio = document.createElement('input');
+        radio.setAttribute('type', 'radio');
+        radio.setAttribute('checked', 'checked');
+        radio.addEventListener('validation-handler', e => { validationEventTriggered = true; });
 
-        formEventsHandler.radioChangeHandler(jQueryEvent);
-        $fnMock.verify();
-        formEventsHandlerMock.verify();
+        formEvent.initEvent('change', true, true);
+        radio.dispatchEvent(formEvent);
+        assert.equal(formEventsHandler.radioChangeHandler(formEvent), undefined);
+        assert.equal(validationEventTriggered, true);
       });
     });
 
     describe('`selectChangeHandler()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        jQueryEvent.target = $('<select></select>').get(0);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        let validationEventTriggered = null;
+        const select = document.createElement('select');
+        select.addEventListener('validation-handler', e => { validationEventTriggered = true; });
 
-        formEventsHandler.selectChangeHandler(jQueryEvent);
-        $fnMock.verify();
+        formEvent.initEvent('change', true, true);
+        select.dispatchEvent(formEvent);
+        assert.equal(formEventsHandler.selectChangeHandler(formEvent), undefined);
+        assert.equal(validationEventTriggered, true);
       });
     });
 
     describe('`inputTextareaChangeHandler()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        jQueryEvent.target = $('<textarea></textarea>').get(0);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        let validationEventTriggered = null;
+        const textarea = document.createElement('textarea');
+        textarea.addEventListener('validation-handler', e => { validationEventTriggered = true; });
 
-        formEventsHandler.inputTextareaChangeHandler(jQueryEvent);
-        $fnMock.verify();
+        formEvent.initEvent('change', true, true);
+        textarea.dispatchEvent(formEvent);
+        assert.equal(formEventsHandler.inputTextareaChangeHandler(formEvent), undefined);
+        assert.equal(validationEventTriggered, true);
       });
     });
 
     describe('`inputTextareaKeyUpHandler()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        jQueryEvent.target = $('<textarea></textarea>').get(0);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        let validationEventTriggered = null;
+        const textarea = document.createElement('textarea');
+        textarea.addEventListener('validation-handler', e => { validationEventTriggered = true; });
 
-        formEventsHandler.inputTextareaKeyUpHandler(jQueryEvent);
-        $fnMock.verify();
+        formEvent.initEvent('keyup', true, true);
+        textarea.dispatchEvent(formEvent);
+        assert.equal(formEventsHandler.inputTextareaKeyUpHandler(formEvent), undefined);
+        assert.equal(validationEventTriggered, true);
       });
     });
 
     describe('`inputFocusHandler()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        jQueryEvent.target = $('<input type="text" />').get(0);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($(jQueryEvent.target));
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        let validationEventTriggered = null;
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.addEventListener('validation-handler', e => { validationEventTriggered = true; });
 
-        formEventsHandler.inputFocusHandler(jQueryEvent);
-        $fnMock.verify();
+        formEvent.initEvent('focus', true, true);
+        input.dispatchEvent(formEvent);
+        assert.equal(formEventsHandler.inputFocusHandler(formEvent), undefined);
+        assert.equal(validationEventTriggered, true);
       });
     });
 
     describe('`validateFormFields()`', function() {
-      it('should trigger the `validation-handler.formation` event on the event target element', function() {
-        let formEventsHandlerMock = sinon.mock(formEventsHandler);
+      it('should trigger the `validation-handler` event on the event target element', function() {
+        const form = document.createElement('form');
+        form.setAttribute('data-formation', 1);
+        const visibleRequired = [
+          document.createElement('input'),
+          document.createElement('select'),
+          document.createElement('textarea')
+        ];
+        visibleRequired.forEach(vr => {
+          vr.setAttribute('data-fv-required', 1);
+          form.appendChild(vr);
+        });
+        const submitButton = document.createElement('button');
+        submitButton.setAttribute('data-fv-form-submit', 1);
+        form.appendChild(submitButton);
+        const validationEventsTriggered = [false, false, false];
 
-        jQueryEvent.target = $('<form></form>').get(0);
-        let $requiredFields = $('<input />').add($('<select></select>')).add($('<textarea></textarea>'));
-        let $optionalFields = $('<textarea></textarea>').add($('<input type="email" />'));
-        formEventsHandlerMock.expects('get$requiredFields').once().returns($requiredFields);
-        formEventsHandlerMock.expects('get$optionalFields').once().returns($optionalFields);
-        let $fields = $().add($requiredFields).add($optionalFields);
-        $fnMock.expects('trigger').once().withArgs('validation-handler.formation').returns($fields);
+        formEventsHandler.initForm(form);
+        visibleRequired[0].addEventListener('validation-handler', e => { validationEventsTriggered[0] = true; });
+        visibleRequired[1].addEventListener('validation-handler', e => { validationEventsTriggered[1] = true; });
+        visibleRequired[2].addEventListener('validation-handler', e => { validationEventsTriggered[2] = true; });
+        formEvent.initEvent('mouseenter', true, true);
+        visibleRequired[0].dispatchEvent(formEvent);
 
-        formEventsHandler.validateFormFields(jQueryEvent);
-
-        $fnMock.verify();
-        formEventsHandlerMock.verify();
+        assert.equal(formEventsHandler.validateFormFields(formEvent), undefined);
+        assert.equal(validationEventsTriggered[0], true);
+        assert.equal(validationEventsTriggered[1], true);
+        assert.equal(validationEventsTriggered[2], true);
       });
     });
 
     describe('`inputElementValidationHandler()`', function() {
-      beforeEach(function() { jQueryEvent.namespace = 'formation'; });
-      describe('nothing should happen', function() {
-        it('when the event namespace is undefined or not `formation`', function () {
-          delete jQueryEvent.namespace; // so it's `undefined`
-          assert.isUndefined(formEventsHandler.inputElementValidationHandler(jQueryEvent));
-          jQueryEvent.namespace = 'randomjibberish';
-          assert.isUndefined(formEventsHandler.inputElementValidationHandler(jQueryEvent));
-        });
-      });
-      describe('something should happen when the event namespace is `formation`', function() {
-        it('should attempt to validate the target element and then trigger the forms `check-form-validity` event', function () {
-          jQueryEvent.target = $('<input type="tel" />').get(0);
-          let validator = { validate : function() {}};
-          let $form = $('<form></form>');
-          let $formMock = sinon.mock($form);
-          let formEventsHandlerMock = sinon.mock(formEventsHandler);
+      it('should attempt to validate the target element and then trigger the forms `check-form-validity` event', function () {
+        const form = document.createElement('form');
+        form.setAttribute('data-formation', 1);
+        const input = document.createElement('input');
+        input.setAttribute('data-fv-required', 1);
+        input.value = 'good value';
+        form.appendChild(input);
+        const submitButton = document.createElement('button');
+        submitButton.setAttribute('data-fv-form-submit', 1);
+        form.appendChild(submitButton);
+        let checkFormValidityEventTriggered = null;
 
-          formEventsHandlerMock.expects('validate').once().withArgs($(jQueryEvent.target));
-          formEventsHandlerMock.expects('get$form').once().returns($form);
-          $formMock.expects('trigger').once().withArgs('check-form-validity.formation');
+        formEventsHandler.initForm(form);
+        const formEventsHandlerMock = sinon.mock(formEventsHandler);
 
-          formEventsHandler.inputElementValidationHandler(jQueryEvent);
+        form.addEventListener('check-form-validity', e => { checkFormValidityEventTriggered = true; });
+        formEvent.initEvent('mouseenter', true, true);
+        input.dispatchEvent(formEvent);
 
-          $formMock.verify();
-          $fnMock.verify();
-          formEventsHandlerMock.verify();
-        });
+        formEventsHandlerMock.expects('validate').once().withArgs(input);
+        assert.equal(formEventsHandler.inputElementValidationHandler(formEvent), undefined);
+        assert.equal(checkFormValidityEventTriggered, true);
+        formEventsHandlerMock.verify();
       });
     });
   });
