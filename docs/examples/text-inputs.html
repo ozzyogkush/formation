@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Formation - Text Inputs Example</title>
     <link rel="stylesheet" href="./css/examples.css" />
-    <script type="text/javascript" src="./js/vendor.min.js"></script>
     <script type="text/javascript" src="./js/formation.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   </head>
@@ -174,9 +173,9 @@
   </body>
   <script type="text/javascript" src="./js/examples.js"></script>
   <script type="text/javascript">
-    Formation.registerRule('text', 'at-least-n-capitals', function($element, attribute) {
-      var n = $element.attr(attribute);
-      var capitals = $element.val().match(/([A-Z])/g);
+    Formation.registerRule('text', 'at-least-n-capitals', function(element, attribute) {
+      var n = element.getAttribute(attribute);
+      var capitals = element.value.match(/([A-Z])/g);
       return capitals !== null && capitals.length >= n;
     });
   </script>

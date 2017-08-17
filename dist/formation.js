@@ -1,22 +1,62 @@
-webpackJsonp([0],[
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
 
 	module.exports = global["Formation"] = __webpack_require__(1);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	const eventEmitterStamp = __webpack_require__(2);
-	const formationLoggerStamp = __webpack_require__(69);
-	const $ = __webpack_require__(74);
-	const jQuery = $;
+	const formationLoggerStamp = __webpack_require__(47);
 
 	const eventEmitter = eventEmitterStamp();
 	const Formation = formationLoggerStamp({nodeEvents : eventEmitter});
@@ -26,12 +66,12 @@ webpackJsonp([0],[
 	 * Add a document.ready event handler and set Formation to handle the
 	 * event so it can initialize the DOM.
 	 */
-	jQuery(document).ready($.proxy(Formation.readyDocument, Formation));
+	document.addEventListener('DOMContentLoaded', function() { Formation.readyDocument(); });
 
 	/**
 	 * Formation!
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @module        Formation
@@ -40,14 +80,14 @@ webpackJsonp([0],[
 	module.exports = Formation;
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var stampit = __webpack_require__(3);
-	var EventEmitter = __webpack_require__(68).EventEmitter;
+	var EventEmitter = __webpack_require__(46).EventEmitter;
 
 	/**
 	 * Turn a node `EventEmitter` into a Stamp.
@@ -122,9 +162,9 @@ webpackJsonp([0],[
 
 	module.exports = eventEmitterEventsStamp.compose(eventEmitterStamp);
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/**
 	 * Stampit
@@ -562,9 +602,9 @@ webpackJsonp([0],[
 	});
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var arrayEach = __webpack_require__(5),
 	    baseEach = __webpack_require__(6),
@@ -605,9 +645,9 @@ webpackJsonp([0],[
 	module.exports = forEach;
 
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * A specialized version of `_.forEach` for arrays without support for callback
@@ -633,9 +673,9 @@ webpackJsonp([0],[
 	module.exports = arrayEach;
 
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var baseForOwn = __webpack_require__(7),
 	    createBaseEach = __webpack_require__(26);
@@ -654,9 +694,9 @@ webpackJsonp([0],[
 	module.exports = baseEach;
 
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var baseFor = __webpack_require__(8),
 	    keys = __webpack_require__(12);
@@ -677,9 +717,9 @@ webpackJsonp([0],[
 	module.exports = baseForOwn;
 
 
-/***/ },
+/***/ }),
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var createBaseFor = __webpack_require__(9);
 
@@ -700,9 +740,9 @@ webpackJsonp([0],[
 	module.exports = baseFor;
 
 
-/***/ },
+/***/ }),
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var toObject = __webpack_require__(10);
 
@@ -733,9 +773,9 @@ webpackJsonp([0],[
 	module.exports = createBaseFor;
 
 
-/***/ },
+/***/ }),
 /* 10 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(11);
 
@@ -753,9 +793,9 @@ webpackJsonp([0],[
 	module.exports = toObject;
 
 
-/***/ },
+/***/ }),
 /* 11 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
@@ -787,9 +827,9 @@ webpackJsonp([0],[
 	module.exports = isObject;
 
 
-/***/ },
+/***/ }),
 /* 12 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(13),
 	    isArrayLike = __webpack_require__(17),
@@ -838,9 +878,9 @@ webpackJsonp([0],[
 	module.exports = keys;
 
 
-/***/ },
+/***/ }),
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isNative = __webpack_require__(14);
 
@@ -860,9 +900,9 @@ webpackJsonp([0],[
 	module.exports = getNative;
 
 
-/***/ },
+/***/ }),
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isFunction = __webpack_require__(15),
 	    isObjectLike = __webpack_require__(16);
@@ -914,9 +954,9 @@ webpackJsonp([0],[
 	module.exports = isNative;
 
 
-/***/ },
+/***/ }),
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(11);
 
@@ -958,9 +998,9 @@ webpackJsonp([0],[
 	module.exports = isFunction;
 
 
-/***/ },
+/***/ }),
 /* 16 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * Checks if `value` is object-like.
@@ -976,9 +1016,9 @@ webpackJsonp([0],[
 	module.exports = isObjectLike;
 
 
-/***/ },
+/***/ }),
 /* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var getLength = __webpack_require__(18),
 	    isLength = __webpack_require__(20);
@@ -997,9 +1037,9 @@ webpackJsonp([0],[
 	module.exports = isArrayLike;
 
 
-/***/ },
+/***/ }),
 /* 18 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var baseProperty = __webpack_require__(19);
 
@@ -1018,9 +1058,9 @@ webpackJsonp([0],[
 	module.exports = getLength;
 
 
-/***/ },
+/***/ }),
 /* 19 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * The base implementation of `_.property` without support for deep paths.
@@ -1038,9 +1078,9 @@ webpackJsonp([0],[
 	module.exports = baseProperty;
 
 
-/***/ },
+/***/ }),
 /* 20 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
@@ -1064,9 +1104,9 @@ webpackJsonp([0],[
 	module.exports = isLength;
 
 
-/***/ },
+/***/ }),
 /* 21 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isArguments = __webpack_require__(22),
 	    isArray = __webpack_require__(23),
@@ -1111,9 +1151,9 @@ webpackJsonp([0],[
 	module.exports = shimKeys;
 
 
-/***/ },
+/***/ }),
 /* 22 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isArrayLike = __webpack_require__(17),
 	    isObjectLike = __webpack_require__(16);
@@ -1151,9 +1191,9 @@ webpackJsonp([0],[
 	module.exports = isArguments;
 
 
-/***/ },
+/***/ }),
 /* 23 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(13),
 	    isLength = __webpack_require__(20),
@@ -1197,9 +1237,9 @@ webpackJsonp([0],[
 	module.exports = isArray;
 
 
-/***/ },
+/***/ }),
 /* 24 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -1227,9 +1267,9 @@ webpackJsonp([0],[
 	module.exports = isIndex;
 
 
-/***/ },
+/***/ }),
 /* 25 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var isArguments = __webpack_require__(22),
 	    isArray = __webpack_require__(23),
@@ -1297,9 +1337,9 @@ webpackJsonp([0],[
 	module.exports = keysIn;
 
 
-/***/ },
+/***/ }),
 /* 26 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var getLength = __webpack_require__(18),
 	    isLength = __webpack_require__(20),
@@ -1334,9 +1374,9 @@ webpackJsonp([0],[
 	module.exports = createBaseEach;
 
 
-/***/ },
+/***/ }),
 /* 27 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var bindCallback = __webpack_require__(28),
 	    isArray = __webpack_require__(23);
@@ -1360,9 +1400,9 @@ webpackJsonp([0],[
 	module.exports = createForEach;
 
 
-/***/ },
+/***/ }),
 /* 28 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var identity = __webpack_require__(29);
 
@@ -1405,9 +1445,9 @@ webpackJsonp([0],[
 	module.exports = bindCallback;
 
 
-/***/ },
+/***/ }),
 /* 29 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * This method returns the first argument provided to it.
@@ -1431,9 +1471,9 @@ webpackJsonp([0],[
 	module.exports = identity;
 
 
-/***/ },
+/***/ }),
 /* 30 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1506,9 +1546,9 @@ webpackJsonp([0],[
 	exports.mergeUnique = mergeUnique;
 	exports.mergeChainNonFunctions = mergeChainNonFunctions;
 
-/***/ },
+/***/ }),
 /* 31 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1523,19 +1563,19 @@ webpackJsonp([0],[
 
 	var _lodashObjectForOwn2 = _interopRequireDefault(_lodashObjectForOwn);
 
-	var _lodashObjectForIn = __webpack_require__(55);
+	var _lodashObjectForIn = __webpack_require__(34);
 
 	var _lodashObjectForIn2 = _interopRequireDefault(_lodashObjectForIn);
 
-	var _lodashLangCloneDeep = __webpack_require__(57);
+	var _lodashLangCloneDeep = __webpack_require__(36);
 
 	var _lodashLangCloneDeep2 = _interopRequireDefault(_lodashLangCloneDeep);
 
-	var _lodashLangIsObject = __webpack_require__(37);
+	var _lodashLangIsObject = __webpack_require__(11);
 
 	var _lodashLangIsObject2 = _interopRequireDefault(_lodashLangIsObject);
 
-	var _lodashLangIsUndefined = __webpack_require__(67);
+	var _lodashLangIsUndefined = __webpack_require__(45);
 
 	var _lodashLangIsUndefined2 = _interopRequireDefault(_lodashLangIsUndefined);
 
@@ -1609,12 +1649,12 @@ webpackJsonp([0],[
 
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 32 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var baseForOwn = __webpack_require__(33),
-	    createForOwn = __webpack_require__(52);
+	var baseForOwn = __webpack_require__(7),
+	    createForOwn = __webpack_require__(33);
 
 	/**
 	 * Iterates over own enumerable properties of an object invoking `iteratee`
@@ -1648,654 +1688,11 @@ webpackJsonp([0],[
 	module.exports = forOwn;
 
 
-/***/ },
+/***/ }),
 /* 33 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var baseFor = __webpack_require__(34),
-	    keys = __webpack_require__(38);
-
-	/**
-	 * The base implementation of `_.forOwn` without support for callback
-	 * shorthands and `this` binding.
-	 *
-	 * @private
-	 * @param {Object} object The object to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Object} Returns `object`.
-	 */
-	function baseForOwn(object, iteratee) {
-	  return baseFor(object, iteratee, keys);
-	}
-
-	module.exports = baseForOwn;
-
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var createBaseFor = __webpack_require__(35);
-
-	/**
-	 * The base implementation of `baseForIn` and `baseForOwn` which iterates
-	 * over `object` properties returned by `keysFunc` invoking `iteratee` for
-	 * each property. Iteratee functions may exit iteration early by explicitly
-	 * returning `false`.
-	 *
-	 * @private
-	 * @param {Object} object The object to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @param {Function} keysFunc The function to get the keys of `object`.
-	 * @returns {Object} Returns `object`.
-	 */
-	var baseFor = createBaseFor();
-
-	module.exports = baseFor;
-
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var toObject = __webpack_require__(36);
-
-	/**
-	 * Creates a base function for `_.forIn` or `_.forInRight`.
-	 *
-	 * @private
-	 * @param {boolean} [fromRight] Specify iterating from right to left.
-	 * @returns {Function} Returns the new base function.
-	 */
-	function createBaseFor(fromRight) {
-	  return function(object, iteratee, keysFunc) {
-	    var iterable = toObject(object),
-	        props = keysFunc(object),
-	        length = props.length,
-	        index = fromRight ? length : -1;
-
-	    while ((fromRight ? index-- : ++index < length)) {
-	      var key = props[index];
-	      if (iteratee(iterable[key], key, iterable) === false) {
-	        break;
-	      }
-	    }
-	    return object;
-	  };
-	}
-
-	module.exports = createBaseFor;
-
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(37);
-
-	/**
-	 * Converts `value` to an object if it's not one.
-	 *
-	 * @private
-	 * @param {*} value The value to process.
-	 * @returns {Object} Returns the object.
-	 */
-	function toObject(value) {
-	  return isObject(value) ? value : Object(value);
-	}
-
-	module.exports = toObject;
-
-
-/***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(1);
-	 * // => false
-	 */
-	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	module.exports = isObject;
-
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(39),
-	    isArrayLike = __webpack_require__(43),
-	    isObject = __webpack_require__(37),
-	    shimKeys = __webpack_require__(47);
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeKeys = getNative(Object, 'keys');
-
-	/**
-	 * Creates an array of the own enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects. See the
-	 * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
-	 * for more details.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keys(new Foo);
-	 * // => ['a', 'b'] (iteration order is not guaranteed)
-	 *
-	 * _.keys('hi');
-	 * // => ['0', '1']
-	 */
-	var keys = !nativeKeys ? shimKeys : function(object) {
-	  var Ctor = object == null ? undefined : object.constructor;
-	  if ((typeof Ctor == 'function' && Ctor.prototype === object) ||
-	      (typeof object != 'function' && isArrayLike(object))) {
-	    return shimKeys(object);
-	  }
-	  return isObject(object) ? nativeKeys(object) : [];
-	};
-
-	module.exports = keys;
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isNative = __webpack_require__(40);
-
-	/**
-	 * Gets the native function at `key` of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {string} key The key of the method to get.
-	 * @returns {*} Returns the function if it's native, else `undefined`.
-	 */
-	function getNative(object, key) {
-	  var value = object == null ? undefined : object[key];
-	  return isNative(value) ? value : undefined;
-	}
-
-	module.exports = getNative;
-
-
-/***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isFunction = __webpack_require__(41),
-	    isObjectLike = __webpack_require__(42);
-
-	/** Used to detect host constructors (Safari > 5). */
-	var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to resolve the decompiled source of functions. */
-	var fnToString = Function.prototype.toString;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Used to detect if a method is native. */
-	var reIsNative = RegExp('^' +
-	  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
-	  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
-	);
-
-	/**
-	 * Checks if `value` is a native function.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
-	 * @example
-	 *
-	 * _.isNative(Array.prototype.push);
-	 * // => true
-	 *
-	 * _.isNative(_);
-	 * // => false
-	 */
-	function isNative(value) {
-	  if (value == null) {
-	    return false;
-	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(fnToString.call(value));
-	  }
-	  return isObjectLike(value) && reIsHostCtor.test(value);
-	}
-
-	module.exports = isNative;
-
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(37);
-
-	/** `Object#toString` result references. */
-	var funcTag = '[object Function]';
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objToString = objectProto.toString;
-
-	/**
-	 * Checks if `value` is classified as a `Function` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isFunction(_);
-	 * // => true
-	 *
-	 * _.isFunction(/abc/);
-	 * // => false
-	 */
-	function isFunction(value) {
-	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in older versions of Chrome and Safari which return 'function' for regexes
-	  // and Safari 8 which returns 'object' for typed array constructors.
-	  return isObject(value) && objToString.call(value) == funcTag;
-	}
-
-	module.exports = isFunction;
-
-
-/***/ },
-/* 42 */
-/***/ function(module, exports) {
-
-	/**
-	 * Checks if `value` is object-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 */
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	module.exports = isObjectLike;
-
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getLength = __webpack_require__(44),
-	    isLength = __webpack_require__(46);
-
-	/**
-	 * Checks if `value` is array-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value));
-	}
-
-	module.exports = isArrayLike;
-
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseProperty = __webpack_require__(45);
-
-	/**
-	 * Gets the "length" property value of `object`.
-	 *
-	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
-	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {*} Returns the "length" value.
-	 */
-	var getLength = baseProperty('length');
-
-	module.exports = getLength;
-
-
-/***/ },
-/* 45 */
-/***/ function(module, exports) {
-
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new function.
-	 */
-	function baseProperty(key) {
-	  return function(object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	module.exports = baseProperty;
-
-
-/***/ },
-/* 46 */
-/***/ function(module, exports) {
-
-	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-
-	module.exports = isLength;
-
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isArguments = __webpack_require__(48),
-	    isArray = __webpack_require__(49),
-	    isIndex = __webpack_require__(50),
-	    isLength = __webpack_require__(46),
-	    keysIn = __webpack_require__(51);
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * A fallback implementation of `Object.keys` which creates an array of the
-	 * own enumerable property names of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function shimKeys(object) {
-	  var props = keysIn(object),
-	      propsLength = props.length,
-	      length = propsLength && object.length;
-
-	  var allowIndexes = !!length && isLength(length) &&
-	    (isArray(object) || isArguments(object));
-
-	  var index = -1,
-	      result = [];
-
-	  while (++index < propsLength) {
-	    var key = props[index];
-	    if ((allowIndexes && isIndex(key, length)) || hasOwnProperty.call(object, key)) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = shimKeys;
-
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isArrayLike = __webpack_require__(43),
-	    isObjectLike = __webpack_require__(42);
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Native method references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-	/**
-	 * Checks if `value` is classified as an `arguments` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isArguments(function() { return arguments; }());
-	 * // => true
-	 *
-	 * _.isArguments([1, 2, 3]);
-	 * // => false
-	 */
-	function isArguments(value) {
-	  return isObjectLike(value) && isArrayLike(value) &&
-	    hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
-	}
-
-	module.exports = isArguments;
-
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(39),
-	    isLength = __webpack_require__(46),
-	    isObjectLike = __webpack_require__(42);
-
-	/** `Object#toString` result references. */
-	var arrayTag = '[object Array]';
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objToString = objectProto.toString;
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeIsArray = getNative(Array, 'isArray');
-
-	/**
-	 * Checks if `value` is classified as an `Array` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isArray([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isArray(function() { return arguments; }());
-	 * // => false
-	 */
-	var isArray = nativeIsArray || function(value) {
-	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
-	};
-
-	module.exports = isArray;
-
-
-/***/ },
-/* 50 */
-/***/ function(module, exports) {
-
-	/** Used to detect unsigned integer values. */
-	var reIsUint = /^\d+$/;
-
-	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * Checks if `value` is a valid array-like index.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-	 */
-	function isIndex(value, length) {
-	  value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
-	  length = length == null ? MAX_SAFE_INTEGER : length;
-	  return value > -1 && value % 1 == 0 && value < length;
-	}
-
-	module.exports = isIndex;
-
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isArguments = __webpack_require__(48),
-	    isArray = __webpack_require__(49),
-	    isIndex = __webpack_require__(50),
-	    isLength = __webpack_require__(46),
-	    isObject = __webpack_require__(37);
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Creates an array of the own and inherited enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keysIn(new Foo);
-	 * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
-	 */
-	function keysIn(object) {
-	  if (object == null) {
-	    return [];
-	  }
-	  if (!isObject(object)) {
-	    object = Object(object);
-	  }
-	  var length = object.length;
-	  length = (length && isLength(length) &&
-	    (isArray(object) || isArguments(object)) && length) || 0;
-
-	  var Ctor = object.constructor,
-	      index = -1,
-	      isProto = typeof Ctor == 'function' && Ctor.prototype === object,
-	      result = Array(length),
-	      skipIndexes = length > 0;
-
-	  while (++index < length) {
-	    result[index] = (index + '');
-	  }
-	  for (var key in object) {
-	    if (!(skipIndexes && isIndex(key, length)) &&
-	        !(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = keysIn;
-
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var bindCallback = __webpack_require__(53);
+	var bindCallback = __webpack_require__(28);
 
 	/**
 	 * Creates a function for `_.forOwn` or `_.forOwnRight`.
@@ -2316,83 +1713,12 @@ webpackJsonp([0],[
 	module.exports = createForOwn;
 
 
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var identity = __webpack_require__(54);
-
-	/**
-	 * A specialized version of `baseCallback` which only supports `this` binding
-	 * and specifying the number of arguments to provide to `func`.
-	 *
-	 * @private
-	 * @param {Function} func The function to bind.
-	 * @param {*} thisArg The `this` binding of `func`.
-	 * @param {number} [argCount] The number of arguments to provide to `func`.
-	 * @returns {Function} Returns the callback.
-	 */
-	function bindCallback(func, thisArg, argCount) {
-	  if (typeof func != 'function') {
-	    return identity;
-	  }
-	  if (thisArg === undefined) {
-	    return func;
-	  }
-	  switch (argCount) {
-	    case 1: return function(value) {
-	      return func.call(thisArg, value);
-	    };
-	    case 3: return function(value, index, collection) {
-	      return func.call(thisArg, value, index, collection);
-	    };
-	    case 4: return function(accumulator, value, index, collection) {
-	      return func.call(thisArg, accumulator, value, index, collection);
-	    };
-	    case 5: return function(value, other, key, object, source) {
-	      return func.call(thisArg, value, other, key, object, source);
-	    };
-	  }
-	  return function() {
-	    return func.apply(thisArg, arguments);
-	  };
-	}
-
-	module.exports = bindCallback;
-
-
-/***/ },
-/* 54 */
-/***/ function(module, exports) {
-
-	/**
-	 * This method returns the first argument provided to it.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Utility
-	 * @param {*} value Any value.
-	 * @returns {*} Returns `value`.
-	 * @example
-	 *
-	 * var object = { 'user': 'fred' };
-	 *
-	 * _.identity(object) === object;
-	 * // => true
-	 */
-	function identity(value) {
-	  return value;
-	}
-
-	module.exports = identity;
-
-
-/***/ },
-/* 55 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseFor = __webpack_require__(34),
-	    createForIn = __webpack_require__(56);
+	var baseFor = __webpack_require__(8),
+	    createForIn = __webpack_require__(35);
 
 	/**
 	 * Iterates over own and inherited enumerable properties of an object invoking
@@ -2426,12 +1752,12 @@ webpackJsonp([0],[
 	module.exports = forIn;
 
 
-/***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var bindCallback = __webpack_require__(53),
-	    keysIn = __webpack_require__(51);
+	var bindCallback = __webpack_require__(28),
+	    keysIn = __webpack_require__(25);
 
 	/**
 	 * Creates a function for `_.forIn` or `_.forInRight`.
@@ -2452,12 +1778,12 @@ webpackJsonp([0],[
 	module.exports = createForIn;
 
 
-/***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var baseClone = __webpack_require__(58),
-	    bindCallback = __webpack_require__(53);
+	var baseClone = __webpack_require__(37),
+	    bindCallback = __webpack_require__(28);
 
 	/**
 	 * Creates a deep clone of `value`. If `customizer` is provided it's invoked
@@ -2513,19 +1839,19 @@ webpackJsonp([0],[
 	module.exports = cloneDeep;
 
 
-/***/ },
-/* 58 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var arrayCopy = __webpack_require__(59),
-	    arrayEach = __webpack_require__(60),
-	    baseAssign = __webpack_require__(61),
-	    baseForOwn = __webpack_require__(33),
-	    initCloneArray = __webpack_require__(63),
-	    initCloneByTag = __webpack_require__(64),
-	    initCloneObject = __webpack_require__(66),
-	    isArray = __webpack_require__(49),
-	    isObject = __webpack_require__(37);
+	var arrayCopy = __webpack_require__(38),
+	    arrayEach = __webpack_require__(5),
+	    baseAssign = __webpack_require__(39),
+	    baseForOwn = __webpack_require__(7),
+	    initCloneArray = __webpack_require__(41),
+	    initCloneByTag = __webpack_require__(42),
+	    initCloneObject = __webpack_require__(44),
+	    isArray = __webpack_require__(23),
+	    isObject = __webpack_require__(11);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -2647,9 +1973,9 @@ webpackJsonp([0],[
 	module.exports = baseClone;
 
 
-/***/ },
-/* 59 */
-/***/ function(module, exports) {
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
 
 	/**
 	 * Copies the values of `source` to `array`.
@@ -2673,40 +1999,12 @@ webpackJsonp([0],[
 	module.exports = arrayCopy;
 
 
-/***/ },
-/* 60 */
-/***/ function(module, exports) {
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	/**
-	 * A specialized version of `_.forEach` for arrays without support for callback
-	 * shorthands and `this` binding.
-	 *
-	 * @private
-	 * @param {Array} array The array to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns `array`.
-	 */
-	function arrayEach(array, iteratee) {
-	  var index = -1,
-	      length = array.length;
-
-	  while (++index < length) {
-	    if (iteratee(array[index], index, array) === false) {
-	      break;
-	    }
-	  }
-	  return array;
-	}
-
-	module.exports = arrayEach;
-
-
-/***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseCopy = __webpack_require__(62),
-	    keys = __webpack_require__(38);
+	var baseCopy = __webpack_require__(40),
+	    keys = __webpack_require__(12);
 
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -2726,9 +2024,9 @@ webpackJsonp([0],[
 	module.exports = baseAssign;
 
 
-/***/ },
-/* 62 */
-/***/ function(module, exports) {
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
 
 	/**
 	 * Copies properties of `source` to `object`.
@@ -2755,9 +2053,9 @@ webpackJsonp([0],[
 	module.exports = baseCopy;
 
 
-/***/ },
-/* 63 */
-/***/ function(module, exports) {
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
 
 	/** Used for native method references. */
 	var objectProto = Object.prototype;
@@ -2787,11 +2085,11 @@ webpackJsonp([0],[
 	module.exports = initCloneArray;
 
 
-/***/ },
-/* 64 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var bufferClone = __webpack_require__(65);
+	var bufferClone = __webpack_require__(43);
 
 	/** `Object#toString` result references. */
 	var boolTag = '[object Boolean]',
@@ -2856,9 +2154,9 @@ webpackJsonp([0],[
 	module.exports = initCloneByTag;
 
 
-/***/ },
-/* 65 */
-/***/ function(module, exports) {
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/** Native method references. */
 	var ArrayBuffer = global.ArrayBuffer,
@@ -2883,9 +2181,9 @@ webpackJsonp([0],[
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
-/* 66 */
-/***/ function(module, exports) {
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
 
 	/**
 	 * Initializes an object clone.
@@ -2905,9 +2203,9 @@ webpackJsonp([0],[
 	module.exports = initCloneObject;
 
 
-/***/ },
-/* 67 */
-/***/ function(module, exports) {
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
 
 	/**
 	 * Checks if `value` is `undefined`.
@@ -2932,9 +2230,9 @@ webpackJsonp([0],[
 	module.exports = isUndefined;
 
 
-/***/ },
-/* 68 */
-/***/ function(module, exports) {
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
 	//
@@ -3240,27 +2538,26 @@ webpackJsonp([0],[
 	}
 
 
-/***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-	var bodyEventsHandlerStamp = __webpack_require__(70);
-	var consoleLoggerStamp = __webpack_require__(71);
-	var domNavigationStamp = __webpack_require__(72);
-	var formEventsHandlerStamp = __webpack_require__(78);
-	var ruleStamp = __webpack_require__(82);
+	var bodyEventsHandlerStamp = __webpack_require__(48);
+	var consoleLoggerStamp = __webpack_require__(49);
+	var domNavigationStamp = __webpack_require__(50);
+	var formEventsHandlerStamp = __webpack_require__(52);
+	var ruleStamp = __webpack_require__(56);
 
 	var stampit = __webpack_require__(3);
-	var $ = __webpack_require__(74);
 
 	/**
 	 * This stamp lets you initialize Formation, and turn debug on or off.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.formation
@@ -3326,16 +2623,16 @@ webpackJsonp([0],[
 
 	    // First find out which forms should be initialized.
 	    this.detectForms();
-
-	    if (this.get$forms().length === 0) {
+	    if (this.getForms().size === 0) {
 	      this.info('No Formation forms present, exiting.');
 	      return this;
 	    }
 
 	    var bodyEventsHandler = bodyEventsHandlerStamp({
-	      $body: $(document.body),
+	      body: document.body,
+	      formationDataAttrKey: this.formationDataAttrKey,
 	      nodeEvents: this.nodeEvents,
-	      formationSelector: this.getFormationSelector()
+	      getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
 	    });
 	    this.initBodyEvents(bodyEventsHandler);
 	    this.initForms();
@@ -3352,21 +2649,20 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formation}
 	   * @mixes       {Formation.formation}
 	   *
-	   * @param       {jQuery}                  $form         The jQuery extended `form` element to be initialized. Required.
+	   * @param       {Element}                 form          The `form` element to be initialized. Required.
 	   *
 	   * @returns     {Formation.formation}     this
 	   */
-	  initForm: function initForm($form) {
+	  initForm: function initForm(form) {
 	    try {
-	      // Set up the Form but only if it has the proper DOM.
-	      var formationComponent = this.createFormationComponent();
-	      var $singleForm = $form.eq(0);
+	      if (!this.getForms().has(form) || this.getForms().get(form) === null) {
+	        // Set up the Form but only if it has the proper DOM.
+	        var formationComponent = this.createFormationComponent();
 
-	      formationComponent.initForm($singleForm);
-	      formationComponent.initFormEvents();
+	        formationComponent.initForm(form);
+	        formationComponent.initFormEvents();
 
-	      if (!this.get$forms().has($form.get(0))) {
-	        this.get$forms().add($singleForm);
+	        this.getForms().set(form, formationComponent);
 	      }
 	    } catch (exception) {
 	      this.error(exception);
@@ -3388,8 +2684,9 @@ webpackJsonp([0],[
 	   */
 	  createFormationComponent: function createFormationComponent() {
 	    return formEventsHandlerStamp({
-	      formationSelector: this.getFormationSelector(),
-	      nodeEvents: this.nodeEvents
+	      formationDataAttrKey: this.formationDataAttrKey,
+	      nodeEvents: this.nodeEvents,
+	      getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
 	    }).initLogging(this.getLogConsole());
 	  },
 
@@ -3406,20 +2703,6 @@ webpackJsonp([0],[
 	   */
 	  createFormationRule: function createFormationRule(name, callback) {
 	    return ruleStamp({ name: name, callback: callback });
-	  },
-
-
-	  /**
-	   * Construct a CSS selector used to find Formation forms.
-	   *
-	   * @access      public
-	   * @memberOf    {Formation.formation}
-	   * @mixes       {Formation.formation}
-	   *
-	   * @returns     {String}
-	   */
-	  getFormationSelector: function getFormationSelector() {
-	    return '[' + this.formationDataAttrKey + '="1"]';
 	  },
 
 
@@ -3444,7 +2727,7 @@ webpackJsonp([0],[
 	    if (typeof elementType !== 'string') {
 	      throw TypeError('Expected `elementType` param to be a `String`, was a `' + (typeof elementType === 'undefined' ? 'undefined' : _typeof(elementType)) + '`.');
 	    }
-	    if ($.inArray(elementType, this.getSupportedElementTypes()) === -1) {
+	    if (this.getSupportedElementTypes().indexOf(elementType) === -1) {
 	      throw TypeError('Specified `elementType` `' + elementType + '` is not supported.');
 	    }
 	    if (typeof ruleName !== 'string') {
@@ -3454,14 +2737,17 @@ webpackJsonp([0],[
 	      throw TypeError('Expected `ruleCallbackMethod` param to be a `Function`, was a `' + (typeof ruleCallbackMethod === 'undefined' ? 'undefined' : _typeof(ruleCallbackMethod)) + '`.');
 	    }
 
-	    // Add the new DOMREADY event.
-	    $(document).ready(function () {
-	      _this.get$forms().each(function (index, form) {
-	        var $form = $(form);
+	    var registerRuleFunc = function registerRuleFunc() {
+	      _this.getForms().forEach(function (formComponent) {
 	        var rule = _this.createFormationRule(ruleName, ruleCallbackMethod);
-	        _this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
+	        formComponent.registerRule(elementType, rule);
 	      });
-	    });
+	      // Remove the DOMContentLoaded event.
+	      document.removeEventListener('DOMContentLoaded', registerRuleFunc);
+	    };
+
+	    // Add the new DOMContentLoaded event.
+	    document.addEventListener('DOMContentLoaded', registerRuleFunc);
 
 	    return this;
 	  }
@@ -3516,30 +2802,54 @@ webpackJsonp([0],[
 	  };
 
 	  /**
-	   * A set of jQuery extended `form` elements to be managed by Formation.
+	   * A map of `form` elements with their respective FormComponents to be managed by Formation.
 	   *
 	   * @access      private
-	   * @type        jQuery
+	   * @type        Map
 	   * @memberOf    {Formation.formation}
-	   * @default     $()
 	   */
-	  var __$forms = $();
+	  var __forms = new Map();
 
 	  /**
-	   * Return the value of the private `__$forms` object.
+	   * Return the value of the private `__forms` object.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formation}
 	   *
-	   * @returns     {jQuery}        __$forms           A set of jQuery extended `form` elements to be managed by Formation.
+	   * @returns     {Map}       __forms           A map of `form` elements with their related FormComponents to be managed by Formation.
 	   */
-	  this.get$forms = function () {
-	    return __$forms;
+	  this.getForms = function () {
+	    return __forms;
+	  };
+
+	  /**
+	   * Find the `formComponent` for the `form` element in which the supplied `element` resides.
+	   *
+	   * @access      public
+	   * @memberOf    {Formation.formation}
+	   * @mixes       {Formation.formation}
+	   *
+	   * @param       {Element}                         element             The DOM element for which to find the `formComponent` instance. Required.
+	   *
+	   * @returns     {Formation.formComponent|null}                        The `formComponent` if it is there, or null otherwise.
+	   */
+	  this.getFormComponentOfCurrentElement = function (element) {
+	    var currentForm = _this2.findCurrentFormByTarget(element);
+	    //console.log(currentForm);
+	    if (currentForm === null) {
+	      return null;
+	    }
+
+	    if (!_this2.getForms().has(currentForm)) {
+	      return null;
+	    }
+
+	    return _this2.getForms().get(currentForm);
 	  };
 
 	  /**
 	   * Find all the `form` elements in the DOM that are to be managed/validated by Formation, and set the private
-	   * `$forms` property.
+	   * `forms` property.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formation}
@@ -3547,27 +2857,30 @@ webpackJsonp([0],[
 	   * @returns     {Formation.formation}  this            Return the instance of the generated object so we can chain methods.
 	   */
 	  this.detectForms = function () {
-	    __$forms = $('form').filter(_this2.formFilter);
+	    var forms = Array.from(document.getElementsByTagName('form')).filter(_this2.formFilter);
+	    forms.forEach(function (form) {
+	      if (!__forms.has(form)) {
+	        __forms.set(form, null);
+	      }
+	    });
 
 	    // So we can chain methods.
 	    return _this2;
 	  };
 
 	  /**
-	   * Helper function to filter a jQuery set to return only forms to be managed
+	   * Helper function to filter an array of form elements to return only forms to be managed
 	   * by Formation.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formation}
 	   *
-	   * @param       {int}           index         The index of the element in the jQuery set.
-	   * @param       {jQuery}        element       The DOM element to check.
+	   * @param       {Element}       form          The DOM form element to check.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  this.formFilter = function (index, element) {
-	    var $element = $(element);
-	    return $element.prop('tagName').toLowerCase() == 'form' && $element.attr(_this2.formationDataAttrKey) !== undefined && parseInt($element.attr(_this2.formationDataAttrKey)) == 1;
+	  this.formFilter = function (form) {
+	    return form.tagName.toLowerCase() === 'form' && form.hasAttribute(_this2.formationDataAttrKey) && parseInt(form.getAttribute(_this2.formationDataAttrKey)) === 1;
 	  };
 
 	  /**
@@ -3642,10 +2955,8 @@ webpackJsonp([0],[
 	   */
 	  this.initForms = function () {
 	    // Set up the individual forms.
-	    __$forms.each(function (index, form) {
-	      var $form = $(form);
-
-	      _this2.initForm($form);
+	    __forms.forEach(function (formComponent, form) {
+	      _this2.initForm(form);
 	    });
 
 	    return _this2;
@@ -3656,23 +2967,21 @@ webpackJsonp([0],[
 
 	module.exports = formationLoggerStamp;
 
-/***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var consoleLoggerStamp = __webpack_require__(71);
-	var domNavigationStamp = __webpack_require__(72);
-	var eventDefinitionsStamp = __webpack_require__(73);
-	var keyCodes = __webpack_require__(77);
+	var consoleLoggerStamp = __webpack_require__(49);
+	var domNavigationStamp = __webpack_require__(50);
+	var eventDefinitionsStamp = __webpack_require__(51);
 	var stampit = __webpack_require__(3);
-	var $ = __webpack_require__(74);
 
 	/**
 	 * Provide an interface for managing body events.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.bodyEventsHandler
@@ -3685,14 +2994,14 @@ webpackJsonp([0],[
 	var bodyEventsHandlerStamp = stampit().refs({
 
 	  /**
-	   * The jQuery extended `body` element.
+	   * The `body` element.
 	   *
 	   * @access      public
-	   * @type        {jQuery}
+	   * @type        {Element}
 	   * @memberOf    {Formation.bodyEventsHandler}
 	   * @default     null
 	   */
-	  $body: null,
+	  body: null,
 
 	  /**
 	   * A singleton passed along so we have some semblance of
@@ -3703,7 +3012,17 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.bodyEventsHandler}
 	   * @default     null
 	   */
-	  nodeEvents: null
+	  nodeEvents: null,
+
+	  /**
+	   * A method for retrieving the formComponent of an element.
+	   *
+	   * @access      public
+	   * @type        {function}
+	   * @memberOf    {Formation.bodyEventsHandler}
+	   * @default     null
+	   */
+	  getFormComponentOfCurrentElement: null
 	}).methods({
 
 	  /**
@@ -3719,9 +3038,10 @@ webpackJsonp([0],[
 	  addDefaultEventHandlers: function addDefaultEventHandlers() {
 	    var _this = this;
 
-	    this.$body.on(this.getKeyPressEventName(), function (event) {
+	    this.body.addEventListener(this.getKeyPressEventName(), function (event) {
 	      return _this.bodyKeyPressHandler(event);
-	    }).on(this.getKeyUpEventName(), function (event) {
+	    });
+	    this.body.addEventListener(this.getKeyUpEventName(), function (event) {
 	      return _this.bodyKeyUpHandler(event);
 	    });
 
@@ -3741,24 +3061,20 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.bodyEventsHandler}
 	   * @mixes       {Formation.bodyEventsHandler}
 	   *
-	   * @param       {jQuery.Event}        event       jQuery `keypress` event object. Required.
+	   * @param       {KeyboardEvent}       event       The `keypress` event object. Required.
 	   *
-	   * @returns     {Boolean}             allowKeyEventToProgress
+	   * @returns     {Boolean}
 	   */
 	  bodyKeyPressHandler: function bodyKeyPressHandler(event) {
-	    var $target = $(event.target);
-	    var userPressedEnterInInputField = event.which === keyCodes.ENTER && $target.prop('tagName').toLowerCase() === 'input' && $.inArray($target.prop('type'), ['radio', 'checkbox']) === -1;
-
-	    var allowKeyEventToProgress = true;
+	    var userPressedEnterInInputField = event.key === 'enter' && event.target.tagName.toLowerCase() === 'input' && ['radio', 'checkbox'].indexOf(event.target.getAttribute('type')) === -1;
 
 	    if (userPressedEnterInInputField) {
-	      var formComponent = this.getFormComponentOfCurrentElement($target);
-	      if (formComponent !== null) {
-	        allowKeyEventToProgress = formComponent.shouldBodyKeyPressEventsProgress();
-	      }
+	      var formComponent = this.getFormComponentOfCurrentElement(event.target);
+
+	      return formComponent === null ? true : formComponent.shouldBodyKeyPressEventsProgress();
 	    }
 
-	    return allowKeyEventToProgress;
+	    return true;
 	  },
 
 
@@ -3774,28 +3090,24 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.bodyEventsHandler}
 	   * @mixes       {Formation.bodyEventsHandler}
 	   *
-	   * @param       {jQuery.Event}        event       jQuery `keyup` event object. Required.
+	   * @param       {KeyboardEvent}       event       The `keyup` event object. Required.
 	   */
 	  bodyKeyUpHandler: function bodyKeyUpHandler(event) {
-	    if ($.inArray(event.which, [keyCodes.ENTER, keyCodes.SPACE]) === -1) {
-	      return false;
-	    }
-	    var $target = $(event.target);
-	    if (this.elementIsCustomRadioOrCheckboxWidget($target)) {
-	      $target.trigger('click');
+	    if (['enter', 'space'].indexOf(event.key) !== -1 && this.elementIsCustomRadioOrCheckboxWidget(event.target)) {
+	      event.target.click();
 	    }
 	  }
 	});
 
 	module.exports = bodyEventsHandlerStamp.compose(eventDefinitionsStamp, domNavigationStamp, consoleLoggerStamp);
 
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var stampit = __webpack_require__(3);
 
@@ -3964,21 +3276,19 @@ webpackJsonp([0],[
 
 	module.exports = toggleableConsoleStamp;
 
-/***/ },
-/* 72 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var eventDefinitionsStamp = __webpack_require__(73);
-
+	var eventDefinitionsStamp = __webpack_require__(51);
 	var stampit = __webpack_require__(3);
-	var $ = __webpack_require__(74);
 
 	/**
 	 * Formation-specific DOM navigation and modification.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.domNavigation
@@ -3998,16 +3308,6 @@ webpackJsonp([0],[
 	   * @default     data-fv-valid
 	   */
 	  formationDataAttrKey: 'data-formation',
-
-	  /**
-	   * The selector used to find a Formation `form` element.
-	   *
-	   * @access      public
-	   * @type        {String}
-	   * @memberOf    {Formation.domNavigation}
-	   * @default     null
-	   */
-	  formationSelector: null,
 
 	  /**
 	   * The element DOM attribute key which specifies whether the element
@@ -4064,16 +3364,6 @@ webpackJsonp([0],[
 	  submittingStateDataKey: 'data-fv-submitting',
 
 	  /**
-	   * The data key used to to store a `formComponent` object on the `form` object.
-	   *
-	   * @access      public
-	   * @type        {String}
-	   * @memberOf    {Formation.domNavigation}
-	   * @default     formation-form
-	   */
-	  formationDataKey: 'formation-form',
-
-	  /**
 	   * The CSS selector used to find the form's optional input elements.
 	   *
 	   * @access      public
@@ -4082,16 +3372,6 @@ webpackJsonp([0],[
 	   * @default     [data-fv-optional="1"]
 	   */
 	  optionalFieldsSelector: '[data-fv-optional="1"]',
-
-	  /**
-	   * The CSS selector used to find the form's preview button element.
-	   *
-	   * @access      public
-	   * @type        {String}
-	   * @memberOf    {Formation.domNavigation}
-	   * @default     [data-fv-form-preview]
-	   */
-	  previewButtonSelector: '[data-fv-form-preview]',
 
 	  /**
 	   * The CSS selector used to find the form's required input elements.
@@ -4115,235 +3395,249 @@ webpackJsonp([0],[
 	}).methods({
 
 	  /**
-	   * Return the `form` element in which `$element` resides.
+	   * Construct a CSS selector used to find Formation forms.
 	   *
 	   * @access      public
-	   * @memberOf    {Formation.domNavigation}
-	   * @mixes       {Formation.domNavigation}
+	   * @memberOf    {Formation.formation}
+	   * @mixes       {Formation.formation}
 	   *
-	   * @returns     {jQuery}       The jQuery wrapped `form` element.
+	   * @returns     {String}
 	   */
-	  findCurrentFormByTarget: function findCurrentFormByTarget($element) {
-	    if ($element.prop('tagName').toLowerCase() === 'form' && $element.attr(this.formationDataAttrKey) !== undefined) {
-	      return $element;
-	    }
-	    return $element.closest(this.formationSelector);
+	  getFormationSelector: function getFormationSelector() {
+	    return '[' + this.formationDataAttrKey + '="1"]';
 	  },
 
 
 	  /**
-	   * Find the `formComponent` for the `form` element in which the `$element` resides.
+	   * Ascends the ancestor tree of `element` until it matches the supplied `selector`.
 	   *
-	   * @throws      TypeError                         if the `formComponent` is undefined, has no `isFormComponent` or `isFormComponent()` returns false
+	   * If no matching element is found, returns null; otherwise returns the matched element.
+	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}                          $element            The jQuery wrapped element for which to find the `formComponent` instance. Required.
+	   * @param       {Element}     element       The element whose ancestors we want to ascend. Required.
+	   * @param       {String}      selector      The CSS selector to match against the ancestors. Required.
 	   *
-	   * @returns     {Formation.formComponent|null}    formationForm       The `formComponent` if it is there, or null otherwise.
+	   * @returns     {Element|null}
 	   */
-	  getFormComponentOfCurrentElement: function getFormComponentOfCurrentElement($element) {
-	    var $currentForm = this.findCurrentFormByTarget($element);
-	    var formComponent = null;
-
-	    // if the element is not inside a formation form, don't bother checking the data, and return null.
-	    if ($currentForm.length) {
-	      formComponent = $currentForm.data(this.formationDataKey);
-	      // TODO - use custom error classes
-	      if (formComponent === undefined) {
-	        throw new TypeError('The `' + this.formationDataKey + '` data object is not set.');
-	      } else if (typeof formComponent.isFormComponent !== 'function' || !formComponent.isFormComponent()) {
-	        throw new TypeError('The `' + this.formationDataKey + '` data object is not built from a `formComponent` stamp.');
-	      }
+	  closest: function closest(element, selector) {
+	    if (element.nodeType !== element.ELEMENT_NODE || element.tagName.toLowerCase() === 'html') {
+	      return null;
+	    }
+	    if (element.matches(selector)) {
+	      return element;
 	    }
 
-	    return formComponent;
+	    var parent = element.parentNode;
+	    if (parent === null) {
+	      return null;
+	    }
+
+	    return this.closest(parent, selector);
 	  },
 
 
 	  /**
-	   * Find the required fields in the specified `$form` element.
+	   * Return the `form` element in which `element` resides.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
+	   * @param       {Element}    element      A `Form` element.
 	   *
-	   * @returns     {jQuery}                The set of required fields in the $form.
+	   * @returns     {Element|null}            The form the supplied `element` is in, or null if not found.
 	   */
-	  findRequiredFields: function findRequiredFields($form) {
-	    return $form.find(this.requiredFieldsSelector);
+	  findCurrentFormByTarget: function findCurrentFormByTarget(element) {
+	    if (element.tagName.toLowerCase() === 'form' && element.matches(this.getFormationSelector())) {
+	      return element;
+	    }
+
+	    return this.closest(element, this.getFormationSelector());
 	  },
 
 
 	  /**
-	   * Find the optional fields in the specified `$form` element.
+	   * Find the required fields in the specified `form` element.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
+	   * @param       {Element}               form                The `form` element. Required.
 	   *
-	   * @returns     {jQuery}                The set of optional fields in the $form.
+	   * @returns     {Array}                 The set of required fields in the form.
 	   */
-	  findOptionalFields: function findOptionalFields($form) {
-	    return $form.find(this.optionalFieldsSelector);
+	  findRequiredFields: function findRequiredFields(form) {
+	    return Array.from(form.querySelectorAll(this.requiredFieldsSelector));
 	  },
 
 
 	  /**
-	   * Find the Formation submit button in the specified `$form` element.
+	   * Find the optional fields in the specified `form` element.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}                $form               The jQuery wrapped `form` element. Required.
+	   * @param       {Element}               form               The `form` element. Required.
 	   *
-	   * @returns     {jQuery}                The Formation submit button in the $form.
+	   * @returns     {Array}                 The set of optional fields in the form.
 	   */
-	  findSubmitButton: function findSubmitButton($form) {
-	    return $form.find(this.submitButtonSelector);
+	  findOptionalFields: function findOptionalFields(form) {
+	    return Array.from(form.querySelectorAll(this.optionalFieldsSelector));
 	  },
 
 
 	  /**
-	   * Find the Formation preview button in the specified `$form` element.
+	   * Find the Formation submit button in the specified `form` element.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}      $form               The jQuery wrapped `form` element. Required.
+	   * @param       {Element}               form               The `form` element. Required.
 	   *
-	   * @returns     {jQuery}      The Formation preview button in the $form.
+	   * @returns     {Array}                 The Formation submit button in the form.
 	   */
-	  findPreviewButton: function findPreviewButton($form) {
-	    return $form.find(this.previewButtonSelector);
+	  findSubmitButton: function findSubmitButton(form) {
+	    return Array.from(form.querySelectorAll(this.submitButtonSelector));
 	  },
 
 
 	  /**
-	   * Check whether `$element` is a custom Formation Bootstrap Radio or Checkbox widget.
+	   * Check whether `element` is a custom Formation Bootstrap Radio or Checkbox widget.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}      $element          The jQuery wrapped `form` element. Required.
+	   * @param       {Element}     element           The `form` element. Required.
 	   *
 	   * @returns     {Boolean}     tbr               Whether the element is a custom widget.
 	   */
-	  elementIsCustomRadioOrCheckboxWidget: function elementIsCustomRadioOrCheckboxWidget($element) {
-	    var $currentForm = this.findCurrentFormByTarget($element);
-	    var tbr = false;
-	    if ($currentForm.length) {
-	      tbr = $element.hasClass('btn-checkbox') || $element.hasClass('btn-radio');
+	  elementIsCustomRadioOrCheckboxWidget: function elementIsCustomRadioOrCheckboxWidget(element) {
+	    var currentForm = this.findCurrentFormByTarget(element);
+	    if (currentForm === null) {
+	      return false;
 	    }
-	    return tbr;
+
+	    return element.classList.contains('btn-checkbox') || element.classList.contains('btn-radio');
 	  },
 
 
 	  /**
 	   * Find the DOM element which acts as a container for a set of input elements
-	   * with the same name as `$element`.
+	   * with the same name as `element`.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $element        The element whose container we want to find. Required.
+	   * @param       {Element}       element        The element whose container we want to find. Required.
 	   *
-	   * @returns     {jQuery}
+	   * @returns     {Element|null}
 	   */
-	  getCheckboxOrRadioContainer: function getCheckboxOrRadioContainer($element) {
-	    return this.findCurrentFormByTarget($element).find('[' + this.groupedElementsContainerAttrKey + '="' + $element.attr('name') + '"]');
+	  getCheckboxOrRadioContainer: function getCheckboxOrRadioContainer(element) {
+	    var currentForm = this.findCurrentFormByTarget(element);
+	    if (currentForm === null) {
+	      return null;
+	    }
+
+	    return currentForm.querySelector('[' + this.groupedElementsContainerAttrKey + '="' + element.getAttribute('name') + '"]');
 	  },
 
 
 	  /**
-	   * Find all input elements in the current form with the same name as `$element`.
+	   * Find all input elements in the current form with the same name as `element`.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $element        The element whose name we want to find all elements for. Required.
+	   * @param       {Element}       element        The element whose name we want to find all elements for. Required.
 	   *
-	   * @returns     {jQuery}
+	   * @returns     {Array}
 	   */
-	  getAllCheckboxesOrRadiosByName: function getAllCheckboxesOrRadiosByName($element) {
-	    return this.findCurrentFormByTarget($element).find('input[name="' + $element.attr('name') + '"]');
+	  getAllCheckboxesOrRadiosByName: function getAllCheckboxesOrRadiosByName(element) {
+	    var currentForm = this.findCurrentFormByTarget(element);
+	    if (currentForm === null) {
+	      return [];
+	    }
+
+	    return Array.from(currentForm.querySelectorAll('input[name="' + element.getAttribute('name') + '"]'));
 	  },
 
 
 	  /**
-	   * Find the `label` element in the DOM for the supplied `$input` element.
+	   * Find the `label` element in the DOM for the supplied `input` element.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $input      The source element used to find a `label` element. Required.
+	   * @param       {Element}       input      The source element used to find a `label` element. Required.
 	   *
-	   * @returns     {jQuery}        $inputLabel
+	   * @returns     {Array}
 	   */
-	  getInputElementLabel: function getInputElementLabel($input) {
-	    var $inputLabel = this.findCurrentFormByTarget($input).find('label[for="' + $input.prop('id') + '"]');
+	  getInputElementLabel: function getInputElementLabel(input) {
+	    var currentForm = this.findCurrentFormByTarget(input);
+	    if (currentForm === null) {
+	      return [];
+	    }
 
-	    return $inputLabel;
+	    return Array.from(currentForm.querySelectorAll('label[for="' + input.getAttribute('id') + '"]'));
 	  },
 
 
 	  /**
-	   * Find the element in the DOM linked to `$source` and return it.
+	   * Find the element in the DOM linked to `source` and return it.
 	   *
 	   * @throws      Error                       iff the linked element is not found in the DOM when expected
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $source     The source element used to find a linked element. Required.
+	   * @param       {Element}       source      The source element used to find a linked element. Required.
 	   *
-	   * @returns     {null|jQuery}   $tbr        The linked element if found, null otherwise.
+	   * @returns     {Element|null}  tbr         The linked element if found, null otherwise.
 	   */
-	  getLinkedElement: function getLinkedElement($source) {
-	    //let $checkboxLabel = this.getInputElementLabel($source);
-	    var $tbr = null;
-	    var linkedElementID = $source.attr(this.linkedInputAttrKey);
-	    if (linkedElementID !== undefined) {
-	      var $linkedElement = $('#' + linkedElementID);
-	      if ($linkedElement.length === 0) {
-	        throw new Error('Expected an element with a `' + this.linkedInputAttrKey + '` attribute equal to "' + linkedElementID + '".');
-	      }
-
-	      $tbr = $linkedElement;
+	  getLinkedElement: function getLinkedElement(source) {
+	    if (!source.hasAttribute(this.linkedInputAttrKey)) {
+	      return null;
 	    }
 
-	    return $tbr;
+	    var linkedElementID = source.getAttribute(this.linkedInputAttrKey);
+	    var linkedElement = document.getElementById(linkedElementID);
+	    if (linkedElement === null) {
+	      throw new Error('Expected an element with a `' + this.linkedInputAttrKey + '` attribute equal to "' + linkedElementID + '".');
+	    }
+
+	    return linkedElement;
 	  },
 
 
 	  /**
-	   * Will enable or disable the `$element` based on the `enable` param.
+	   * Will enable or disable the `element` based on the `enable` param.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $element        The element to enable or disable. Required.
-	   * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$element`. Required.
+	   * @param       {Element}       element         The element to enable or disable. Required.
+	   * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `element`. Required.
 	   *
 	   * @returns     {Formation.domNavigation}
 	   */
-	  enableOrDisableElement: function enableOrDisableElement($element, enable) {
+	  enableOrDisableElement: function enableOrDisableElement(element, enable) {
 	    if (enable) {
-	      $element.removeProp('disabled').removeClass('disabled');
+	      element.removeAttribute('disabled');
+	      element.classList.remove('disabled');
 	    } else {
-	      $element.prop('disabled', 'disabled').addClass('disabled');
+	      element.setAttribute('disabled', 'disabled');
+	      element.classList.add('disabled');
 	    }
 
 	    return this;
@@ -4351,30 +3645,26 @@ webpackJsonp([0],[
 
 
 	  /**
-	   * Will add or remove the `hidden` class of the `$element` based on the `show` param.
+	   * Will add or remove the `hidden` class of the `element` based on the `show` param.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $element        The element to show or hide. Required.
-	   * @param       {Boolean}       show            Whether to show (true) or hide (false) the `$element`. Required.
+	   * @param       {Element}       element         The element to show or hide. Required.
+	   * @param       {Boolean}       show            Whether to show (true) or hide (false) the `element`. Required.
 	   *
 	   * @returns     {Formation.domNavigation}
 	   */
-	  showOrHideElement: function showOrHideElement($element, show) {
-	    if (show) {
-	      $element.removeClass('hidden');
-	    } else {
-	      $element.addClass('hidden');
-	    }
+	  showOrHideElement: function showOrHideElement(element, show) {
+	    element.classList.toggle('hidden', !show);
 
 	    return this;
 	  },
 
 
 	  /**
-	   * Will show or hide the element linked to `$element` based on the `show` param.
+	   * Will show or hide the element linked to `element` based on the `show` param.
 	   * Handles when the linked element is in a Bootstrap `form-group`, as well as
 	   * when it is not.
 	   *
@@ -4382,55 +3672,52 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}        $element        The element to show or hide. Required.
-	   * @param       {Boolean}       show            Whether to show (true) or hide (false) the `$element`. Required.
+	   * @param       {Element}       element         The element to show or hide. Required.
+	   * @param       {Boolean}       show            Whether to show (true) or hide (false) the `element`. Required.
 	   *
 	   * @returns     {Formation.domNavigation}
 	   */
-	  showOrHideLinkedElement: function showOrHideLinkedElement($element, show) {
-	    var $linkedElement = this.getLinkedElement($element);
-	    if ($linkedElement === null) {
-	      // no linked element, do nothing
+	  showOrHideLinkedElement: function showOrHideLinkedElement(element, show) {
+	    var linkedElement = this.getLinkedElement(element);
+	    if (linkedElement === null) {
 	      return this;
 	    }
-	    var $linkedInputFormGroup = $linkedElement.closest('.form-group');
+	    var linkedInputFormGroup = this.closest(linkedElement, '.form-group');
 
 	    // The linked input may be part of a form group which contains other elements that need to be shown
 	    // or hidden along with the linked element. If that's the case, the 'hidden' class only applies
 	    // to the form group. If that's not the case, the linked element itself applies the 'hidden' class.
-	    var hasFormGroup = $linkedInputFormGroup.length > 0;
+	    var hasFormGroup = linkedInputFormGroup !== null;
 	    if (hasFormGroup) {
-	      this.showOrHideElement($linkedInputFormGroup, show);
+	      this.showOrHideElement(linkedInputFormGroup, show);
 	    }
 
-	    // show and enable, or hide and disable, the $linkedElement.
-	    this.enableOrDisableLinkedElement($linkedElement, show, !hasFormGroup);
+	    // show and enable, or hide and disable, the linkedElement.
+	    this.enableOrDisableLinkedElement(linkedElement, show, !hasFormGroup);
 
 	    return this;
 	  },
 
 
 	  /**
-	   * Convenience method which, for the supplied `$linkedElement`, shows and enables
+	   * Convenience method which, for the supplied `linkedElement`, shows and enables
 	   * it, or hides and disables it, based on the params.
-	   *
-	   * Takes into account whether
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param	      {jQuery}      $linkedElement        jQuery extended text-based `input` or `textarea` field. Required.
+	   * @param	      {Element}     linkedElement         Text-based `input` or `textarea` field. Required.
 	   * @param       {Boolean}     enableAndShow         Flag indicating whether to show/enable, or hide/disable, the element. Required.
 	   * @param       {Boolean}     elementHandlesHidden  Flag indicating whether the element handles its hidden/shown status. Required.
 	   *
 	   * @returns     {Formation.domNavigation}
 	   */
-	  enableOrDisableLinkedElement: function enableOrDisableLinkedElement($linkedElement, enableAndShow, elementHandlesHidden) {
+	  enableOrDisableLinkedElement: function enableOrDisableLinkedElement(linkedElement, enableAndShow, elementHandlesHidden) {
 	    if (enableAndShow) {
-	      this.showEnableLinkedElement($linkedElement, elementHandlesHidden);
+	      this.showEnableLinkedElement(linkedElement, elementHandlesHidden);
 	    } else {
-	      this.hideDisableLinkedElement($linkedElement, elementHandlesHidden);
+	      this.hideDisableLinkedElement(linkedElement, elementHandlesHidden);
 	    }
 
 	    return this;
@@ -4438,7 +3725,7 @@ webpackJsonp([0],[
 
 
 	  /**
-	   * Convenience method which, for the supplied `$element`, removes the `disabled` property,
+	   * Convenience method which, for the supplied `element`, removes the `disabled` property,
 	   * and removes the Twitter Bootstrap class of "disabled". If the `includeHidden` parameter
 	   * is specified and is `true`, also removes the "hidden" class from the element.
 	   *
@@ -4446,15 +3733,15 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param	      {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
+	   * @param	      {Element}     element           Text-based `input` or `textarea` field. Required.
 	   * @param       {Boolean}     removeHidden      Flag indicating whether to remove the 'hidden' class. Required.
 	   *
 	   * @returns     {Formation.domNavigation}
 	   */
-	  showEnableLinkedElement: function showEnableLinkedElement($element, removeHidden) {
-	    this.enableOrDisableElement($element, true);
+	  showEnableLinkedElement: function showEnableLinkedElement(element, removeHidden) {
+	    this.enableOrDisableElement(element, true);
 	    if (removeHidden) {
-	      this.showOrHideElement($element, true);
+	      this.showOrHideElement(element, true);
 	    }
 
 	    return this;
@@ -4462,7 +3749,7 @@ webpackJsonp([0],[
 
 
 	  /**
-	   * Convenience method which, for the supplied `$element`, disables it and gives it the
+	   * Convenience method which, for the supplied `element`, disables it and gives it the
 	   * Twitter Bootstrap class of "disabled". If the `includeHidden` parameter is
 	   * specified and is `true`, also adds the "hidden" class to the element. By default
 	   * it will clear the value of the text input and set the `data-fv-valid` attribute to 0 (false),
@@ -4472,20 +3759,22 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {jQuery}      $element          jQuery extended text-based `input` or `textarea` field. Required.
+	   * @param       {Element}     element           Text-based `input` or `textarea` field. Required.
 	   * @param       {Boolean}     includeHidden     Flag indicating whether to add the 'hidden' class. Required.
 	   *
 	   * @returns     {Formation.domNavigation}
 	   */
-	  hideDisableLinkedElement: function hideDisableLinkedElement($element, includeHidden) {
-	    var clearValue = $element.attr(this.toggleOverrideTextAttrKey) === undefined || parseInt($element.attr(this.toggleOverrideTextAttrKey)) === 1;
+	  hideDisableLinkedElement: function hideDisableLinkedElement(element, includeHidden) {
+	    var clearValue = !element.hasAttribute(this.toggleOverrideTextAttrKey) || parseInt(element.getAttribute(this.toggleOverrideTextAttrKey)) === 1;
 	    if (clearValue) {
-	      $element.val('').trigger(this.getSetValidationFlagEventName(), false);
+	      element.value = '';
+	      var validationEvent = new CustomEvent(this.getSetValidationFlagEventName(), { bubbles: true, cancelable: true, detail: { valid: false } });
+	      element.dispatchEvent(validationEvent);
 	    }
 
-	    this.enableOrDisableElement($element, false);
+	    this.enableOrDisableElement(element, false);
 	    if (includeHidden) {
-	      this.showOrHideElement($element, false);
+	      this.showOrHideElement(element, false);
 	    }
 
 	    return this;
@@ -4493,41 +3782,39 @@ webpackJsonp([0],[
 
 
 	  /**
-	   * Helper function to filter a jQuery set to return only elements that are
+	   * Helper function to filter an array of elements to return only those that are
 	   * not hidden nor disabled.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.domNavigation}
 	   * @mixes       {Formation.domNavigation}
 	   *
-	   * @param       {int}           index         The index of the element in the jQuery set.
-	   * @param       {jQuery}        element       The DOM element to check.
+	   * @param       {Element}       element       The DOM element to check.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  visibleEnabledFilter: function visibleEnabledFilter(index, element) {
-	    var $element = $(element);
-	    var hiddenOrDisabled = $element.hasClass('hidden') || $element.prop('disabled') === "disabled" || $element.hasClass('disabled');
+	  visibleEnabledFilter: function visibleEnabledFilter(element) {
+	    var hiddenOrDisabled = element.classList.contains('hidden') || element.getAttribute('disabled') === "disabled" || element.classList.contains('disabled');
 	    return !hiddenOrDisabled;
 	  }
 	});
 
 	module.exports = domNavigationStamp.compose(eventDefinitionsStamp);
 
-/***/ },
-/* 73 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var stampit = __webpack_require__(3);
 
 	/**
 	 * Provides an interface for defining Formation DOM events. 
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.eventDefinitions
@@ -4590,7 +3877,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __checkFormValidityEventName = 'check-form-validity.formation';
+	  var __checkFormValidityEventName = 'check-form-validity';
 
 	  /**
 	   * Returns the private `__checkFormValidityEventName` property.
@@ -4613,7 +3900,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __changeEventName = 'change.formation';
+	  var __changeEventName = 'change';
 
 	  /**
 	   * Returns the private `__changeEventName` property.
@@ -4636,7 +3923,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __keyPressEventName = 'keypress.formation';
+	  var __keyPressEventName = 'keypress';
 
 	  /**
 	   * Returns the private `__keyPressEventName` property.
@@ -4659,7 +3946,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __keyUpEventName = 'keyup.formation';
+	  var __keyUpEventName = 'keyup';
 
 	  /**
 	   * Returns the private `__keyUpEventName` property.
@@ -4682,7 +3969,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __focusEventName = 'focus.formation';
+	  var __focusEventName = 'focus';
 
 	  /**
 	   * Returns the private `__focusEventName` property.
@@ -4705,7 +3992,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __blurEventName = 'blur.formation';
+	  var __blurEventName = 'blur';
 
 	  /**
 	   * Returns the private `__blurEventName` property.
@@ -4728,7 +4015,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __mouseEnterEventName = 'mouseenter.formation';
+	  var __mouseEnterEventName = 'mouseenter';
 
 	  /**
 	   * Returns the private `__mouseEnterEventName` property.
@@ -4751,7 +4038,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __mouseLeaveEventName = 'mouseleave.formation';
+	  var __mouseLeaveEventName = 'mouseleave';
 
 	  /**
 	   * Returns the private `__mouseLeaveEventName` property.
@@ -4774,7 +4061,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __touchStartEventName = 'touchstart.formation';
+	  var __touchStartEventName = 'touchstart';
 
 	  /**
 	   * Returns the private `__touchStartEventName` property.
@@ -4798,7 +4085,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __validationEventName = 'validation-handler.formation';
+	  var __validationEventName = 'validation-handler';
 
 	  /**
 	   * Returns the private `__validationEventName` property.
@@ -4822,7 +4109,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __setValidationFlagEventName = 'set-validation-flag.formation';
+	  var __setValidationFlagEventName = 'set-validation-flag';
 
 	  /**
 	   * Returns the private `__setValidationFlagEventName` property.
@@ -4845,7 +4132,7 @@ webpackJsonp([0],[
 	   * @type        {String}
 	   * @memberOf    {Formation.eventDefinitions}
 	   */
-	  var __validityChangedEventName = 'validity-changed.formation';
+	  var __validityChangedEventName = 'validity-changed';
 
 	  /**
 	   * Returns the private `__validityChangedEventName` property.
@@ -4862,63 +4149,23 @@ webpackJsonp([0],[
 
 	module.exports = eventDefinitionsStamp;
 
-/***/ },
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */
-/***/ function(module, exports) {
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	/**
-	 * A set of keyboard event codes mapped to useful names.
-	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
-	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
-	 * @package       Formation
-	 * @namespace     Formation.KeyCodeSet
-	 */
-
-	var KeyCodeSet = {
-	  BACKSPACE: 8,
-	  COMMA: 188,
-	  DELETE: 46,
-	  DOWN: 40,
-	  END: 35,
-	  ENTER: 13,
-	  ESCAPE: 27,
-	  HOME: 36,
-	  LEFT: 37,
-	  PAGE_DOWN: 34,
-	  PAGE_UP: 33,
-	  PERIOD: 190,
-	  RIGHT: 39,
-	  SPACE: 32,
-	  TAB: 9,
-	  UP: 38
-	};
-
-	module.exports = KeyCodeSet;
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var consoleLoggerStamp = __webpack_require__(71);
-	var domNavigationStamp = __webpack_require__(72);
-	var eventDefinitionsStamp = __webpack_require__(73);
-	var formComponentStamp = __webpack_require__(79);
+	var consoleLoggerStamp = __webpack_require__(49);
+	var domNavigationStamp = __webpack_require__(50);
+	var eventDefinitionsStamp = __webpack_require__(51);
+	var formComponentStamp = __webpack_require__(53);
 
 	var stampit = __webpack_require__(3);
-	var $ = __webpack_require__(74);
 
 	/**
 	 * Provides an interface for managing form element events
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.formEventsHandler
@@ -4940,7 +4187,17 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @default     null
 	   */
-	  nodeEvents: null
+	  nodeEvents: null,
+
+	  /**
+	   * A method for retrieving the formComponent of an element.
+	   *
+	   * @access      public
+	   * @type        {function}
+	   * @memberOf    {Formation.formEventsHandler}
+	   * @default     null
+	   */
+	  getFormComponentOfCurrentElement: null
 	}).methods({
 
 	  /**
@@ -4950,7 +4207,7 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event       jQuery `submit` event object. Required.
+	   * @param       {Event}       event       The `submit` event object. Required.
 	   *
 	   * @returns     {Boolean}     true
 	   */
@@ -4977,36 +4234,36 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}         event         jQuery `check-form-validity` event object. Required.
+	   * @param       {Event}         event         The `check-form-validity` event object. Required.
 	   */
 	  checkFormValidityHandler: function checkFormValidityHandler(event) {
-	    if (event.namespace === undefined || event.namespace !== "formation") {
+	    var _this = this;
+
+	    var submitButton = this.getSubmitButton();
+	    if (submitButton === null || !submitButton.exists()) {
 	      return;
 	    }
 
-	    var continueButton = this.getSubmitWithFallbackPreviewButton();
-	    if (continueButton === null) {
-	      // We don't have a submit or preview button, so there's really nothing to do.
-	      return;
-	    }
-
-	    if (continueButton.isSubmitting()) {
+	    if (submitButton.isSubmitting()) {
 	      // It's already submitting, don't change the state of the button.
 	      return;
 	    }
 
 	    // Get the list of required, enabled, and visible fields.
-	    var $visibleRequiredFields = this.get$requiredFields().filter(this.visibleEnabledFilter);
+	    var visibleRequiredFields = this.getRequiredFields().filter(this.visibleEnabledFilter);
 
 	    // Grab the list of valid visible required fields.
-	    var $validRequiredFields = $visibleRequiredFields.filter('[' + this.validAttrKey + '="1"]');
+	    var validRequiredFields = visibleRequiredFields.filter(function (e) {
+	      return e.matches('[' + _this.validAttrKey + '="1"]');
+	    });
 
 	    // Everything is basically valid if all required fields are valid...
-	    var validAfterRuleCheck = $visibleRequiredFields.length === $validRequiredFields.length;
+	    var validAfterRuleCheck = visibleRequiredFields.length === validRequiredFields.length;
 
-	    continueButton.setEnabled(validAfterRuleCheck);
+	    submitButton.setEnabled(validAfterRuleCheck);
 
-	    this.get$form().trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
+	    var setValidationFlagEvent = new CustomEvent(this.getSetValidationFlagEventName(), { bubbles: true, cancelable: true, detail: { validAfterRuleCheck: validAfterRuleCheck } });
+	    this.getForm().dispatchEvent(setValidationFlagEvent);
 	  },
 
 
@@ -5021,16 +4278,17 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
+	   * @param       {Event}       event         The `change` event object. Required.
 	   */
 	  checkBoxChangeHandler: function checkBoxChangeHandler(event) {
-	    var $checkbox = $(event.target);
+	    var checkbox = event.target;
 
 	    // Check for linked elements and show/hide them appropriately.
-	    this.showOrHideLinkedElement($checkbox, $checkbox.is(':checked'));
+	    this.showOrHideLinkedElement(checkbox, checkbox.checked);
 
 	    // Trigger the form validation event.
-	    $checkbox.trigger(this.getValidationEventName());
+	    var validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+	    checkbox.dispatchEvent(validationEvent);
 	  },
 
 
@@ -5045,20 +4303,20 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
+	   * @param       {Event}       event         The `change` event object. Required.
 	   */
 	  radioChangeHandler: function radioChangeHandler(event) {
-	    var _this = this;
+	    var _this2 = this;
 
-	    var $radio = $(event.target);
+	    var radio = event.target;
 
 	    // Check for linked elements and show/hide them appropriately.
-	    this.getAllCheckboxesOrRadiosByName($radio).each(function (index, radio) {
-	      var $r = $(radio);
-	      _this.showOrHideLinkedElement($r, $r.is(':checked'));
+	    this.getAllCheckboxesOrRadiosByName(radio).forEach(function (r) {
+	      _this2.showOrHideLinkedElement(r, r.checked);
 	    });
 
-	    $radio.trigger(this.getValidationEventName());
+	    var validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+	    radio.dispatchEvent(validationEvent);
 	  },
 
 
@@ -5071,12 +4329,13 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
+	   * @param       {Event}       event         The `change` event object. Required.
 	   */
 	  selectChangeHandler: function selectChangeHandler(event) {
-	    var $select = $(event.target);
+	    var select = event.target;
 
-	    $select.trigger(this.getValidationEventName());
+	    var validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+	    select.dispatchEvent(validationEvent);
 	  },
 
 
@@ -5090,12 +4349,13 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `change` event object. Required.
+	   * @param       {Event}       event         The `change` event object. Required.
 	   */
 	  inputTextareaChangeHandler: function inputTextareaChangeHandler(event) {
-	    var $target = $(event.target);
+	    var target = event.target;
 
-	    $target.trigger(this.getValidationEventName());
+	    var validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+	    target.dispatchEvent(validationEvent);
 	  },
 
 
@@ -5109,12 +4369,13 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `keyup` event object. Required.
+	   * @param       {Event}       event         The `keyup` event object. Required.
 	   */
 	  inputTextareaKeyUpHandler: function inputTextareaKeyUpHandler(event) {
-	    var $target = $(event.target);
+	    var target = event.target;
 
-	    $target.trigger(this.getValidationEventName());
+	    var validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+	    target.dispatchEvent(validationEvent);
 	  },
 
 
@@ -5127,12 +4388,70 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `focus` event object. Required.
+	   * @param       {Event}       event         The `focus` event object. Required.
 	   */
 	  inputFocusHandler: function inputFocusHandler(event) {
-	    var $input = $(event.target);
+	    var input = event.target;
 
-	    $input.trigger(this.getValidationEventName());
+	    var validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+	    input.dispatchEvent(validationEvent);
+	  },
+
+
+	  /**
+	   * Handle the form `validation-handler` event which will trigger a validator for
+	   * the specific element/type being validated.
+	   *
+	   * The `this` object is expected to refer to an instance of this class.
+	   *
+	   * @access      public
+	   * @memberOf    {Formation.formEventsHandler}
+	   * @mixes       {Formation.formEventsHandler}
+	   *
+	   * @param       {Event}         event         The `validation-handler` Formation event object. Required.
+	   */
+	  inputElementValidationHandler: function inputElementValidationHandler(event) {
+	    var triggeringFormInput = event.target;
+
+	    // Validate this element
+	    this.validate(triggeringFormInput);
+
+	    // Check the validity of the whole form
+	    var checkValidityEvent = new CustomEvent(this.getCheckFormValidityEventName(), { bubbles: true, cancelable: true });
+	    this.getForm().dispatchEvent(checkValidityEvent);
+	  },
+
+
+	  /**
+	   * Set the state of validation on the element with the new value.
+	   *
+	   * If the validity state actually changes, trigger the `validity-changed` event.
+	   *
+	   * The `this` object is expected to refer to an instance of this class.
+	   *
+	   * @access      public
+	   * @memberOf    {Formation.formEventsHandler}
+	   * @mixes       {Formation.formEventsHandler}
+	   *
+	   * @param       {Event}                 event                   The `set-validation-flag` Formation event object. Required.
+	   */
+	  setValidationFlagHandler: function setValidationFlagHandler(event) {
+	    var element = event.target;
+	    var validAfterRuleCheck = event.detail.validAfterRuleCheck;
+	    var type = this.getInputType(element);
+	    var elementToCheckAndSetAttr = ['checkbox', 'radio'].indexOf(type) === -1 ? element : this.getCheckboxOrRadioContainer(element);
+
+	    var validBeforeRuleCheck = parseInt(elementToCheckAndSetAttr.getAttribute(this.validAttrKey)) === 1;
+
+	    // Set the value
+	    elementToCheckAndSetAttr.setAttribute(this.validAttrKey, validAfterRuleCheck === true ? 1 : 0);
+
+	    // If the value changed, trigger the validity changed event on the EVENT element
+	    var validityChanged = validBeforeRuleCheck ^ validAfterRuleCheck;
+	    if (validityChanged) {
+	      var validityChangedEvent = new CustomEvent(this.getValidityChangedEventName(), { bubbles: true, cancelable: true });
+	      element.dispatchEvent(validityChangedEvent);
+	    }
 	  },
 
 
@@ -5148,11 +4467,16 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery.Event}       event         jQuery `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
+	   * @param       {Event}       event         The `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
 	   */
 	  validateFormFields: function validateFormFields(event) {
-	    var $fields = $().add(this.get$requiredFields()).add(this.get$optionalFields());
-	    $fields.trigger(this.getValidationEventName()); // do we have to loop through these?
+	    var _this3 = this;
+
+	    var fields = Array.from(this.getRequiredFields()).concat(Array.from(this.getOptionalFields()));
+	    fields.forEach(function (field) {
+	      var validationEvent = new CustomEvent(_this3.getValidationEventName(), { bubbles: true, cancelable: true });
+	      field.dispatchEvent(validationEvent);
+	    });
 	  },
 
 
@@ -5167,72 +4491,14 @@ webpackJsonp([0],[
 	   * @returns     {Formation.formEventsHandler}
 	   */
 	  triggerValidationCheck: function triggerValidationCheck() {
-	    this.getAllInputElementsToValidate().trigger(this.getValidationEventName());
+	    var _this4 = this;
+
+	    this.getAllInputElementsToValidate().forEach(function (field) {
+	      var validationEvent = new CustomEvent(_this4.getValidationEventName(), { bubbles: true, cancelable: true });
+	      field.dispatchEvent(validationEvent);
+	    });
 
 	    return this;
-	  },
-
-
-	  /**
-	   * Handle the form `validation-handler` event which will trigger a validator for
-	   * the specific element/type being validated.
-	   *
-	   * The `this` object is expected to refer to an instance of this class.
-	   *
-	   * @access      public
-	   * @memberOf    {Formation.formEventsHandler}
-	   * @mixes       {Formation.formEventsHandler}
-	   *
-	   * @param       {jQuery.Event}         event         jQuery `validation-handler` Formation event object. Required.
-	   */
-	  inputElementValidationHandler: function inputElementValidationHandler(event) {
-	    if (event.namespace === null || event.namespace !== "formation") {
-	      return;
-	    }
-	    var $triggeringFormInput = $(event.target);
-
-	    // Validate this element
-	    this.validate($triggeringFormInput);
-
-	    // Check the validity of the whole form
-	    this.get$form().trigger(this.getCheckFormValidityEventName());
-	  },
-
-
-	  /**
-	   * Set the state of validation on the element with the new value.
-	   *
-	   * If the validity state actually changes, trigger the `validity-changed` event.
-	   *
-	   * The `this` object is expected to refer to an instance of this class.
-	   *
-	   * @access      public
-	   * @memberOf    {Formation.formEventsHandler}
-	   * @mixes       {Formation.formEventsHandler}
-	   *
-	   * @param       {jQuery.Event}          event                   jQuery `set-validation-flag` Formation event object. Required.
-	   * @param       {Boolean}               validAfterRuleCheck     Flag indicating whether the event target is now valid. Required.
-	   */
-	  setValidationFlagHandler: function setValidationFlagHandler(event, validAfterRuleCheck) {
-	    var $element = $(event.target);
-	    var type = this.getInputType($element);
-	    var $elementToCheckAndSetAttr = $element;
-
-	    // TODO - re-use `ruleSetStamp.getAttributeOwner()` for this check
-	    if ($.inArray(type, ['checkbox', 'radio']) !== -1) {
-	      $elementToCheckAndSetAttr = this.getCheckboxOrRadioContainer($element);
-	    }
-
-	    var validBeforeRuleCheck = parseInt($elementToCheckAndSetAttr.attr(this.validAttrKey)) === 1;
-
-	    // Set the value
-	    $elementToCheckAndSetAttr.attr(this.validAttrKey, validAfterRuleCheck === true ? 1 : 0);
-
-	    // If the value changed, trigger the validity changed event on the EVENT element
-	    var validityChanged = validBeforeRuleCheck && !validAfterRuleCheck || !validBeforeRuleCheck && validAfterRuleCheck;
-	    if (validityChanged) {
-	      $element.trigger(this.getValidityChangedEventName());
-	    }
 	  },
 
 
@@ -5246,11 +4512,11 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formEventsHandler}
 	   * @mixes       {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery}            $element      The jQuery wrapped element to validate. Required.
+	   * @param       {Element}       element      The element to validate. Required.
 	   */
-	  validate: function validate($element) {
-	    var lowerTag = $element.prop('tagName').toLowerCase();
-	    var type = this.getInputType($element);
+	  validate: function validate(element) {
+	    var lowerTag = element.tagName.toLowerCase();
+	    var type = this.getInputType(element);
 
 	    if (type === null) {
 	      this.warn('No rules class exists for the tag `' + lowerTag + '`.');
@@ -5258,12 +4524,14 @@ webpackJsonp([0],[
 	    }
 
 	    var registeredRules = this.getRuleSetBySupportedElementType(type);
-	    var validAfterRuleCheck = registeredRules.process($element);
+	    var validAfterRuleCheck = registeredRules.process(element);
 
-	    $element.trigger(this.getSetValidationFlagEventName(), validAfterRuleCheck);
+	    var setValidationFlagEvent = new CustomEvent(this.getSetValidationFlagEventName(), { bubbles: true, cancelable: true, detail: { validAfterRuleCheck: validAfterRuleCheck } });
+
+	    element.dispatchEvent(setValidationFlagEvent);
 	  }
 	}).init(function () {
-	  var _this2 = this;
+	  var _this5 = this;
 
 	  /**
 	   * Helper function that users of this Stamp can use to determine if an object is composed
@@ -5307,16 +4575,16 @@ webpackJsonp([0],[
 	   * @access      public
 	   * @memberOf    {Formation.formEventsHandler}
 	   *
-	   * @param       {jQuery}            $element      The jQuery wrapped element to check. Required.
+	   * @param       {Element}           element       The element to check. Required.
 	   *
 	   * @returns     {String|null}       type          The determined input type.
 	   */
-	  this.getInputType = function ($element) {
-	    var lowerTag = $element.prop('tagName').toLowerCase();
-	    var elementType = $element.prop('type');
+	  this.getInputType = function (element) {
+	    var lowerTag = element.tagName.toLowerCase();
+	    var elementType = element.getAttribute('type');
 
 	    var type = null;
-	    if (lowerTag === 'textarea' || lowerTag === 'input' && $.inArray(elementType, _this2.getInputTypesArr()) !== -1) {
+	    if (lowerTag === 'textarea' || lowerTag === 'input' && _this5.getInputTypesArr().indexOf(elementType) !== -1) {
 	      type = 'text';
 	    } else if (elementType === 'checkbox') {
 	      type = 'checkbox';
@@ -5331,27 +4599,28 @@ webpackJsonp([0],[
 
 	  /**
 	   * Checks whether this instance has been initialized, or if there is a `formEventsHandlerStamp` attached to
-	   * the `$form` element already which has been initialized.
+	   * the `form` element already which has been initialized.
 	   *
 	   * @private
 	   * @access      private
 	   * @type        {Function}
 	   * @memberOf    {Formation.formEventsHandler}
 	   *
-	   * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
+	   * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `form`, have been initialized.
 	   */
 	  var __formEventsAlreadyInitialized = function __formEventsAlreadyInitialized() {
-	    var alreadyInit = _this2.getEventsInitialized();
+	    var alreadyInit = _this5.getEventsInitialized();
 	    try {
 	      var formEventsHandler = void 0;
-	      var $form = _this2.get$form();
-	      alreadyInit = alreadyInit || (formEventsHandler = _this2.getFormComponentOfCurrentElement($form)) !== null && formEventsHandler.getEventsInitialized();
+	      var form = _this5.getForm();
+	      alreadyInit = alreadyInit || form !== null && (formEventsHandler = _this5.getFormComponentOfCurrentElement(form)) !== null && formEventsHandler.getEventsInitialized();
 	    } catch (e) {
-	      // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
-	      _this2.info(e);
+	      _this5.info(e);
 	    }
 	    return alreadyInit;
 	  };
+
+	  this.formEventsAlreadyInitialized = __formEventsAlreadyInitialized;
 
 	  /**
 	   * Add the default event handlers for a form's various input element,
@@ -5364,13 +4633,13 @@ webpackJsonp([0],[
 	   */
 	  this.initFormEvents = function () {
 	    if (__formEventsAlreadyInitialized()) {
-	      _this2.warn('Form events previously initialized for this form, skipping.');
-	      return _this2;
+	      _this5.warn('Form events previously initialized for this form, skipping.');
+	      return _this5;
 	    }
 
-	    _this2.initLogging(_this2.getLogConsole()).addDefaultEventHandlers().triggerValidationCheck();
+	    _this5.initLogging(_this5.getLogConsole()).addDefaultEventHandlers().triggerValidationCheck();
 
-	    return _this2;
+	    return _this5;
 	  };
 
 	  /**
@@ -5385,18 +4654,17 @@ webpackJsonp([0],[
 	  var __inputElementTypesToValidate = ['input', 'textarea', 'select'];
 
 	  /**
-	   * Finds all form input elements to be validated and returns a
-	   * jQuery object containing them.
+	   * Finds all form input elements to be validated and returns a NodeList containing them.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formEventsHandler}
 	   *
-	   * @returns     {jQuery}
+	   * @returns     {Array}
 	   */
 	  this.getAllInputElementsToValidate = function () {
 	    var inputElementTypesToValidate = __inputElementTypesToValidate.join(', ');
 
-	    return _this2.get$form().find(inputElementTypesToValidate);
+	    return Array.from(_this5.getForm().querySelectorAll(inputElementTypesToValidate));
 	  };
 
 	  /**
@@ -5415,68 +4683,88 @@ webpackJsonp([0],[
 	  this.addDefaultEventHandlers = function () {
 	    var joinStr = ', ';
 	    var allInputElementsSelector = __inputElementTypesToValidate.join(joinStr);
-	    var mouseMoveTouchEvents = [_this2.getMouseEnterEventName(), _this2.getMouseLeaveEventName(), _this2.getTouchStartEventName()].join(joinStr);
-
 	    var textElementsSelector = __inputTypes.map(function (type) {
 	      return 'input[type="' + type + '"]';
 	    }).join(joinStr) + ', textarea';
 
-	    _this2.get$form().submit(function (event) {
-	      return _this2.formSubmitHandler(event);
-	    }).on(_this2.getChangeEventName(), 'input:checkbox', function (event) {
-	      return _this2.checkBoxChangeHandler(event);
-	    }).on(_this2.getChangeEventName(), 'input:radio', function (event) {
-	      return _this2.radioChangeHandler(event);
-	    }).on(_this2.getChangeEventName(), textElementsSelector, function (event) {
-	      return _this2.inputTextareaChangeHandler(event);
-	    }).on(_this2.getChangeEventName(), 'select', function (event) {
-	      return _this2.selectChangeHandler(event);
-	    }).on(_this2.getKeyUpEventName(), 'input, textarea', function (event) {
-	      return _this2.inputTextareaKeyUpHandler(event);
-	    }).on(_this2.getFocusEventName(), allInputElementsSelector, function (event) {
-	      return _this2.inputFocusHandler(event);
-	    }).on(_this2.getValidationEventName(), allInputElementsSelector, function (event) {
-	      return _this2.inputElementValidationHandler(event);
-	    }).on(_this2.getCheckFormValidityEventName(), function (event) {
-	      return _this2.checkFormValidityHandler(event);
-	    }).on(_this2.getSetValidationFlagEventName(), function (event, isValid) {
-	      return _this2.setValidationFlagHandler(event, isValid);
-	    }).on(_this2.getSetValidationFlagEventName(), allInputElementsSelector, function (event, isValid) {
-	      return _this2.setValidationFlagHandler(event, isValid);
-	    }).parent().on(mouseMoveTouchEvents, function (event) {
-	      return _this2.validateFormFields(event);
+	    // Add normal form and element listeners
+	    _this5.getForm().addEventListener('submit', function (event) {
+	      return _this5.formSubmitHandler(event);
+	    });
+	    _this5.getForm().addEventListener(_this5.getChangeEventName(), function (event) {
+	      var target = event.target;
+	      if (target.tagName.toLowerCase() === 'input' && target.getAttribute('type') === 'checkbox') {
+	        _this5.checkBoxChangeHandler(event);
+	      } else if (target.tagName.toLowerCase() === 'input' && target.getAttribute('type') === 'radio') {
+	        _this5.radioChangeHandler(event);
+	      } else if (target.matches(textElementsSelector)) {
+	        _this5.inputTextareaChangeHandler(event);
+	      } else if (target.tagName.toLowerCase() === 'select') {
+	        _this5.selectChangeHandler(event);
+	      }
+	    });
+	    _this5.getForm().addEventListener(_this5.getKeyUpEventName(), function (event) {
+	      if (['input', 'textarea'].indexOf(event.target.tagName.toLowerCase()) !== -1) {
+	        _this5.inputTextareaKeyUpHandler(event);
+	      }
+	    });
+	    _this5.getForm().addEventListener(_this5.getFocusEventName(), function (event) {
+	      if (event.target.matches(allInputElementsSelector)) {
+	        _this5.inputFocusHandler(event);
+	      }
 	    });
 
-	    _this2.setEventsInitialized(true);
+	    // Add event listeners for detecting validation events and setting the validation flag
+	    _this5.getForm().addEventListener(_this5.getValidationEventName(), function (event) {
+	      if (event.target.matches(allInputElementsSelector)) {
+	        _this5.inputElementValidationHandler(event);
+	      }
+	    });
+	    _this5.getForm().addEventListener(_this5.getCheckFormValidityEventName(), function (event) {
+	      return _this5.checkFormValidityHandler(event);
+	    });
+	    _this5.getForm().addEventListener(_this5.getSetValidationFlagEventName(), function (event) {
+	      if (event.target === _this5.getForm() || event.target.matches(allInputElementsSelector)) {
+	        _this5.setValidationFlagHandler(event);
+	      }
+	    });
 
-	    return _this2;
+	    var mouseMoveTouchEvents = [_this5.getMouseEnterEventName(), _this5.getMouseLeaveEventName(), _this5.getTouchStartEventName()];
+
+	    mouseMoveTouchEvents.forEach(function (mte) {
+	      _this5.getForm().parentNode.addEventListener(mte, function (event) {
+	        return _this5.validateFormFields(event);
+	      });
+	    });
+
+	    _this5.setEventsInitialized(true);
+
+	    return _this5;
 	  };
 	});
 
 	module.exports = formEventsHandlerStamp.compose(formComponentStamp, eventDefinitionsStamp, domNavigationStamp, consoleLoggerStamp);
 
-/***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var buttonComponentStamp = __webpack_require__(80);
-	var checkboxDefaultRulesStamp = __webpack_require__(81);
-	var consoleLoggerStamp = __webpack_require__(71);
-	var domNavigationStamp = __webpack_require__(72);
-	var radioDefaultRulesStamp = __webpack_require__(85);
-	var ruleSetStamp = __webpack_require__(83);
-	var selectDefaultRulesStamp = __webpack_require__(86);
-	var textDefaultRulesStamp = __webpack_require__(87);
+	var buttonComponentStamp = __webpack_require__(54);
+	var checkboxDefaultRulesStamp = __webpack_require__(55);
+	var consoleLoggerStamp = __webpack_require__(49);
+	var domNavigationStamp = __webpack_require__(50);
+	var radioDefaultRulesStamp = __webpack_require__(59);
+	var selectDefaultRulesStamp = __webpack_require__(60);
+	var textDefaultRulesStamp = __webpack_require__(61);
 
 	var stampit = __webpack_require__(3);
-	var $ = __webpack_require__(74);
 
 	/**
 	 * Provides an interface for form button elements (`button`, `input:submit`, etc).
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.formComponent
@@ -5496,7 +4784,17 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formComponent}
 	   * @default     null
 	   */
-	  nodeEvents: null
+	  nodeEvents: null,
+
+	  /**
+	   * A method for retrieving the formComponent of an element.
+	   *
+	   * @access      public
+	   * @type        {function}
+	   * @memberOf    {Formation.formComponent}
+	   * @default     null
+	   */
+	  getFormComponentOfCurrentElement: null
 	}).methods({
 
 	  /**
@@ -5550,26 +4848,26 @@ webpackJsonp([0],[
 	  };
 
 	  /**
-	   * The jQuery object containing the initialized form node.
+	   * The initialized form node.
 	   *
 	   * @private
 	   * @access      private
-	   * @type        {jQuery}
+	   * @type        {Element}
 	   * @memberOf    {Formation.formComponent}
-	   * @default     $()
+	   * @default     null
 	   */
-	  var __$form = $();
+	  var __form = null;
 
 	  /**
-	   * Returns the jQuery object containing the initialized form node.
+	   * Returns the initialized form node.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formComponent}
 	   *
-	   * @returns     {jQuery}       __$form
+	   * @returns     {Element}     __form
 	   */
-	  this.get$form = function () {
-	    return __$form;
+	  this.getForm = function () {
+	    return __form;
 	  };
 
 	  /**
@@ -5597,89 +4895,86 @@ webpackJsonp([0],[
 
 	  /**
 	   * Checks whether this instance has been initialized, or if there is a `formComponent` attached to
-	   * the `$form` element already which has been initialized.
+	   * the `form` element already which has been initialized.
 	   *
 	   * @private
 	   * @access      private
 	   * @type        {Function}
 	   * @memberOf    {Formation.formComponent}
 	   *
-	   * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `$form`, have been initialized.
+	   * @returns     {Boolean}                     False iff neither this instance, nor the `formComponent` attached to the `form`, have been initialized.
 	   */
 	  var __formAlreadyInitialized = function __formAlreadyInitialized() {
 	    var alreadyInit = _this.initialized();
 	    try {
 	      var formComponent = void 0;
-	      var $form = _this.get$form();
-	      alreadyInit = alreadyInit || (formComponent = _this.getFormComponentOfCurrentElement($form)) !== null && formComponent.initialized();
+	      var form = _this.getForm();
+	      alreadyInit = alreadyInit || form !== null && (formComponent = _this.getFormComponentOfCurrentElement(form)) !== null && formComponent.initialized();
 	    } catch (e) {
-	      // TODO - handle this as a custom error thrown by `getFormComponentOfCurrentElement()`
 	      _this.info(e);
 	    }
 	    return alreadyInit;
 	  };
 
 	  /**
-	   * The meat of this Stamp. Will initialize a jQuery wrapped `form` and assign it internally,
-	   * setting all the required and optional fields, the form buttons (such as submit and preview),
+	   * The meat of this Stamp. Will initialize a `form` and assign it internally,
+	   * setting all the required and optional fields, the form submit button,
 	   * and initializing the fields' current validation status. If everything went without error,
-	   * sets the `__initialized` flag to `true` so that we can't re-initialize the `$form`.
+	   * sets the `__initialized` flag to `true` so that we can't re-initialize the `form`.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formComponent}
 	   *
-	   * @param       {jQuery}        $form               jQuery wrapped `form` element to be managed by this instance. Required.
+	   * @param       {Element}         form               The `form` element to be managed by this instance. Required.
 	   *
 	   * @returns     {Formation.formComponent}
 	   */
-	  this.initForm = function ($form) {
+	  this.initForm = function (form) {
 	    // Set the form so we can use it internally elsewhere.
-	    __$form = $form;
+	    __form = form;
 
 	    if (__formAlreadyInitialized()) {
 	      _this.warn('This `formComponent` is already initialized, skipping.');
 	      return _this;
 	    }
 
-	    // Get the required and optional fields, and the submit and preview buttons present in the form.
+	    // Get the required and optional fields, and the submit button present in the form.
 	    __setRequiredFields();
 	    __setOptionalFields();
 	    __initFields();
 	    __initFormButtons();
-	    __initDefaultRules();
 
-	    // There were no problems initializing the form, set the data and the private vars.
-	    __$form.data(_this.formationDataKey, _this);
+	    // There were no problems initializing the form, set the private vars.
 	    __initialized = true;
 
 	    return _this;
 	  };
 
 	  /**
-	   * The jQuery object containing the elements in this form that are required to be validated.
+	   * The NodeList containing the elements in this form that are required to be validated.
 	   *
 	   * @private
 	   * @access      private
-	   * @type        {jQuery}
+	   * @type        {NodeList}
 	   * @memberOf    {Formation.formComponent}
-	   * @default     $()
+	   * @default     null
 	   */
-	  var __$requiredFields = $();
+	  var __requiredFields = null;
 
 	  /**
-	   * Returns the jQuery object containing the elements in this form that are required to be validated.
+	   * Returns the NodeList containing the elements in this form that are required to be validated.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formComponent}
 	   *
-	   * @returns     {jQuery}       __$requiredFields
+	   * @returns     {NodeList}       __requiredFields
 	   */
-	  this.get$requiredFields = function () {
-	    return __$requiredFields;
+	  this.getRequiredFields = function () {
+	    return __requiredFields;
 	  };
 
 	  /**
-	   * Find the required fields and set them to the private `__$requiredFields` var.
+	   * Find the required fields and set them to the private `__requiredFields` var.
 	   *
 	   * @throws      Error       iff the set of required fields is empty.
 	   * @private
@@ -5688,38 +4983,38 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formComponent}
 	   */
 	  var __setRequiredFields = function __setRequiredFields() {
-	    __$requiredFields = _this.findRequiredFields(__$form);
-	    if (!__$requiredFields.length) {
+	    __requiredFields = _this.findRequiredFields(__form);
+	    if (!__requiredFields.length) {
 	      // TODO - use a custom error type here
 	      throw new Error('No required fields found, cannot proceed.');
 	    }
 	  };
 
 	  /**
-	   * The jQuery object containing the elements in this form that are optional to be validated.
+	   * The NodeList containing the elements in this form that are optional to be validated.
 	   *
 	   * @private
 	   * @access      private
-	   * @type        {jQuery}
+	   * @type        {NodeList}
 	   * @memberOf    {Formation.formComponent}
-	   * @default     $()
+	   * @default     null
 	   */
-	  var __$optionalFields = $();
+	  var __optionalFields = null;
 
 	  /**
-	   * Returns the jQuery object containing the elements in this form that are optional to be validated.
+	   * Returns the NodeList containing the elements in this form that are optional to be validated.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.formComponent}
 	   *
-	   * @returns     {jQuery}       __$optionalFields
+	   * @returns     {NodeList}       __optionalFields
 	   */
-	  this.get$optionalFields = function () {
-	    return __$optionalFields;
+	  this.getOptionalFields = function () {
+	    return __optionalFields;
 	  };
 
 	  /**
-	   * Find the optional fields and set them to the private `__$optionalFields` var.
+	   * Find the optional fields and set them to the private `__optionalFields` var.
 	   *
 	   * @private
 	   * @access      private
@@ -5727,7 +5022,7 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formComponent}
 	   */
 	  var __setOptionalFields = function __setOptionalFields() {
-	    __$optionalFields = _this.findOptionalFields(__$form);
+	    __optionalFields = _this.findOptionalFields(__form);
 	  };
 
 	  /**
@@ -5740,17 +5035,21 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formComponent}
 	   */
 	  var __initFields = function __initFields() {
-	    _this.get$form().attr(_this.validAttrKey, 0);
-	    __$requiredFields.attr(_this.validAttrKey, 0);
-	    __$optionalFields.attr(_this.validAttrKey, 0);
+	    _this.getForm().setAttribute(_this.validAttrKey, 0);
+	    __requiredFields.forEach(function (required) {
+	      required.setAttribute(_this.validAttrKey, 0);
+	    });
+	    __optionalFields.forEach(function (optional) {
+	      optional.setAttribute(_this.validAttrKey, 0);
+	    });
 	  };
 
 	  /**
-	   * The jQuery object containing the form's submit button.
+	   * The `Formation.buttonComponent` object containing the form's submit button.
 	   *
 	   * @private
 	   * @access      private
-	   * @type        {buttonComponent}
+	   * @type        {Formation.buttonComponent}
 	   * @memberOf    {Formation.formComponent}
 	   * @default     null
 	   */
@@ -5769,54 +5068,8 @@ webpackJsonp([0],[
 	  };
 
 	  /**
-	   * The jQuery object containing the form's optional preview button.
-	   *
-	   * @private
-	   * @access      private
-	   * @type        {Formation.buttonComponent}
-	   * @memberOf    {Formation.formComponent}
-	   * @default     null
-	   */
-	  var __previewButton = null;
-
-	  /**
-	   * Returns the `__previewButton`.
-	   *
-	   * @access      public
-	   * @memberOf    {Formation.formComponent}
-	   *
-	   * @returns     {Formation.buttonComponent}       __previewButton
-	   */
-	  this.getPreviewButton = function () {
-	    return __previewButton;
-	  };
-
-	  /**
-	   * Get the submit button if it exists, otherwise get the preview button, if it exists.
-	   *
-	   * @access      public
-	   * @memberOf    {Formation.formComponent}
-	   *
-	   * @returns     {Formation.buttonComponent|null}
-	   */
-	  this.getSubmitWithFallbackPreviewButton = function () {
-	    var submitButton = _this.getSubmitButton();
-	    if (submitButton !== null && submitButton.exists()) {
-	      return submitButton;
-	    }
-	    var previewButton = _this.getPreviewButton();
-	    if (previewButton !== null && previewButton.exists()) {
-	      return previewButton;
-	    }
-
-	    // We don't have a submit or preview button, so there's really nothing to do.
-	    return null;
-	  };
-
-	  /**
-	   * Create new `buttonComponents` to manage the Submit and Preview buttons
-	   * for this form, and set them to the private `__submitButton` and
-	   * `__previewButton` vars respectively.
+	   * Create new `buttonComponents` to manage the Submit button
+	   * for this form, and set them to the private `__submitButton` var.
 	   *
 	   * TODO - make `setLoadingHTML()` optional with a new `data-fv` attribute on the button
 	   *
@@ -5827,20 +5080,14 @@ webpackJsonp([0],[
 	   */
 	  var __initFormButtons = function __initFormButtons() {
 	    __submitButton = buttonComponentStamp({
-	      $button: _this.findSubmitButton(__$form),
+	      button: _this.findSubmitButton(__form)[0],
 	      loadingText: 'Submitting, please wait...',
-	      nodeEvents: _this.nodeEvents
-	    }).initLogging(_this.getLogConsole()).addHandleFormSubmitListener().setLoadingHTML();
-
-	    __previewButton = buttonComponentStamp({
-	      $button: _this.findPreviewButton(__$form),
-	      loadingText: 'Rendering preview, please wait...',
 	      nodeEvents: _this.nodeEvents
 	    }).initLogging(_this.getLogConsole()).addHandleFormSubmitListener().setLoadingHTML();
 	  };
 
 	  /**
-	   * The types of elements that are supported by Formation mapped to jQuery
+	   * The types of elements that are supported by Formation mapped to `querySelectorAll()`
 	   * compatible selectors.
 	   *
 	   * @private
@@ -5877,28 +5124,10 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.formComponent}
 	   */
 	  var __supportedElementTypesRuleSets = {
-	    'text': ruleSetStamp(),
-	    'checkbox': ruleSetStamp(),
-	    'radio': ruleSetStamp(),
-	    'select': ruleSetStamp()
-	  };
-
-	  /**
-	   * Create default rule instances for the supported element types.
-	   *
-	   * @private
-	   * @access      private
-	   * @type        {Function}
-	   * @memberOf    {Formation.formComponent}
-	   */
-	  var __initDefaultRules = function __initDefaultRules() {
-	    var formationSelector = _this.formationSelector;
-	    __supportedElementTypesRuleSets = {
-	      'text': textDefaultRulesStamp({ formationSelector: formationSelector }),
-	      'checkbox': checkboxDefaultRulesStamp({ formationSelector: formationSelector }),
-	      'radio': radioDefaultRulesStamp({ formationSelector: formationSelector }),
-	      'select': selectDefaultRulesStamp({ formationSelector: formationSelector })
-	    };
+	    'text': textDefaultRulesStamp(),
+	    'checkbox': checkboxDefaultRulesStamp(),
+	    'radio': radioDefaultRulesStamp(),
+	    'select': selectDefaultRulesStamp()
 	  };
 
 	  /**
@@ -5943,22 +5172,22 @@ webpackJsonp([0],[
 
 	module.exports = formComponentStamp.compose(domNavigationStamp, consoleLoggerStamp);
 
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var consoleLoggerStamp = __webpack_require__(71);
-	var domNavigationStamp = __webpack_require__(72);
-	var eventDefinitionsStamp = __webpack_require__(73);
+	var consoleLoggerStamp = __webpack_require__(49);
+	var domNavigationStamp = __webpack_require__(50);
+	var eventDefinitionsStamp = __webpack_require__(51);
 
 	var stampit = __webpack_require__(3);
 
 	/**
 	 * Provides an interface for form button elements (`button`, `input:submit`, etc).
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.buttonComponent
@@ -5971,14 +5200,14 @@ webpackJsonp([0],[
 	var buttonComponentStamp = stampit().refs({
 
 	  /**
-	   * The jQuery `button` (or `input` equivalent) this component will manage.
+	   * The `button` (or `input` equivalent) this component will manage.
 	   *
 	   * @access      public
-	   * @type        {jQuery}
+	   * @type        {Element}
 	   * @memberOf    {Formation.buttonComponent}
 	   * @default     null
 	   */
-	  $button: null,
+	  button: null,
 
 	  /**
 	   * A singleton passed along so we have some semblance of
@@ -6013,7 +5242,7 @@ webpackJsonp([0],[
 	}).methods({
 
 	  /**
-	   * Check whether the `$button` represents a non-empty jQuery object.
+	   * Check whether the `button` represents a non-null Element object.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.buttonComponent}
@@ -6022,12 +5251,12 @@ webpackJsonp([0],[
 	   * @returns     {Boolean}
 	   */
 	  exists: function exists() {
-	    return this.$button !== null && this.$button.length > 0;
+	    return this.button !== null;
 	  },
 
 
 	  /**
-	   * Check whether the `$button` is currently in a 'submitting' state.
+	   * Check whether the `button` is currently in a 'submitting' state.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.buttonComponent}
@@ -6036,48 +5265,47 @@ webpackJsonp([0],[
 	   * @returns     {Boolean}       isSubmitting
 	   */
 	  isSubmitting: function isSubmitting() {
-	    var isSubmitting = this.exists() && this.$button.attr(this.submittingStateDataKey) !== undefined && parseInt(this.$button.attr(this.submittingStateDataKey)) === 1;
+	    var isSubmitting = this.exists() && this.button.hasAttribute(this.submittingStateDataKey) && parseInt(this.button.getAttribute(this.submittingStateDataKey)) === 1;
 
 	    return isSubmitting;
 	  },
 
 
 	  /**
-	   * Will enable or disable the `$button` based on the `enable` param.
+	   * Will enable or disable the `button` based on the `enable` param.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.buttonComponent}
 	   * @mixes       {Formation.buttonComponent}
 	   *
-	   * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$button`. Required.
+	   * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `button`. Required.
 	   *
 	   * @returns     {Formation.buttonComponent}
 	   */
 	  setEnabled: function setEnabled(enable) {
-	    this.enableOrDisableElement(this.$button, enable);
+	    this.enableOrDisableElement(this.button, enable);
 
 	    return this;
 	  },
 
 
 	  /**
-	   * Will set the `$button` to a `submitting` state or undo it depending on
+	   * Will set the `button` to a `submitting` state or undo it depending on
 	   * the `submitting` param.
 	   *
 	   * @access      public
 	   * @memberOf    {Formation.buttonComponent}
 	   * @mixes       {Formation.buttonComponent}
 	   *
-	   * @param       {Boolean}       submitting      Whether to set the `$button` to a submitting state (true) or not (false). Required.
+	   * @param       {Boolean}       submitting      Whether to set the `button` to a submitting state (true) or not (false). Required.
 	   *
 	   * @returns     {Formation.buttonComponent}
 	   */
 	  setSubmitting: function setSubmitting(submitting) {
-	    // TODO - the `button()` calls will throw an error until we get Bootstrap into the mix.
 	    if (submitting) {
-	      this.$button.attr(this.submittingStateDataKey, 1); //.button('loading');
+	      this.button.setAttribute(this.submittingStateDataKey, 1);
 	    } else {
-	      this.$button.removeAttr(this.submittingStateDataKey); //.button('reset');
+	      this.button.removeAttribute(this.submittingStateDataKey);
 	    }
 
 	    return this;
@@ -6113,14 +5341,15 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.buttonComponent}
 	   * @mixes       {Formation.buttonComponent}
 	   *
-	   * @param       {jQuery.Event}        event       jQuery `submit` event object. Required.
+	   * @param       {Event}         event       The `submit` event object. Required.
 	   */
 	  handleFormSubmitEvent: function handleFormSubmitEvent(event) {
-	    this.log('handleFormSubmitEvent() called for ' + this.$button.selector);
+	    this.log('handleFormSubmitEvent() called for ' + (this.exists() ? this.button.toString() : 'undefined'));
 	    if (this.exists()) {
 	      this.setEnabled(false).setSubmitting(true);
 
-	      this.$button.trigger(this.getBlurEventName());
+	      var blurEvent = new CustomEvent(this.getBlurEventName(), { bubbles: true, cancelable: true });
+	      this.button.dispatchEvent(blurEvent);
 	    }
 	  }
 	}).init(function () {
@@ -6159,7 +5388,7 @@ webpackJsonp([0],[
 	   * @returns     {Formation.buttonComponent}
 	   */
 	  this.setLoadingHTML = function () {
-	    _this2.$button.attr(_this2.loadingTextDataKey, getButtonLoadingTextWithSpinnerHTML());
+	    _this2.button.setAttribute(_this2.loadingTextDataKey, getButtonLoadingTextWithSpinnerHTML());
 
 	    return _this2;
 	  };
@@ -6167,21 +5396,21 @@ webpackJsonp([0],[
 
 	module.exports = buttonComponentStamp.compose(consoleLoggerStamp, domNavigationStamp, eventDefinitionsStamp);
 
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ruleStamp = __webpack_require__(82);
-	var ruleSetStamp = __webpack_require__(83);
+	var ruleStamp = __webpack_require__(56);
+	var ruleSetStamp = __webpack_require__(57);
 
 	var stampit = __webpack_require__(3);
 
 	/**
 	 * Used for processing a set of `Formation.rule` objects against `input:checkbox` elements.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.checkboxDefaultRules
@@ -6198,15 +5427,17 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.checkboxDefaultRules}
 	   * @mixes       {Formation.checkboxDefaultRules}
 	   *
-	   * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
+	   * @param       {Element}       checkbox        The `checkbox` element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvDefault: function dataFvDefault($checkbox, attribute) {
-	    var $checkedCheckboxes = this.getAllCheckboxesOrRadiosByName($checkbox).filter(':checked');
+	  dataFvDefault: function dataFvDefault(checkbox, attribute) {
+	    var checkedCheckboxes = this.getAllCheckboxesOrRadiosByName(checkbox).filter(function (c) {
+	      return c.checked;
+	    });
 
-	    return $checkedCheckboxes.length >= 1;
+	    return checkedCheckboxes.length >= 1;
 	  },
 
 
@@ -6217,17 +5448,23 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.checkboxDefaultRules}
 	   * @mixes       {Formation.checkboxDefaultRules}
 	   *
-	   * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
+	   * @param       {Element}       checkbox        The `checkbox` element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvMinSelected: function dataFvMinSelected($checkbox, attribute) {
-	    var minSelected = parseInt(this.getAttributeOwner($checkbox).attr(attribute));
+	  dataFvMinSelected: function dataFvMinSelected(checkbox, attribute) {
+	    var attributeOwner = this.getAttributeOwner(checkbox);
+	    if (attributeOwner === null) {
+	      return true;
+	    }
+	    var minSelected = parseInt(attributeOwner.getAttribute(attribute));
 
-	    var $checkedCheckboxes = this.getAllCheckboxesOrRadiosByName($checkbox).filter(':checked');
+	    var checkedCheckboxes = this.getAllCheckboxesOrRadiosByName(checkbox).filter(function (c) {
+	      return c.checked;
+	    });
 
-	    return isNaN(minSelected) || $checkedCheckboxes.length >= minSelected;
+	    return isNaN(minSelected) || checkedCheckboxes.length >= minSelected;
 	  },
 
 
@@ -6239,17 +5476,23 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.checkboxDefaultRules}
 	   * @mixes       {Formation.checkboxDefaultRules}
 	   *
-	   * @param       {jQuery}        $checkbox       The `checkbox` element upon which to apply the rule. Required.
+	   * @param       {Element}       checkbox        The `checkbox` element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvMaxSelected: function dataFvMaxSelected($checkbox, attribute) {
-	    var maxSelected = parseInt(this.getAttributeOwner($checkbox).attr(attribute));
+	  dataFvMaxSelected: function dataFvMaxSelected(checkbox, attribute) {
+	    var attributeOwner = this.getAttributeOwner(checkbox);
+	    if (attributeOwner === null) {
+	      return true;
+	    }
+	    var maxSelected = parseInt(attributeOwner.getAttribute(attribute));
 
-	    var $checkedCheckboxes = this.getAllCheckboxesOrRadiosByName($checkbox).filter(':checked');
+	    var checkedCheckboxes = this.getAllCheckboxesOrRadiosByName(checkbox).filter(function (c) {
+	      return c.checked;
+	    });
 
-	    return isNaN(maxSelected) || $checkedCheckboxes.length <= maxSelected;
+	    return isNaN(maxSelected) || checkedCheckboxes.length <= maxSelected;
 	  }
 	}).init(function () {
 	  var _this = this;
@@ -6265,18 +5508,18 @@ webpackJsonp([0],[
 	   */
 	  var __rules = [ruleStamp({
 	    name: 'default',
-	    callback: function callback($checkbox, attribute) {
-	      return _this.dataFvDefault($checkbox, attribute);
+	    callback: function callback(checkbox, attribute) {
+	      return _this.dataFvDefault(checkbox, attribute);
 	    }
 	  }), ruleStamp({
 	    name: 'min-selected',
-	    callback: function callback($checkbox, attribute) {
-	      return _this.dataFvMinSelected($checkbox, attribute);
+	    callback: function callback(checkbox, attribute) {
+	      return _this.dataFvMinSelected(checkbox, attribute);
 	    }
 	  }), ruleStamp({
 	    name: 'max-selected',
-	    callback: function callback($checkbox, attribute) {
-	      return _this.dataFvMaxSelected($checkbox, attribute);
+	    callback: function callback(checkbox, attribute) {
+	      return _this.dataFvMaxSelected(checkbox, attribute);
 	    }
 	  })];
 
@@ -6301,20 +5544,20 @@ webpackJsonp([0],[
 	   * @access      public
 	   * @memberOf    {Formation.checkboxDefaultRules}
 	   *
-	   * @param       {jQuery}    $element      The element to check. Required.
+	   * @param       {Element}   element       The element to check. Required.
 	   *
-	   * @returns     {jQuery}
+	   * @returns     {Element|null}
 	   */
-	  this.getAttributeOwner = function ($element) {
-	    return _this.getCheckboxOrRadioContainer($element);
+	  this.getAttributeOwner = function (element) {
+	    return _this.getCheckboxOrRadioContainer(element);
 	  };
 	});
 
 	module.exports = ruleSetStamp.compose(checkboxDefaultRulesStamp);
 
-/***/ },
-/* 82 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -6324,7 +5567,7 @@ webpackJsonp([0],[
 	 * Defines a rule, which contains a name used to identify when it's used,
 	 * and a callback function to process the rule against an element.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.rule
@@ -6334,34 +5577,30 @@ webpackJsonp([0],[
 
 	  /**
 	   * The name of the rule, prefixed with `data-fv`, which will be used to
-	   * reference it in a DOM element
+	   * reference it in a DOM element.
 	   *
-	   * @throws      Error           The method for the rule is not implemented, so alert the user with an error
 	   * @access      public
+	   * @type        {String}
 	   * @memberOf    {Formation.rule}
-	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
-	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
-	   *
-	   * @returns     {Boolean}
+	   * @default     'undefined
 	   */
 	  name: 'undefined'
 	}).methods({
 
 	  /**
-	   * The method that will attempt to satisfy the rule against `$element`.
+	   * The method that will attempt to satisfy the rule against `element`.
 	   *
 	   * @throws      Error           The method for the rule is not implemented, so alert the user with an error
 	   * @access      public
 	   * @memberOf    {Formation.rule}
 	   * @mixes       {Formation.rule}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  callback: function callback($element, attribute) {
+	  callback: function callback(element, attribute) {
 	    throw new Error('Rule callback for `' + this.name + '` is not implemented');
 	  }
 	}).init(function () {
@@ -6382,22 +5621,22 @@ webpackJsonp([0],[
 
 	module.exports = ruleStamp;
 
-/***/ },
-/* 83 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var domNavigationStamp = __webpack_require__(72);
-	var eventDefinitionsStamp = __webpack_require__(73);
-	var validityChecksStamp = __webpack_require__(84);
+	var domNavigationStamp = __webpack_require__(50);
+	var eventDefinitionsStamp = __webpack_require__(51);
+	var validityChecksStamp = __webpack_require__(58);
 
 	var stampit = __webpack_require__(3);
 
 	/**
 	 * Used for processing a set of `Formation.rule` objects against form DOM elements.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.ruleSet
@@ -6424,6 +5663,16 @@ webpackJsonp([0],[
 	  };
 
 	  /**
+	   * An empty set of rules by default.
+	   *
+	   * @private
+	   * @access      private
+	   * @type        Array
+	   * @memberOf    {Formation.ruleSet}
+	   */
+	  var __rules = [];
+
+	  /**
 	   * Add a rule to this rule set.
 	   *
 	   * @access      public
@@ -6446,10 +5695,10 @@ webpackJsonp([0],[
 	   * @access      public
 	   * @memberOf    {Formation.ruleSet}
 	   *
-	   * @returns     {Array}     An empty array;
+	   * @returns     {Array}     __rules       The empty array of rules.
 	   */
 	  this.getRules = function () {
-	    return [];
+	    return __rules;
 	  };
 
 	  /**
@@ -6460,12 +5709,12 @@ webpackJsonp([0],[
 	   * @access      public
 	   * @memberOf    {Formation.ruleSet}
 	   *
-	   * @param       {jQuery}    $element      The element to check. Required.
+	   * @param       {Element}   element         The element to check. Required.
 	   *
-	   * @returns     {jQuery}    $element
+	   * @returns     {Element}   element
 	   */
-	  this.getAttributeOwner = function ($element) {
-	    return $element;
+	  this.getAttributeOwner = function (element) {
+	    return element;
 	  };
 
 	  /**
@@ -6476,40 +5725,42 @@ webpackJsonp([0],[
 	   * @access      public
 	   * @memberOf    {Formation.ruleSet}
 	   *
-	   * @param       {jQuery}    $element                The element upon which to process the rules. Required.
+	   * @param       {Element}   element                 The element upon which to process the rules. Required.
 	   *
 	   * @returns     {boolean}   validAfterRuleCheck     Whether the element passes all specified rules.
 	   */
-	  this.process = function ($element) {
+	  this.process = function (element) {
 	    var validAfterRuleCheck = true;
-	    var $attributeOwner = _this.getAttributeOwner($element);
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
+	    var attributeOwner = _this.getAttributeOwner(element);
+	    if (attributeOwner !== null) {
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
 
-	    try {
-	      for (var _iterator = _this.getRules()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var rule = _step.value;
+	      try {
+	        for (var _iterator = _this.getRules()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var rule = _step.value;
 
-	        var ruleAttribute = 'data-fv-' + rule.name;
-	        if (rule.name === 'default' || $attributeOwner.attr(ruleAttribute) !== undefined) {
-	          validAfterRuleCheck = rule.callback($element, ruleAttribute);
-	          if (!validAfterRuleCheck) {
-	            break;
+	          var ruleAttribute = 'data-fv-' + rule.name;
+	          if (rule.name === 'default' || attributeOwner.hasAttribute(ruleAttribute)) {
+	            validAfterRuleCheck = rule.callback(element, ruleAttribute);
+	            if (!validAfterRuleCheck) {
+	              break;
+	            }
 	          }
 	        }
-	      }
-	    } catch (err) {
-	      _didIteratorError = true;
-	      _iteratorError = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion && _iterator.return) {
-	          _iterator.return();
-	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
 	      } finally {
-	        if (_didIteratorError) {
-	          throw _iteratorError;
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
 	        }
 	      }
 	    }
@@ -6520,9 +5771,9 @@ webpackJsonp([0],[
 
 	module.exports = ruleSetStamp.compose(domNavigationStamp, eventDefinitionsStamp, validityChecksStamp);
 
-/***/ },
-/* 84 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -6568,7 +5819,7 @@ webpackJsonp([0],[
 	   * @returns     {Boolean}                   Flag indicating whether the string only contains numbers.
 	   */
 	  isValidZip: function isValidZip(strToTest) {
-	    var part = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	    var part = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
 	    // satisfies `12345` and `12345-1234`
 	    var filter = /^(\d{5})((\-(\d{4}))?)$/;
@@ -6614,7 +5865,7 @@ webpackJsonp([0],[
 	   * @returns     {Boolean}                   Flag indicating whether the string is a valid phone number.
 	   */
 	  isValidPhone: function isValidPhone(strToTest) {
-	    var multi = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	    var multi = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	    var filter = /^\((\d{3})\)(\s)(\d{3})-(\d{4})$/;
 	    if (multi) {
@@ -6627,21 +5878,21 @@ webpackJsonp([0],[
 
 	module.exports = validityCheckStamp;
 
-/***/ },
-/* 85 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ruleStamp = __webpack_require__(82);
-	var ruleSetStamp = __webpack_require__(83);
+	var ruleStamp = __webpack_require__(56);
+	var ruleSetStamp = __webpack_require__(57);
 
 	var stampit = __webpack_require__(3);
 
 	/**
 	 * Used for processing a set of `Formation.rule` objects against `input:radio` elements.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.radioDefaultRules
@@ -6658,15 +5909,17 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.radioDefaultRules}
 	   * @mixes       {Formation.radioDefaultRules}
 	   *
-	   * @param       {jQuery}        $radio          The `radio` element upon which to apply the rule. Required.
+	   * @param       {Element}       radio           The `radio` element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvDefault: function dataFvDefault($radio, attribute) {
-	    var $checkedRadios = this.getAllCheckboxesOrRadiosByName($radio).filter(':checked');
+	  dataFvDefault: function dataFvDefault(radio, attribute) {
+	    var checkedRadios = this.getAllCheckboxesOrRadiosByName(radio).filter(function (r) {
+	      return r.checked;
+	    });
 
-	    return $checkedRadios.length == 1;
+	    return checkedRadios.length == 1;
 	  }
 	}).init(function () {
 	  var _this = this;
@@ -6682,8 +5935,8 @@ webpackJsonp([0],[
 	   */
 	  var __rules = [ruleStamp({
 	    name: 'default',
-	    callback: function callback($radio, attribute) {
-	      return _this.dataFvDefault($radio, attribute);
+	    callback: function callback(radio, attribute) {
+	      return _this.dataFvDefault(radio, attribute);
 	    }
 	  })];
 
@@ -6708,32 +5961,32 @@ webpackJsonp([0],[
 	   * @access      public
 	   * @memberOf    {Formation.radioDefaultRules}
 	   *
-	   * @param       {jQuery}    $element      The element to check. Required.
+	   * @param       {Element}     element      The element to check. Required.
 	   *
-	   * @returns     {jQuery}
+	   * @returns     {Element|null}
 	   */
-	  this.getAttributeOwner = function ($element) {
-	    return _this.getCheckboxOrRadioContainer($element);
+	  this.getAttributeOwner = function (element) {
+	    return _this.getCheckboxOrRadioContainer(element);
 	  };
 	});
 
 	module.exports = ruleSetStamp.compose(radioDefaultRulesStamp);
 
-/***/ },
-/* 86 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ruleStamp = __webpack_require__(82);
-	var ruleSetStamp = __webpack_require__(83);
+	var ruleStamp = __webpack_require__(56);
+	var ruleSetStamp = __webpack_require__(57);
 
 	var stampit = __webpack_require__(3);
 
 	/**
 	 * Used for processing a set of `Formation.rule` objects against `select` elements.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.selectDefaultRules
@@ -6751,13 +6004,13 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.selectDefaultRules}
 	   * @mixes       {Formation.selectDefaultRules}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvDefault: function dataFvDefault($element, attribute) {
-	    return $element.val().trim() !== '';
+	  dataFvDefault: function dataFvDefault(element, attribute) {
+	    return element.value.trim() !== '';
 	  }
 	}).init(function () {
 	  var _this = this;
@@ -6773,8 +6026,8 @@ webpackJsonp([0],[
 	   */
 	  var __rules = [ruleStamp({
 	    name: 'default',
-	    callback: function callback($element, attribute) {
-	      return _this.dataFvDefault($element, attribute);
+	    callback: function callback(element, attribute) {
+	      return _this.dataFvDefault(element, attribute);
 	    }
 	  })];
 
@@ -6793,22 +6046,21 @@ webpackJsonp([0],[
 
 	module.exports = ruleSetStamp.compose(selectDefaultRulesStamp);
 
-/***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ruleStamp = __webpack_require__(82);
-	var ruleSetStamp = __webpack_require__(83);
+	var ruleStamp = __webpack_require__(56);
+	var ruleSetStamp = __webpack_require__(57);
 
 	var stampit = __webpack_require__(3);
-	var $ = __webpack_require__(74);
 
 	/**
 	 * Used for processing a set of `Formation.rule` objects against `select` elements.
 	 *
-	 * @copyright     Copyright (c) 2016, Derek Rosenzweig
+	 * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
 	 * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
 	 * @package       Formation
 	 * @namespace     Formation.textDefaultRules
@@ -6826,13 +6078,13 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.textDefaultRules}
 	   * @mixes       {Formation.textDefaultRules}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvDefault: function dataFvDefault($element, attribute) {
-	    return $element.val().trim() !== '';
+	  dataFvDefault: function dataFvDefault(element, attribute) {
+	    return element.value.trim() !== '';
 	  },
 
 
@@ -6844,15 +6096,15 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.textDefaultRules}
 	   * @mixes       {Formation.textDefaultRules}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvMinLength: function dataFvMinLength($element, attribute) {
-	    var minChars = $element.attr(attribute);
+	  dataFvMinLength: function dataFvMinLength(element, attribute) {
+	    var minChars = element.getAttribute(attribute);
 
-	    return $element.val().trim().length >= parseInt(minChars);
+	    return element.value.trim().length >= parseInt(minChars);
 	  },
 
 
@@ -6864,15 +6116,15 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.textDefaultRules}
 	   * @mixes       {Formation.textDefaultRules}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}
 	   */
-	  dataFvMaxLength: function dataFvMaxLength($element, attribute) {
-	    var maxChars = $element.attr(attribute);
+	  dataFvMaxLength: function dataFvMaxLength(element, attribute) {
+	    var maxChars = element.getAttribute(attribute);
 
-	    return $element.val().trim().length <= parseInt(maxChars);
+	    return element.value.trim().length <= parseInt(maxChars);
 	  },
 
 
@@ -6886,15 +6138,15 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.textDefaultRules}
 	   * @mixes       {Formation.textDefaultRules}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}       valid
 	   */
-	  dataFvFormat: function dataFvFormat($element, attribute) {
-	    var format = $element.attr(attribute);
+	  dataFvFormat: function dataFvFormat(element, attribute) {
+	    var format = element.getAttribute(attribute);
 	    var valid = true;
-	    var trimmedVal = $element.val().trim();
+	    var trimmedVal = element.value.trim();
 	    switch (format) {
 	      case 'zip5':
 	        valid = this.isValidZip(trimmedVal, 5);
@@ -6936,25 +6188,26 @@ webpackJsonp([0],[
 	   * @memberOf    {Formation.textDefaultRules}
 	   * @mixes       {Formation.textDefaultRules}
 	   *
-	   * @param       {jQuery}        $element        The element upon which to apply the rule. Required.
+	   * @param       {Element}       element         The element upon which to apply the rule. Required.
 	   * @param       {String}        attribute       The data attribute which may contain additional data. Required.
 	   *
 	   * @returns     {Boolean}       valid
 	   */
-	  dataFvMatchField: function dataFvMatchField($element, attribute) {
-	    var matchOtherFieldID = $element.attr(attribute);
-	    var $otherField = $('#' + matchOtherFieldID);
-	    if ($otherField.length === 0) {
+	  dataFvMatchField: function dataFvMatchField(element, attribute) {
+	    var matchOtherFieldID = element.getAttribute(attribute);
+	    var otherField = document.getElementById(matchOtherFieldID);
+	    if (otherField === null) {
 	      throw new Error('Expected an element with an ID equal to "' + matchOtherFieldID + '" on this form.');
 	    }
 
-	    var trimmedVal = $element.val().trim();
-	    var otherFieldTrimmedVal = $otherField.val().trim();
+	    var trimmedVal = element.value.trim();
+	    var otherFieldTrimmedVal = otherField.value.trim();
 	    var valid = trimmedVal === otherFieldTrimmedVal;
 
-	    if (parseInt($otherField.attr('data-fv-required')) === 1) {
+	    if (parseInt(otherField.getAttribute('data-fv-required')) === 1) {
 	      // Set the valid flag on the matched field
-	      $otherField.trigger(this.getSetValidationFlagEventName(), valid);
+	      var setValidationFlagEvent = new CustomEvent(this.getSetValidationFlagEventName(), { bubbles: true, cancelable: true, detail: { validAfterRuleCheck: valid } });
+	      otherField.dispatchEvent(setValidationFlagEvent);
 	    }
 
 	    return valid;
@@ -6973,28 +6226,28 @@ webpackJsonp([0],[
 	   */
 	  var __rules = [ruleStamp({
 	    name: 'default',
-	    callback: function callback($element, attribute) {
-	      return _this.dataFvDefault($element, attribute);
+	    callback: function callback(element, attribute) {
+	      return _this.dataFvDefault(element, attribute);
 	    }
 	  }), ruleStamp({
 	    name: 'min-length',
-	    callback: function callback($element, attribute) {
-	      return _this.dataFvMinLength($element, attribute);
+	    callback: function callback(element, attribute) {
+	      return _this.dataFvMinLength(element, attribute);
 	    }
 	  }), ruleStamp({
 	    name: 'max-length',
-	    callback: function callback($element, attribute) {
-	      return _this.dataFvMaxLength($element, attribute);
+	    callback: function callback(element, attribute) {
+	      return _this.dataFvMaxLength(element, attribute);
 	    }
 	  }), ruleStamp({
 	    name: 'format',
-	    callback: function callback($element, attribute) {
-	      return _this.dataFvFormat($element, attribute);
+	    callback: function callback(element, attribute) {
+	      return _this.dataFvFormat(element, attribute);
 	    }
 	  }), ruleStamp({
 	    name: 'match-field',
-	    callback: function callback($element, attribute) {
-	      return _this.dataFvMatchField($element, attribute);
+	    callback: function callback(element, attribute) {
+	      return _this.dataFvMatchField(element, attribute);
 	    }
 	  })];
 
@@ -7013,5 +6266,5 @@ webpackJsonp([0],[
 
 	module.exports = ruleSetStamp.compose(textDefaultRulesStamp);
 
-/***/ }
-]);
+/***/ })
+/******/ ]);

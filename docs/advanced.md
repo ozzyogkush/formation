@@ -14,7 +14,6 @@ Example `at-least-n-capitals`:
 
 ```html
 <head>
-  <script type="text/javascript" src="vendor.min.js"></script>
   <script type="text/javascript" src="formation.min.js"></script>
 </head>
 <body>
@@ -30,15 +29,11 @@ Example `at-least-n-capitals`:
   </form>
 </body>
 <script type="text/javascript">
-  Formation.registerRule(
-    'text', 
-    'at-least-n-capitals', 
-    function($element, attribute) {
-      var n = $element.attr(attribute);
-      var capitals = $element.val().match(/([A-Z])/g);
-      return capitals !== null && capitals.length >= n;
-    }
-  );
+  Formation.registerRule('text', 'at-least-n-capitals', function(element, attribute) {
+    var n = element.getAttribute(attribute);
+    var capitals = element.value.match(/([A-Z])/g);
+    return capitals !== null && capitals.length >= n;
+  });
 </script>
 ```
 
@@ -52,6 +47,22 @@ When the validation state of a registered `form` - or an input element inside a 
 Example:
 
 ```javascript
+var formValid = document.getElementById('form-valid');
+Array.from(document.getElementsByTagName('form')).forEach(function(form) {
+  form.addEventListener(Formation.getValidityChangedEventName(), function() {
+    // ... Do stuff when the FORM's validity has changed
+  });
+
+  Array
+    .from(Formation.findRequiredFields(form))
+    .concat(Array.from(Formation.findOptionalFields(form)))
+    .forEach(function(field) {
+      field.addEventListener(Formation.getValidityChangedEventName(), function(event) {
+        // ... Do stuff when an individual required/optional form element's validity has changed
+      });
+    })
+});
+
 $('form[data-formation="1"]').each(function() {
   $form.on(Formation.getValidityChangedEventName(), function() {
     // ... Do stuff when the FORM's validity has changed

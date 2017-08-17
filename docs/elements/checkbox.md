@@ -29,7 +29,6 @@ description: Supported rules and basic example of checkbox form inputs
 
 ```html
 <head>
-  <script type="text/javascript" src="vendor.min.js"></script>
   <script type="text/javascript" src="formation.min.js"></script>
 </head>
 <body>
