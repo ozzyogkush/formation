@@ -153,7 +153,7 @@ const textDefaultRulesStamp = stampit()
         // Set the valid flag on the matched field
         const setValidationFlagEvent = new CustomEvent(
           this.getSetValidationFlagEventName(),
-          { bubbles: true, cancelable: true, validAfterRuleCheck: valid }
+          { bubbles: true, cancelable: true, detail: { validAfterRuleCheck: valid } }
         );
         otherField.dispatchEvent(setValidationFlagEvent);
       }

@@ -67,7 +67,7 @@ describe('Objects created using the `buttonComponentStamp`', function() {
       assert.equal(buttonComponent.setSubmitting(true), buttonComponent);
       assert.equal(buttonComponent.isSubmitting(), true);
     });
-    it('removes the submitting state of the $button when the param is false', function() {
+    it('removes the submitting state of the button when the param is false', function() {
       const buttonComponent = buttonComponentStamp({button : document.createElement('button')});
       assert.equal(buttonComponent.setSubmitting(false), buttonComponent);
       assert.equal(buttonComponent.isSubmitting(), false);

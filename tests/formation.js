@@ -12,7 +12,6 @@ describe('The `Formation` object', function() {
       const text = document.createElement('input');
       text.setAttribute('type', 'text');
       text.setAttribute('data-fv-required', 1);
-      text.value = 'blarg';
       const checkbox = document.createElement('input');
       checkbox.setAttribute('type', 'checkbox');
       checkbox.setAttribute('name', 'checkbox');
@@ -59,6 +58,16 @@ describe('The `Formation` object', function() {
       assert.equal(formation.getForms().size, 1);
       assert.notEqual(formation.getForms().get(form), null);
       assert.equal(formation.getForms().get(form).isFormComponent(), true);
+
+      assert.equal(document.querySelectorAll('[data-fv-valid="1"]').length, 3);
+      assert.equal(form.getAttribute('data-fv-valid'), 0);
+      assert.equal(submit.getAttribute('disabled'), 'disabled');
+      assert.equal(submit.classList.contains('disabled'), true);
+
+      text.value = 'a good value';
+      const changeEvent = document.createEvent('Event');
+      changeEvent.initEvent('change', true, true);
+      text.dispatchEvent(changeEvent);
 
       assert.equal(document.querySelectorAll('[data-fv-valid="1"]').length, 5);
       assert.equal(form.getAttribute('data-fv-valid'), 1);

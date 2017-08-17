@@ -29,16 +29,6 @@ const domNavigationStamp = stampit()
     formationDataAttrKey : 'data-formation',
 
     /**
-     * The selector used to find a Formation `form` element.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {Formation.domNavigation}
-     * @default     null
-     */
-    formationSelector: null,
-
-    /**
      * The element DOM attribute key which specifies whether the element
      * is valid (1) or not (0).
      *
@@ -93,16 +83,6 @@ const domNavigationStamp = stampit()
     submittingStateDataKey : 'data-fv-submitting',
 
     /**
-     * The data key used to to store a `formComponent` object on the `form` object.
-     *
-     * @access      public
-     * @type        {String}
-     * @memberOf    {Formation.domNavigation}
-     * @default     formation-form
-     */
-    formationDataKey : 'formation-form',
-
-    /**
      * The CSS selector used to find the form's optional input elements.
      *
      * @access      public
@@ -133,6 +113,19 @@ const domNavigationStamp = stampit()
     submitButtonSelector : '[data-fv-form-submit]'
   })
   .methods({
+
+    /**
+     * Construct a CSS selector used to find Formation forms.
+     *
+     * @access      public
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
+     *
+     * @returns     {String}
+     */
+    getFormationSelector() {
+      return `[${this.formationDataAttrKey}="1"]`;
+    },
 
     /**
      * Ascends the ancestor tree of `element` until it matches the supplied `selector`.
@@ -177,11 +170,11 @@ const domNavigationStamp = stampit()
      * @returns     {Element|null}            The form the supplied `element` is in, or null if not found.
      */
     findCurrentFormByTarget(element) {
-      if (element.tagName.toLowerCase() === 'form' && element.matches(this.formationSelector)) {
+      if (element.tagName.toLowerCase() === 'form' && element.matches(this.getFormationSelector())) {
         return element;
       }
 
-      return this.closest(element, this.formationSelector);
+      return this.closest(element, this.getFormationSelector());
     },
 
     /**

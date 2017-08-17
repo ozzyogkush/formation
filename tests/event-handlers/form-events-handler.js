@@ -14,10 +14,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
   let formEvent;
   beforeEach(function() {
     formEvent = document.createEvent('Event');
-    formEventsHandler = formEventsHandlerStamp({
-      formationSelector: '[data-formation="1"]',
-      nodeEvents : eventEmitterEventsStamp()
-    });
+    formEventsHandler = formEventsHandlerStamp({ nodeEvents : eventEmitterEventsStamp() });
   });
 
   describe('`formSubmitHandler()`', function() {

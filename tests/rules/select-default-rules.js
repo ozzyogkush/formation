@@ -8,7 +8,7 @@ const selectDefaultRulesStamp = require('../../src/rules/select-default-rules');
 describe('Objects created using the `selectDefaultRulesStamp`', function() {
   let selectRulesSet;
   beforeEach(function() {
-    selectRulesSet = selectDefaultRulesStamp({ formationSelector: '[data-formation="1"]'});
+    selectRulesSet = selectDefaultRulesStamp();
   });
   describe('`dataFvDefault()`', function() {
     describe('checks that the trimmed value is not empty', function() {

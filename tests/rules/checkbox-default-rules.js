@@ -8,7 +8,7 @@ const checkboxDefaultRulesStamp = require('../../src/rules/checkbox-default-rule
 describe('Objects created using the `checkboxDefaultRulesStamp`', function() {
   let checkboxRulesSet;
   beforeEach(function() {
-    checkboxRulesSet = checkboxDefaultRulesStamp({ formationSelector: '[data-formation="1"]'});
+    checkboxRulesSet = checkboxDefaultRulesStamp();
   });
   describe('`dataFvDefault()`', function() {
     describe('checks that at least one is checked', function() {

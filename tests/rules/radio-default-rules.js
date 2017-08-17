@@ -8,7 +8,7 @@ const radioDefaultRulesStamp = require('../../src/rules/radio-default-rules');
 describe('Objects created using the `radioDefaultRulesStamp`', function() {
   let radioRulesSet;
   beforeEach(function() {
-    radioRulesSet = radioDefaultRulesStamp({ formationSelector: '[data-formation="1"]'});
+    radioRulesSet = radioDefaultRulesStamp();
   });
   describe('`dataFvDefault()`', function() {
     describe('checks that at least one is checked', function() {

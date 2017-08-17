@@ -85,8 +85,8 @@ const formationStamp = stampit()
 
       const bodyEventsHandler = bodyEventsHandlerStamp({
         body: document.body,
+        formationDataAttrKey: this.formationDataAttrKey,
         nodeEvents : this.nodeEvents,
-        formationSelector: this.getFormationSelector(),
         getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
       });
       this.initBodyEvents(bodyEventsHandler);
@@ -109,13 +109,13 @@ const formationStamp = stampit()
      */
     initForm(form) {
       try {
-        // Set up the Form but only if it has the proper DOM.
-        const formationComponent = this.createFormationComponent();
-
-        formationComponent.initForm(form);
-        formationComponent.initFormEvents();
-
         if (! this.getForms().has(form) || this.getForms().get(form) === null) {
+          // Set up the Form but only if it has the proper DOM.
+          const formationComponent = this.createFormationComponent();
+
+          formationComponent.initForm(form);
+          formationComponent.initFormEvents();
+
           this.getForms().set(form, formationComponent);
         }
       }
@@ -138,7 +138,7 @@ const formationStamp = stampit()
      */
     createFormationComponent() {
       return formEventsHandlerStamp({
-        formationSelector: this.getFormationSelector(),
+        formationDataAttrKey: this.formationDataAttrKey,
         nodeEvents : this.nodeEvents,
         getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
       }).initLogging(this.getLogConsole());
@@ -156,19 +156,6 @@ const formationStamp = stampit()
      */
     createFormationRule(name, callback) {
       return ruleStamp({name: name, callback: callback});
-    },
-
-    /**
-     * Construct a CSS selector used to find Formation forms.
-     *
-     * @access      public
-     * @memberOf    {Formation.formation}
-     * @mixes       {Formation.formation}
-     *
-     * @returns     {String}
-     */
-    getFormationSelector() {
-      return `[${this.formationDataAttrKey}="1"]`;
     },
 
     /**
@@ -281,33 +268,27 @@ const formationStamp = stampit()
      *
      * @returns     {Map}       __forms           A map of `form` elements with their related FormComponents to be managed by Formation.
      */
-    this.getForms = () => {
-      return __forms;
-    };
+    this.getForms = () => __forms;
 
     /**
      * Find the `formComponent` for the `form` element in which the supplied `element` resides.
      *
-     * @throws      TypeError                         if the `formComponent` is not set
      * @access      public
      * @memberOf    {Formation.formation}
      * @mixes       {Formation.formation}
      *
      * @param       {Element}                         element             The DOM element for which to find the `formComponent` instance. Required.
      *
-     * @returns     {Formation.formComponent|null}    formationForm       The `formComponent` if it is there, or null otherwise.
+     * @returns     {Formation.formComponent|null}                        The `formComponent` if it is there, or null otherwise.
      */
     this.getFormComponentOfCurrentElement = element => {
       const currentForm = this.findCurrentFormByTarget(element);
+      //console.log(currentForm);
       if (currentForm === null) { return null; }
 
-      // if the element is not inside a formation form, don't bother checking the data, and return null.
-      const formComponent = this.getForms().get(currentForm);
-      if (formComponent === null) {
-        throw new TypeError(`The \`${this.formationDataKey}\` data object is not set.`);
-      }
+      if (! this.getForms().has(currentForm)) { return null; }
 
-      return formComponent;
+      return this.getForms().get(currentForm);
     };
 
     /**
@@ -374,9 +355,7 @@ const formationStamp = stampit()
      *
      * @returns     {Array}       __supportedElementTypes         Types of elements supported by Formation.
      */
-    this.getSupportedElementTypes = () => {
-      return __supportedElementTypes;
-    };
+    this.getSupportedElementTypes = () => __supportedElementTypes;
 
     /**
      * Object composed of a {bodyEventsHandlerStamp} which handles body events.

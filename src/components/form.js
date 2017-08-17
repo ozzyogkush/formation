@@ -95,9 +95,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {Boolean}       true
      */
-    this.isFormComponent = () => {
-      return true;
-    };
+    this.isFormComponent = () => true;
 
     /**
      * The initialized form node.
@@ -188,7 +186,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {Formation.formComponent}
      */
-    this.initForm = (form) => {
+    this.initForm = form => {
       // Set the form so we can use it internally elsewhere.
       __form = form;
 
@@ -228,9 +226,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {NodeList}       __requiredFields
      */
-    this.getRequiredFields = () => {
-      return __requiredFields;
-    };
+    this.getRequiredFields = () => __requiredFields;
 
     /**
      * Find the required fields and set them to the private `__requiredFields` var.
@@ -268,9 +264,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {NodeList}       __optionalFields
      */
-    this.getOptionalFields = () => {
-      return __optionalFields;
-    };
+    this.getOptionalFields = () => __optionalFields;
 
     /**
      * Find the optional fields and set them to the private `__optionalFields` var.
@@ -318,9 +312,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {Formation.buttonComponent}       __submitButton
      */
-    this.getSubmitButton = () => {
-      return __submitButton;
-    };
+    this.getSubmitButton = () => __submitButton;
 
     /**
      * Create new `buttonComponents` to manage the Submit button
@@ -368,9 +360,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {Object}      __supportedElementTypesMap         Types of elements supported by Formation.
      */
-    this.getSupportedElementTypesMap = () => {
-      return __supportedElementTypesMap;
-    };
+    this.getSupportedElementTypesMap = () => __supportedElementTypesMap;
 
     /**
      * Rule sets keyed by the supported element types.
@@ -381,10 +371,10 @@ const formComponentStamp = stampit()
      * @memberOf    {Formation.formComponent}
      */
     const __supportedElementTypesRuleSets = {
-      'text' : textDefaultRulesStamp({formationSelector: this.formationSelector}),
-      'checkbox' : checkboxDefaultRulesStamp({formationSelector: this.formationSelector}),
-      'radio' : radioDefaultRulesStamp({formationSelector: this.formationSelector}),
-      'select': selectDefaultRulesStamp({formationSelector: this.formationSelector})
+      'text' : textDefaultRulesStamp(),
+      'checkbox' : checkboxDefaultRulesStamp(),
+      'radio' : radioDefaultRulesStamp(),
+      'select': selectDefaultRulesStamp()
     };
 
     /**
@@ -395,9 +385,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {Object}
      */
-    this.getSupportedElementTypeRuleSets = () => {
-      return __supportedElementTypesRuleSets;
-    };
+    this.getSupportedElementTypeRuleSets = () => __supportedElementTypesRuleSets;
 
     /**
      * Get the rule set to be applied to the specified supported element type.
@@ -409,9 +397,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {Formation.ruleSet}
      */
-    this.getRuleSetBySupportedElementType = (type) => {
-      return __supportedElementTypesRuleSets[type];
-    };
+    this.getRuleSetBySupportedElementType = type => __supportedElementTypesRuleSets[type];
 
     /**
      * Set the rule set to be applied to the specified supported element type.

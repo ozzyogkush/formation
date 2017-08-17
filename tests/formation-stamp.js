@@ -245,6 +245,60 @@ describe('Objects created using the `formationStamp`', function() {
     });
   });
 
+  describe('`getFormComponentOfCurrentElement()`', function() {
+    describe('when the element is not inside a Formation validated HTML form element', function() {
+      it('returns null', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('data-fv-required', 1);
+
+        assert.equal(formation.getFormComponentOfCurrentElement(input), null);
+      });
+    });
+    describe('when the element is inside a Formation validated HTML form element', function() {
+      describe('the formComponent for the HTML form is not set', function() {
+        it('returns null', function() {
+          const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+          const formNode = document.createElement('form');
+          formNode.setAttribute('data-formation', 1);
+          const input = document.createElement('input');
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-required', 1);
+
+          formNode.appendChild(input);
+          assert.equal(formation.getFormComponentOfCurrentElement(input), null);
+        });
+      });
+      describe('the formComponent for the HTML form is set', function() {
+        it('successfully returns the `formComponent`', function() {
+          const formNode = document.createElement('form');
+          formNode.setAttribute('data-formation', 1);
+          const input = document.createElement('input');
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-required', 1);
+          const submit = document.createElement('button');
+          submit.setAttribute('type', 'submit');
+          submit.setAttribute('data-fv-form-submit', 1);
+
+          formNode.appendChild(input);
+          formNode.appendChild(submit);
+          document.body.appendChild(formNode);
+
+          const formation = formationStamp({ nodeEvents: eventEmitterStamp() });//.detectForms();
+          formation.initLogging(true);
+          formation.initForm(formNode);
+          const formComponent = formation.getFormComponentOfCurrentElement(input);
+
+          assert.notEqual(formComponent, null);
+          assert.equal(formComponent.isFormComponent(), true);
+
+          document.body.removeChild(formNode);
+        });
+      });
+    });
+  });
+
   describe('`initBodyEvents()`', function() {
     describe('when the body events have not yet been initialized', function() {
       it('logs initialization, and calls `setLogConsole()` and `addDefaultEventHandlers()` on the new instance', function() {

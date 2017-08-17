@@ -1,6 +1,5 @@
 'use strict';
 
-const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 

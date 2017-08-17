@@ -107,7 +107,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
               let allowedToContinue = null;
               const bodyEventsHandler = bodyEventsHandlerStamp({
                 body : document.body,
-                formationSelector : '[data-formation="1"]',
                 getFormComponentOfCurrentElement: e => null
               });
               const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
@@ -137,7 +136,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 const formComponentMock = sinon.mock(formComponent);
                 const bodyEventsHandler = bodyEventsHandlerStamp({
                   body : document.body,
-                  formationSelector : '[data-formation="1"]',
                   getFormComponentOfCurrentElement: e => formComponent
                 });
                 const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
@@ -168,7 +166,6 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
                 const formComponentMock = sinon.mock(formComponent);
                 const bodyEventsHandler = bodyEventsHandlerStamp({
                   body : document.body,
-                  formationSelector : '[data-formation="1"]',
                   getFormComponentOfCurrentElement: e => formComponent
                 });
                 const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };

@@ -10,7 +10,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
   let domNavigation;
   let domNavigationMock;
   beforeEach(function() {
-    domNavigation = domNavigationStamp({formationSelector : '[data-formation="1"]'});
+    domNavigation = domNavigationStamp();
     domNavigationMock = sinon.mock(domNavigation);
   });
 
@@ -21,7 +21,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
 
       assert.equal(domNavigation.findCurrentFormByTarget(form), form);
     });
-    it('should return the closest form element in the DOM using the `formationSelector`, or null if not found', function() {
+    it('should return the closest form element in the DOM using the calculated `formationSelector`, or null if not found', function() {
       const form = document.createElement('form');
       form.setAttribute('data-formation', 1);
 
@@ -424,7 +424,7 @@ describe('Objects created using the `domNavigationStamp`', function() {
     });
   });
 
-  describe('`showEnableLinkedElement()` calls `enableOrDisableElement()` with the supplied $element and `true` flag', function() {
+  describe('`showEnableLinkedElement()` calls `enableOrDisableElement()` with the supplied element and `true` flag', function() {
     describe('when the `removeHidden` param is false', function() {
       it('does not call `showOrHideElement()`', function() {
         const input = document.createElement('input');
