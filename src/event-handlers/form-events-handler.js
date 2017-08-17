@@ -235,47 +235,6 @@ const formEventsHandlerStamp = stampit()
     },
 
     /**
-     * For each of the required and optional fields passed in with the event data,
-     * trigger the validation handler. This can be used to ensure that the form fields
-     * validation is checked even when the field doesn't know it's been changed, eg when
-     * a browser's autofill inputs values for known fields.
-     *
-     * The `this` object is expected to refer to an instance of this class.
-     *
-     * @access      public
-     * @memberOf    {Formation.formEventsHandler}
-     * @mixes       {Formation.formEventsHandler}
-     *
-     * @param       {Event}       event         The `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
-     */
-    validateFormFields(event) {
-      const fields = Array.from(this.getRequiredFields()).concat(Array.from(this.getOptionalFields()));
-      fields.forEach(field => {
-        const validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
-        field.dispatchEvent(validationEvent);
-      });
-    },
-
-    /**
-     * For all the inputs we are handling, trigger an event which will trigger
-     * element/type specific validation.
-     *
-     * @access      public
-     * @memberOf    {Formation.formEventsHandler}
-     * @mixes       {Formation.formEventsHandler}
-     *
-     * @returns     {Formation.formEventsHandler}
-     */
-    triggerValidationCheck() {
-      this.getAllInputElementsToValidate().forEach(field => {
-        const validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
-        field.dispatchEvent(validationEvent);
-      });
-
-      return this;
-    },
-
-    /**
      * Handle the form `validation-handler` event which will trigger a validator for
      * the specific element/type being validated.
      *
@@ -325,10 +284,7 @@ const formEventsHandlerStamp = stampit()
       elementToCheckAndSetAttr.setAttribute(this.validAttrKey, (validAfterRuleCheck === true ? 1 : 0));
 
       // If the value changed, trigger the validity changed event on the EVENT element
-      const validityChanged = (
-        (validBeforeRuleCheck && ! validAfterRuleCheck) ||
-        (! validBeforeRuleCheck && validAfterRuleCheck)
-      );
+      const validityChanged = (validBeforeRuleCheck ^ validAfterRuleCheck);
       if (validityChanged) {
         const validityChangedEvent = new CustomEvent(
           this.getValidityChangedEventName(),
@@ -336,6 +292,47 @@ const formEventsHandlerStamp = stampit()
         );
         element.dispatchEvent(validityChangedEvent);
       }
+    },
+
+    /**
+     * For each of the required and optional fields passed in with the event data,
+     * trigger the validation handler. This can be used to ensure that the form fields
+     * validation is checked even when the field doesn't know it's been changed, eg when
+     * a browser's autofill inputs values for known fields.
+     *
+     * The `this` object is expected to refer to an instance of this class.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
+     *
+     * @param       {Event}       event         The `mouseenter`, `mouseleave`, or `touchstart` event object. Required.
+     */
+    validateFormFields(event) {
+      const fields = Array.from(this.getRequiredFields()).concat(Array.from(this.getOptionalFields()));
+      fields.forEach(field => {
+        const validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+        field.dispatchEvent(validationEvent);
+      });
+    },
+
+    /**
+     * For all the inputs we are handling, trigger an event which will trigger
+     * element/type specific validation.
+     *
+     * @access      public
+     * @memberOf    {Formation.formEventsHandler}
+     * @mixes       {Formation.formEventsHandler}
+     *
+     * @returns     {Formation.formEventsHandler}
+     */
+    triggerValidationCheck() {
+      this.getAllInputElementsToValidate().forEach(field => {
+        const validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
+        field.dispatchEvent(validationEvent);
+      });
+
+      return this;
     },
 
     /**
@@ -402,9 +399,7 @@ const formEventsHandlerStamp = stampit()
      *
      * @returns     {Array}       __inputTypes
      */
-    this.getInputTypesArr = () => {
-      return __inputTypes;
-    };
+    this.getInputTypesArr = () => __inputTypes;
 
     /**
      * Return a Formation-friendly string indicating the type of an element.
