@@ -56,10 +56,9 @@ module.exports = function(grunt) {
           ),
           new webpack.optimize.UglifyJsPlugin({
             mangle: {
-              except: ['jQuery', '$', 'exports', 'require', 'Formation']
+              except: ['exports', 'require', 'Formation']
             }
-          }),
-          new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.min.js')
+          })
         ]
       }
     },

@@ -34,7 +34,7 @@ const radioDefaultRulesStamp = stampit()
     dataFvDefault(radio, attribute) {
       const checkedRadios = this
         .getAllCheckboxesOrRadiosByName(radio)
-        .filter(r => (r.getAttribute('checked') === 'checked' && r.checked));
+        .filter(r => r.checked);
 
       return (checkedRadios.length == 1);
     }

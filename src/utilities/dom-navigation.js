@@ -229,7 +229,7 @@ const domNavigationStamp = stampit()
      * @memberOf    {Formation.domNavigation}
      * @mixes       {Formation.domNavigation}
      *
-     * @param       {Element}     element           The jQuery wrapped `form` element. Required.
+     * @param       {Element}     element           The `form` element. Required.
      *
      * @returns     {Boolean}     tbr               Whether the element is a custom widget.
      */
@@ -476,7 +476,7 @@ const domNavigationStamp = stampit()
         element.value = '';
         const validationEvent = new CustomEvent(
           this.getSetValidationFlagEventName(),
-          { bubbles: true, cancelable: true, valid: false }
+          { bubbles: true, cancelable: true, detail: { valid: false } }
         );
         element.dispatchEvent(validationEvent);
       }

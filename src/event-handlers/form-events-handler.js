@@ -128,7 +128,7 @@ const formEventsHandlerStamp = stampit()
       const checkbox = event.target;
 
       // Check for linked elements and show/hide them appropriately.
-      this.showOrHideLinkedElement(checkbox, (checkbox.hasAttribute('checked') && checkbox.checked));
+      this.showOrHideLinkedElement(checkbox, checkbox.checked);
 
       // Trigger the form validation event.
       const validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });
@@ -153,7 +153,7 @@ const formEventsHandlerStamp = stampit()
 
       // Check for linked elements and show/hide them appropriately.
       this.getAllCheckboxesOrRadiosByName(radio).forEach(r => {
-        this.showOrHideLinkedElement(r, (r.hasAttribute('checked') && r.checked));
+        this.showOrHideLinkedElement(r, r.checked);
       });
 
       const validationEvent = new CustomEvent(this.getValidationEventName(), { bubbles: true, cancelable: true });

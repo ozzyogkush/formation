@@ -294,7 +294,7 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * The jQuery object containing the form's submit button.
+     * The `Formation.buttonComponent` object containing the form's submit button.
      *
      * @private
      * @access      private
@@ -336,7 +336,7 @@ const formComponentStamp = stampit()
     };
 
     /**
-     * The types of elements that are supported by Formation mapped to jQuery
+     * The types of elements that are supported by Formation mapped to `querySelectorAll()`
      * compatible selectors.
      *
      * @private

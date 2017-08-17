@@ -1,12 +1,9 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
-const buttonComponentStamp = require('../../src/components/button');
 const eventEmitterStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formComponentStamp = require('../../src/components/form');
 const ruleStamp = require('../../src/rules/rule');

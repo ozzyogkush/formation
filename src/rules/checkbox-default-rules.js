@@ -34,7 +34,7 @@ const checkboxDefaultRulesStamp = stampit()
     dataFvDefault(checkbox, attribute) {
       const checkedCheckboxes = this
         .getAllCheckboxesOrRadiosByName(checkbox)
-        .filter(c => (c.getAttribute('checked') === 'checked' && c.checked));
+        .filter(c => c.checked);
 
       return checkedCheckboxes.length >= 1;
     },
@@ -60,7 +60,7 @@ const checkboxDefaultRulesStamp = stampit()
 
       const checkedCheckboxes = this
         .getAllCheckboxesOrRadiosByName(checkbox)
-        .filter(c => (c.getAttribute('checked') === 'checked' && c.checked));
+        .filter(c => c.checked);
 
       return (isNaN(minSelected) || checkedCheckboxes.length >= minSelected);
     },
@@ -73,7 +73,7 @@ const checkboxDefaultRulesStamp = stampit()
      * @memberOf    {Formation.checkboxDefaultRules}
      * @mixes       {Formation.checkboxDefaultRules}
      *
-     * @param       {jQuery}        checkbox        The `checkbox` element upon which to apply the rule. Required.
+     * @param       {Element}       checkbox        The `checkbox` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
@@ -87,7 +87,7 @@ const checkboxDefaultRulesStamp = stampit()
 
       const checkedCheckboxes = this.
         getAllCheckboxesOrRadiosByName(checkbox)
-        .filter(c => (c.getAttribute('checked') === 'checked' && c.checked));
+        .filter(c => c.checked);
 
       return (isNaN(maxSelected) || checkedCheckboxes.length <= maxSelected);
     }

@@ -8,7 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "grunt": "^1.0.1",
-    "jquery": "^1.11",
     "stampit": "^2.1.1"
   },
   "devDependencies": {
