@@ -1,26 +1,19 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
 const bodyEventsHandlerStamp = require('../src/event-handlers/body-events-handler');
 const eventEmitterStamp = require('../src/utilities/node-event-emitter-stamp');
 const formationStamp = require('../src/formation-stamp');
-const formEventsHandlerStamp = require('../src/event-handlers/form-events-handler');
 const ruleStamp = require('../src/rules/rule');
 
 describe('Objects created using the `formationStamp`', function() {
-  let formation;
-  beforeEach(function() {
-    formation = formationStamp({ nodeEvents: eventEmitterStamp() });
-  });
-
   describe('`readyDocument()`', function() {
     it('should Enter Formation and return itself', function() {
-      let formationMock = sinon.mock(formation);
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      const formationMock = sinon.mock(formation);
 
       formationMock.expects('enterFormation').once();
 
@@ -33,10 +26,10 @@ describe('Objects created using the `formationStamp`', function() {
   describe('`enterFormation()`', function() {
     describe('when zero Formation forms are present on the page', function() {
       it('should log initialization, log that there are no forms, and return itself', function() {
-        let formationMock = sinon.mock(formation);
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+        const formationMock = sinon.mock(formation);
 
         formationMock.expects('log').once().withArgs('Initializing Formation...');
-        formationMock.expects('get$forms').once().returns($());
         formationMock.expects('info').once().withArgs('No Formation forms present, exiting.');
         formationMock.expects('initBodyEvents').never();
         formationMock.expects('initForms').never();
@@ -48,59 +41,53 @@ describe('Objects created using the `formationStamp`', function() {
     });
     describe('when one or more Formation forms are present on the page', function() {
       it('should log initialization, call the initialization methods, and return itself', function() {
-        let formationMock = sinon.mock(formation);
-
-        formationMock.expects('log').once().withArgs('Initializing Formation...');
-        formationMock.expects('get$forms').once().returns($('<form data-formation="1"></form>'));
-        formationMock.expects('initBodyEvents').once().returns(formation);
-        formationMock.expects('initForms').once().returns(formation);
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+        const formNode = document.createElement('form');
+        formNode.setAttribute('data-formation', 1);
+        document.body.appendChild(formNode);
 
         assert.equal(formation.enterFormation(), formation);
-
-        formationMock.verify();
+        document.body.removeChild(formNode);
       });
     });
   });
 
   describe('`initForm()`', function() {
     it('initializes the form component and events', function() {
-      let formEventsHandler = formEventsHandlerStamp({
-        formationSelector: '[data-formation="1"]',
-        nodeEvents : formation.nodeEvents
-      });
-      let formEventsHandlerMock = sinon.mock(formEventsHandler);
-      let $form = $('<form data-formation="1"></form>');
-      let $allForms = $();
-      let $allFormsMock = sinon.mock($allForms);
-      let $formMock = sinon.mock($form);
-      let formationMock = sinon.mock(formation);
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      const formNode = document.createElement('form');
+      formNode.setAttribute('data-formation', 1);
+      const input = document.createElement('input');
+      input.setAttribute('type', 'text');
+      input.setAttribute('data-fv-required', 1);
+      const submit = document.createElement('button');
+      submit.setAttribute('type', 'submit');
+      submit.setAttribute('data-fv-form-submit', 1);
 
-      formationMock.expects('createFormationComponent').once().returns(formEventsHandler);
-      formEventsHandlerMock.expects('initForm').once().withArgs($form);
-      formEventsHandlerMock.expects('initFormEvents').once();
-      formationMock.expects('get$forms').twice().returns($allForms);
-      $formMock.expects('eq').once().withArgs(0).returns($form);
-      $allFormsMock.expects('has').once().withArgs($form.get(0)).returns(false);
-      $allFormsMock.expects('add').once().withArgs($form);
+      formNode.appendChild(input);
+      formNode.appendChild(submit);
+      document.body.appendChild(formNode);
 
-      formation.initForm($form);
+      assert.equal(formation.initForm(formNode), formation);
+      assert.equal(formation.getForms().size, 1);
+      assert.equal(formation.getForms().has(formNode), true);
+      const formationComponent = formation.getForms().get(formNode);
+      assert.equal(formationComponent.formEventsAlreadyInitialized(), true);
 
-      formationMock.verify();
-      $formMock.verify();
-      $allFormsMock.verify();
-      formEventsHandlerMock.verify();
+      document.body.removeChild(formNode);
     });
   });
 
   describe('`createFormationComponent()`', function() {
     it('generates a `Formation.formEventsHandler`', function() {
-      let formationMock = sinon.mock(formation);
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      const formationMock = sinon.mock(formation);
 
-      formationMock.expects('getFormationSelector').once().returns('[data-formation="1"]');
-      formationMock.expects('getLogConsole').once().returns(true);
+      formationMock.expects('getLogConsole').once().returns(false);
 
-      let formEventsHandler = formation.createFormationComponent();
-      assert.isTrue(formEventsHandler.isFormEventHandler());
+      const formEventsHandler = formation.createFormationComponent();
+      assert.equal(formEventsHandler.isFormEventHandler(), true);
+      assert.equal(formEventsHandler.getLogConsole(), false);
 
       formationMock.verify();
     });
@@ -108,10 +95,11 @@ describe('Objects created using the `formationStamp`', function() {
 
   describe('`createFormationRule()`', function() {
     it('generates a `Formation.rule`', function() {
-      let rule = ruleStamp({name: 'a-good-rule', callback: function() {}});
-      let generatedRule = formation.createFormationRule(rule.name, rule.callback);
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      const rule = ruleStamp({name: 'a-good-rule', callback: function() {}});
+      const generatedRule = formation.createFormationRule(rule.name, rule.callback);
 
-      assert.isTrue(rule.isFormationRule());
+      assert.equal(rule.isFormationRule(), true);
       assert.equal(generatedRule.name, rule.name);
       assert.equal(generatedRule.callback, rule.callback);
     });
@@ -120,6 +108,7 @@ describe('Objects created using the `formationStamp`', function() {
   describe('`registerRule()`', function() {
     describe('when parameters are not valid', function() {
       it('throws an error when `elementType` is incorrect', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
         assert.throws(
           () => formation.registerRule(),
           TypeError,
@@ -132,6 +121,7 @@ describe('Objects created using the `formationStamp`', function() {
         );
       });
       it('throws an error when `ruleName` is incorrect', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
         assert.throws(
           () => formation.registerRule('text'),
           TypeError,
@@ -139,6 +129,7 @@ describe('Objects created using the `formationStamp`', function() {
         );
       });
       it('throws an error when `ruleCallbackMethod` is incorrect', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
         assert.throws(
           () => formation.registerRule('text', 'a-good-rule'),
           TypeError,
@@ -152,52 +143,56 @@ describe('Objects created using the `formationStamp`', function() {
       });
     });
     describe('when parameters are valid', function() {
-      it('adds a `document.ready` callback', function() {
-        let jQueryMock = sinon.mock($.fn);
+      it('adds a `DOMContentLoaded` callback', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+        const documentMock = sinon.mock(document);
 
-        jQueryMock.expects('ready').once().withArgs(sinon.match.func);
+        documentMock.expects('addEventListener').once().withArgs('DOMContentLoaded', sinon.match.func);
         assert.equal(formation.registerRule('text', 'a-good-rule', function() {}), formation);
 
-        jQueryMock.verify();
+        documentMock.verify();
       });
     });
-    describe('when `document.ready` is called', function() {
+    describe('when `DOMContentLoaded` is called', function() {
       // This is more of an integration test, but whatever.
       it('registers the supplied rule for each registered form', function() {
-        let formationMock = sinon.mock(formation);
-        let $forms = $('<form data-formation="1" id="form1"></form>');
-        let formEventsHandler = formEventsHandlerStamp({
-          formationSelector: '[data-formation="1"]',
-          nodeEvents : formation.nodeEvents
-        });
-        let formEventsHandlerMock = sinon.mock(formEventsHandler);
-        let rule = ruleStamp({name: 'a-good-rule', callback: function() {}});
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+        const formationMock = sinon.mock(formation);
+        const formNode = document.createElement('form');
+        formNode.setAttribute('data-formation', 1);
+        formNode.setAttribute('id', 'form1');
+        document.body.appendChild(formNode);
+        const formComponent = formation.createFormationComponent();
 
-        formationMock.expects('get$forms').once().returns($forms);
-        formationMock.expects('getFormComponentOfCurrentElement').once().withArgs($($forms.get(0))).returns(formEventsHandler);
-        formationMock.expects('createFormationRule').once().withArgs('a-good-rule', rule.callback).returns(rule);
-        formEventsHandlerMock.expects('registerRule').once().withArgs('text', rule);
+        assert.equal(formation.registerRule('text', 'a-good-rule', function() {}), formation);
+        formationMock.expects('getForms').once().returns(new Map([[formNode, formComponent]]));
 
-        assert.equal(formation.registerRule('text', 'a-good-rule', rule.callback), formation);
+        const event = document.createEvent('Event');
+        event.initEvent('DOMContentLoaded', true, true);
+        window.document.dispatchEvent(event);
+        assert.equal(formComponent.getRuleSetBySupportedElementType('text').getRules().slice(-1)[0].name, 'a-good-rule');
 
         formationMock.verify();
-        formEventsHandlerMock.verify();
+        document.body.removeChild(formNode);
       });
     });
   });
 
   describe('`getDebug()`', function() {
     it('should return `false` when logging is disabled (as it is by default)', function() {
-      assert.isFalse(formation.getDebug());
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      assert.equal(formation.getDebug(), false);
     });
     it('should return `true` when logging is enabled', function() {
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
       formation.setDebug(true);
-      assert.isTrue(formation.getDebug());
+      assert.equal(formation.getDebug(), true);
     });
   });
 
   describe('`setDebug()`', function() {
     it('should throw a `TypeError` when the `newVal` param is not a Boolean', function() {
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
       assert.throws(
         () => formation.setDebug(),
         TypeError,
@@ -210,84 +205,104 @@ describe('Objects created using the `formationStamp`', function() {
       );
     });
     it('should not throw a `TypeError` when the `newVal` param is a Boolean', function() {
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
       assert.doesNotThrow(() => formation.setDebug(false), TypeError);
       assert.equal(formation.setDebug(true), formation);
-      assert.isTrue(formation.getDebug());
+      assert.equal(formation.getDebug(), true);
     });
   });
 
-  describe('`get$forms()`', function() {
-    it('returns an empty `jQuery` object by default', function() {
-      assert.equal(formation.get$forms().length, 0);
+  describe('`getForms()`', function() {
+    it('returns an empty Map by default', function() {
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      assert.equal(formation.getForms().size, 0);
     });
   });
 
   describe('`detectForms()`', function() {
     it('looks for `form` elements in the DOM, filter them, and return itself', function() {
-      let jQueryMock = sinon.mock($.fn);
-      jQueryMock.expects('filter').once().withArgs(formation.formFilter).returns($);
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+      const formNode = document.createElement('form');
+      const formNode2 = document.createElement('form');
+      const formNode3 = document.createElement('form');
+      formNode.setAttribute('data-formation', 1);
+      formNode.setAttribute('id', 'form1');
+      formNode2.setAttribute('data-formation', 1);
+      formNode2.setAttribute('id', 'form2');
+      formNode3.setAttribute('id', 'form3');
+      document.body.appendChild(formNode);
+      document.body.appendChild(formNode2);
+      document.body.appendChild(formNode3);
 
       assert.equal(formation.detectForms(), formation);
-
-      jQueryMock.verify();
+      assert.equal(formation.getForms().size, 2);
+      assert.equal(formation.getForms().has(formNode), true);
+      assert.equal(formation.getForms().has(formNode2), true);
+      assert.equal(formation.getForms().has(formNode3), false);
+      document.body.removeChild(formNode);
+      document.body.removeChild(formNode2);
+      document.body.removeChild(formNode3);
     });
   });
 
-  describe('`formFilter()`', function() {
-    let jQueryMock;
-    beforeEach(function() {
-      jQueryMock = sinon.mock($.fn);
+  describe('`getFormComponentOfCurrentElement()`', function() {
+    describe('when the element is not inside a Formation validated HTML form element', function() {
+      it('returns null', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('data-fv-required', 1);
+
+        assert.equal(formation.getFormComponentOfCurrentElement(input), null);
+      });
     });
-    afterEach(function() {
-      jQueryMock.restore();
-    });
-    it('returns false when the DOM element is not a `form` node', function() {
-      jQueryMock.expects('prop').once().withArgs('tagName').returns('div');
-      jQueryMock.expects('attr').never();
+    describe('when the element is inside a Formation validated HTML form element', function() {
+      describe('the formComponent for the HTML form is not set', function() {
+        it('returns null', function() {
+          const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
+          const formNode = document.createElement('form');
+          formNode.setAttribute('data-formation', 1);
+          const input = document.createElement('input');
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-required', 1);
 
-      let $div = $('<div></div>');
+          formNode.appendChild(input);
+          assert.equal(formation.getFormComponentOfCurrentElement(input), null);
+        });
+      });
+      describe('the formComponent for the HTML form is set', function() {
+        it('successfully returns the `formComponent`', function() {
+          const formNode = document.createElement('form');
+          formNode.setAttribute('data-formation', 1);
+          const input = document.createElement('input');
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-required', 1);
+          const submit = document.createElement('button');
+          submit.setAttribute('type', 'submit');
+          submit.setAttribute('data-fv-form-submit', 1);
 
-      assert.isFalse(formation.formFilter(0, $div.get(0)));
+          formNode.appendChild(input);
+          formNode.appendChild(submit);
+          document.body.appendChild(formNode);
 
-      jQueryMock.verify();
-    });
-    it('returns false when the DOM element is a `form` node, but has no `data-formation` attribute', function() {
-      jQueryMock.expects('prop').once().withArgs('tagName').returns('form');
-      jQueryMock.expects('attr').once().withArgs('data-formation').returns(undefined);
+          const formation = formationStamp({ nodeEvents: eventEmitterStamp() });//.detectForms();
+          formation.initLogging(true);
+          formation.initForm(formNode);
+          const formComponent = formation.getFormComponentOfCurrentElement(input);
 
-      let $form = $('<form></form>');
+          assert.notEqual(formComponent, null);
+          assert.equal(formComponent.isFormComponent(), true);
 
-      assert.isFalse(formation.formFilter(0, $form.get(0)));
-
-      jQueryMock.verify();
-    });
-    it('returns false when the DOM element is a `form` node, has a `data-formation` attribute, but the value is not `1`', function() {
-      jQueryMock.expects('prop').once().withArgs('tagName').returns('form');
-      jQueryMock.expects('attr').twice().withArgs('data-formation').returns('0');
-
-      let $form = $('<form data-formation="0"></form>');
-
-      assert.isFalse(formation.formFilter(0, $form.get(0)));
-
-      jQueryMock.verify();
-    });
-    it('returns true when the DOM element is a `form` node, has a `data-formation` attribute, and the value is `1`', function() {
-      jQueryMock.expects('prop').once().withArgs('tagName').returns('form');
-      jQueryMock.expects('attr').twice().withArgs('data-formation').returns('1');
-
-      let $form = $('<form data-formation="1"></form>');
-
-      assert.isTrue(formation.formFilter(0, $form.get(0)));
-
-      jQueryMock.verify();
+          document.body.removeChild(formNode);
+        });
+      });
     });
   });
-
-  describe.skip('`getSupportedElementTypes()`', function() {});
 
   describe('`initBodyEvents()`', function() {
     describe('when the body events have not yet been initialized', function() {
       it('logs initialization, and calls `setLogConsole()` and `addDefaultEventHandlers()` on the new instance', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
         let formationMock = sinon.mock(formation);
         let bodyEventsHandler = bodyEventsHandlerStamp({ nodeEvents : eventEmitterStamp() });
         let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
@@ -306,6 +321,7 @@ describe('Objects created using the `formationStamp`', function() {
     });
     describe('when the body events have been initialized', function() {
       it('logs initialization, calls `setLogConsole()`, but does not call `addDefaultEventHandlers()` on the new instance', function() {
+        const formation = formationStamp({ nodeEvents: eventEmitterStamp() });
         let formationMock = sinon.mock(formation);
         let bodyEventsHandler = bodyEventsHandlerStamp({ nodeEvents : eventEmitterStamp() });
         let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
@@ -327,16 +343,21 @@ describe('Objects created using the `formationStamp`', function() {
 
   describe('`initForms()`', function() {
     it('initialize its DOM and the various events which should be handled for each registered Formation form', function() {
-      let $forms = $('<form data-formation="1" id="form1"></form>');
-      $(document.body).append($forms);
-      formation = formationStamp({ nodeEvents: eventEmitterStamp() }).detectForms();
-      let formationMock = sinon.mock(formation);
+      const formNode = document.createElement('form');
+      const formNode2 = document.createElement('form');
+      formNode.setAttribute('data-formation', 1);
+      formNode2.setAttribute('data-formation', 1);
+      document.body.appendChild(formNode);
+      document.body.appendChild(formNode2);
 
-      formationMock.expects('initForm').once().withArgs($($forms.get(0))).returns(formation);
-
+      const formation = formationStamp({ nodeEvents: eventEmitterStamp() }).detectForms();
       assert.equal(formation.initForms(), formation);
+      assert.equal(formation.getForms().size, 2);
+      assert.equal(formation.getForms().has(formNode), true);
+      assert.equal(formation.getForms().has(formNode2), true);
 
-      formationMock.verify();
+      document.body.removeChild(formNode);
+      document.body.removeChild(formNode2);
     });
   });
 });

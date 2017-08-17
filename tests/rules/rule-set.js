@@ -1,6 +1,5 @@
 'use strict';
 
-const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
@@ -16,21 +15,15 @@ describe('Objects created using the `ruleSetStamp`', function() {
   });
   describe('`isFormationRuleSet()`', function() {
     it('returns true', function() {
-      assert.isTrue(rulesSet.isFormationRuleSet());
+      assert.equal(rulesSet.isFormationRuleSet(), true);
     });
   });
 
   describe('`add()`', function() {
     it('should attempt to push a rule onto the list', function() {
       const newRule = ruleStamp();
-      let rules = [];
-      let rulesMock = sinon.mock(rules);
-
-      rulesSetMock.expects('getRules').once().returns(rules);
-      rulesMock.expects('push').once().withArgs(newRule);
       assert.equal(rulesSet.add(newRule), rulesSet);
-
-      rulesSetMock.verify();
+      assert.equal(rulesSet.getRules().slice(-1)[0], newRule);
     });
   });
 
@@ -43,25 +36,23 @@ describe('Objects created using the `ruleSetStamp`', function() {
   });
 
   describe('`getAttributeOwner()`', function() {
-    let $input;
-    beforeEach(function() {
-      $input = $('<input type="text" name="test" id="test1" value="take a test toke" />');
-    });
-
     it('should return the value passed in', function() {
-      assert.equal(rulesSet.getAttributeOwner($input), $input);
+      const input = document.createElement('input');
+      input.setAttribute('type', 'text');
+      assert.equal(rulesSet.getAttributeOwner(input), input);
     });
   });
 
   describe('`process()`', function() {
-    let $input;
-    let $inputMock;
+    let input;
     beforeEach(function() {
-      $input = $('<input type="text" name="test" id="test1" value="take a test toke" />');
-      $inputMock = sinon.mock($input);
+      input = document.createElement('input');
+      input.setAttribute('type', 'text');
+      input.setAttribute('data-fv-required', 1);
     });
     describe('when a rule fails', function() {
       it('returns false', function() {
+        input.setAttribute('data-fv-rule-called', 1);
         const rules = [
           ruleStamp({
             'name' : 'default',
@@ -80,21 +71,14 @@ describe('Objects created using the `ruleSetStamp`', function() {
             'callback' : function() { throw new Error('should never be called'); }
           })
         ];
-
-        rulesSetMock.expects('getAttributeOwner').once().withArgs($input).returns($input);
-        rulesSetMock.expects('getRules').once().returns(rules);
-        $inputMock.expects('attr').never().withArgs('data-fv-default');
-        $inputMock.expects('attr').once().withArgs('data-fv-rule-called').returns('1');
-        $inputMock.expects('attr').once().withArgs('data-fv-rule-never-called-1').returns(undefined);
-        $inputMock.expects('attr').never().withArgs('data-fv-rule-never-called-2');
-        assert.isFalse(rulesSet.process($input));
-
-        rulesSetMock.verify();
-        $inputMock.verify();
+        rules.forEach(rule => rulesSet.add(rule));
+        assert.equal(rulesSet.process(input), false);
       });
     });
     describe('when all rules pass', function() {
       it('returns true', function() {
+        input.setAttribute('data-fv-rule-called', 1);
+        input.setAttribute('data-fv-rule-called-2', 1);
         const rules = [
           ruleStamp({
             'name' : 'default',
@@ -109,16 +93,8 @@ describe('Objects created using the `ruleSetStamp`', function() {
             'callback' : function() { return true; }
           })
         ];
-
-        rulesSetMock.expects('getAttributeOwner').once().withArgs($input).returns($input);
-        rulesSetMock.expects('getRules').once().returns(rules);
-        $inputMock.expects('attr').never().withArgs('data-fv-default');
-        $inputMock.expects('attr').once().withArgs('data-fv-rule-called').returns('1');
-        $inputMock.expects('attr').once().withArgs('data-fv-rule-called-2').returns('1');
-        assert.isTrue(rulesSet.process($input));
-
-        rulesSetMock.verify();
-        $inputMock.verify();
+        rules.forEach(rule => rulesSet.add(rule));
+        assert.equal(rulesSet.process(input), true);
       });
     });
   });

@@ -1,12 +1,9 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
-const buttonComponentStamp = require('../../src/components/button');
 const eventEmitterStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formComponentStamp = require('../../src/components/form');
 const ruleStamp = require('../../src/rules/rule');
@@ -16,10 +13,7 @@ describe('Objects created using the `formComponentStamp`', function() {
   let formComponent;
   let formComponentMock;
   beforeEach(function() {
-    formComponent = formComponentStamp({
-      nodeEvents : eventEmitterStamp(),
-      formationSelector : '[data-formation="1"]'
-    });
+    formComponent = formComponentStamp({ nodeEvents : eventEmitterStamp() });
     formComponentMock = sinon.mock(formComponent);
   });
 
@@ -110,84 +104,112 @@ describe('Objects created using the `formComponentStamp`', function() {
   });
 
   describe('`initForm()`', function() {
-    describe('it has been initialized', function() {
-      it('should log that it was already initialized and return itself', function() {
-        let $form = $('<form></form>').data('formation-form', formComponent);
-        formComponentMock.expects('initialized').once().returns(false);
-        formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(formComponent);
-        formComponentMock.expects('initialized').once().returns(true);
-        formComponentMock.expects('warn').once().withArgs('This `formComponent` is already initialized, skipping.');
-        assert.equal(formComponent.initForm($form), formComponent);
-
-        formComponentMock.verify();
-      });
-    });
     describe('it has not been initialized', function() {
       describe('no required fields are present in the form', function() {
-        describe('the `$form` element has no `formation-form` object to check', function() {
-          it('should catch the error from `getFormComponentOfCurrentElement()` and throw an error about missing required fields', function() {
-            let $form = $('<form></form>');
-            let typeErrMsg = 'The `formation-form` data object is not set.';
-            let err = new TypeError(typeErrMsg);
-            formComponentMock.expects('initialized').once().returns(false);
-            formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).throws(err);
-            formComponentMock.expects('findRequiredFields').once().withArgs($form).returns($());
-            formComponentMock.expects('info').once().withArgs(err);
+        it('throw an error about missing required fields', function() {
+          const formNode = document.createElement('form');
+          formNode.setAttribute('data-formation', 1);
+          document.body.appendChild(formNode);
 
-            assert.throws(
-              () => {formComponent.initForm($form);},
-              Error,
-              'No required fields found, cannot proceed.'
-            );
+          assert.throws(
+            () => { formComponent.initForm(formNode);},
+            Error,
+            'No required fields found, cannot proceed.'
+          );
 
-            formComponentMock.verify();
-          });
+          document.body.removeChild(formNode);
         });
       });
       describe('required fields are present in the form', function() {
-        it('sets the optional fields and initializes their validity flags, and sets the form buttons (submit, preview, etc)', function() {
-          let $form = $('<form></form>');
-          let $formMock = sinon.mock($form);
-          let $requiredFields = $('<input type="text" />').add($('<input type="text" />'));
-          let $requiredFieldsMock = sinon.mock($requiredFields);
-          let $optionalFields = $('<input type="checkbox" />').add($('<select><option value="0">nope</option></select>'));
-          let $optionalFieldsMock = sinon.mock($optionalFields);
-          let $submitButton = $('<button data-fv-submit="1"></button>');
-          formComponentMock.expects('initialized').once().returns(false);
-          formComponentMock.expects('getFormComponentOfCurrentElement').once().withArgs($form).returns(null);
-          formComponentMock.expects('findRequiredFields').once().withArgs($form).returns($requiredFields);
-          formComponentMock.expects('findOptionalFields').once().withArgs($form).returns($optionalFields);
-          formComponentMock.expects('get$form').twice().returns($form);
-          $formMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($form);
-          $requiredFieldsMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($requiredFields);
-          $optionalFieldsMock.expects('attr').once().withArgs('data-fv-valid', 0).returns($optionalFields);
-          $formMock.expects('data').once().withArgs('formation-form', formComponent);
-          formComponentMock.expects('findSubmitButton').once().withArgs($form).returns($submitButton);
-          formComponentMock.expects('findPreviewButton').once().withArgs($form).returns($());
+        it('sets the required and optional fields and initializes their validity flags, and sets the form buttons (submit, preview, etc)', function() {
+          const formNode = document.createElement('form');
+          formNode.setAttribute('data-formation', 1);
+          const input = document.createElement('input');
+          input.setAttribute('type', 'text');
+          input.setAttribute('data-fv-required', 1);
+          const optionalInput = document.createElement('input');
+          optionalInput.setAttribute('type', 'text');
+          optionalInput.setAttribute('data-fv-optional', 1);
+          const textarea = document.createElement('textarea');
+          textarea.setAttribute('data-fv-required', 1);
+          const select = document.createElement('select');
+          select.setAttribute('data-fv-required', 1);
+          const submit = document.createElement('button');
+          submit.setAttribute('type', 'submit');
+          submit.setAttribute('data-fv-form-submit', 1);
 
-          assert.equal(formComponent.initForm($form), formComponent);
+          formNode.appendChild(input);
+          formNode.appendChild(optionalInput);
+          formNode.appendChild(textarea);
+          formNode.appendChild(select);
+          formNode.appendChild(submit);
+          document.body.appendChild(formNode);
 
-          $requiredFieldsMock.verify();
-          $optionalFieldsMock.verify();
-          $formMock.verify();
-          formComponentMock.verify();
+          assert.equal(formComponent.initForm(formNode), formComponent);
+          assert.equal(formNode.getAttribute('data-fv-valid'), '0');
+          assert.equal(input.getAttribute('data-fv-valid'), '0');
+          assert.equal(optionalInput.getAttribute('data-fv-valid'), '0');
+          assert.equal(textarea.getAttribute('data-fv-valid'), '0');
+          assert.equal(select.getAttribute('data-fv-valid'), '0');
+
+          document.body.removeChild(formNode);
         });
       });
     });
-  });
+    describe('it has been initialized', function() {
+      it('should log that it was already initialized and return itself', function() {
+        const formNode = document.createElement('form');
+        formNode.setAttribute('data-formation', 1);
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('data-fv-required', 1);
+        input.value = 'test';
+        const optionalInput = document.createElement('input');
+        optionalInput.setAttribute('type', 'text');
+        optionalInput.setAttribute('data-fv-optional', 1);
+        const textarea = document.createElement('textarea');
+        textarea.setAttribute('data-fv-required', 1);
+        const select = document.createElement('select');
+        select.setAttribute('data-fv-required', 1);
+        const submit = document.createElement('button');
+        submit.setAttribute('type', 'submit');
+        submit.setAttribute('data-fv-form-submit', 1);
 
-  describe('`get$requiredFields()`', function() {
-    describe('it has not been set', function() {
-      it('should return an empty jQuery object', function() {
-        assert.deepEqual(formComponent.get$requiredFields(), $());
+        formNode.appendChild(input);
+        formNode.appendChild(optionalInput);
+        formNode.appendChild(textarea);
+        formNode.appendChild(select);
+        formNode.appendChild(submit);
+        document.body.appendChild(formNode);
+
+        assert.equal(formComponent.initForm(formNode), formComponent);
+        assert.equal(formNode.getAttribute('data-fv-valid'), '0');
+        assert.equal(input.getAttribute('data-fv-valid'), '0');
+        assert.equal(optionalInput.getAttribute('data-fv-valid'), '0');
+        assert.equal(textarea.getAttribute('data-fv-valid'), '0');
+        assert.equal(select.getAttribute('data-fv-valid'), '0');
+
+        formComponentMock.expects('warn').once().withArgs('This `formComponent` is already initialized, skipping.');
+        assert.equal(formComponent.initForm(formNode), formComponent);
+
+        formComponentMock.verify();
+        document.body.removeChild(formNode);
       });
     });
   });
 
-  describe('`get$optionalFields()`', function() {
+  describe('`getRequiredFields()`', function() {
     describe('it has not been set', function() {
-      it('should return an empty jQuery object', function() {
-        assert.deepEqual(formComponent.get$optionalFields(), $());
+      it('should return null', function() {
+        assert.equal(formComponent.getRequiredFields(), null);
+      });
+    });
+  });
+
+  describe('`getOptionalFields()`', function() {
+    describe('it has not been set', function() {
+      it('should return null', function() {
+        assert.equal(formComponent.getOptionalFields(), null);
       });
     });
   });
@@ -195,60 +217,7 @@ describe('Objects created using the `formComponentStamp`', function() {
   describe('`getSubmitButton()`', function() {
     describe('it has not been set', function() {
       it('should return null', function() {
-        assert.isNull(formComponent.getSubmitButton());
-      });
-    });
-  });
-
-  describe('`getPreviewButton()`', function() {
-    describe('it has not been set', function() {
-      it('should return null', function() {
-        assert.isNull(formComponent.getPreviewButton());
-      });
-    });
-  });
-
-  describe('`getSubmitWithFallbackPreviewButton()`', function() {
-    let button;
-    let buttonMock;
-    beforeEach(function() {
-      button = buttonComponentStamp({$button : $('<button></button>')});
-      buttonMock = sinon.mock(button);
-    });
-    describe('the submit button exists', function() {
-      it('returns the submit button', function() {
-        formComponentMock.expects('getSubmitButton').once().returns(button);
-        buttonMock.expects('exists').once().returns(true);
-        assert.equal(formComponent.getSubmitWithFallbackPreviewButton(), button);
-
-        formComponentMock.verify();
-        buttonMock.verify();
-      });
-    });
-    describe('the submit button does not exist', function() {
-      describe('the preview button exists', function() {
-        it('returns the preview button', function () {
-          formComponentMock.expects('getSubmitButton').once().returns(button);
-          buttonMock.expects('exists').once().returns(false);
-          formComponentMock.expects('getPreviewButton').once().returns(button);
-          buttonMock.expects('exists').once().returns(true);
-          assert.equal(formComponent.getSubmitWithFallbackPreviewButton(), button);
-
-          formComponentMock.verify();
-          buttonMock.verify();
-        });
-      });
-      describe('the preview button does not exist', function() {
-        it('returns null', function () {
-          formComponentMock.expects('getSubmitButton').once().returns(button);
-          buttonMock.expects('exists').once().returns(false);
-          formComponentMock.expects('getPreviewButton').once().returns(button);
-          buttonMock.expects('exists').once().returns(false);
-          assert.isNull(formComponent.getSubmitWithFallbackPreviewButton());
-
-          formComponentMock.verify();
-          buttonMock.verify();
-        });
+        assert.equal(formComponent.getSubmitButton(), null);
       });
     });
   });

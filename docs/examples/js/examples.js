@@ -1,30 +1,45 @@
 Formation.setDebug(true);
-var $body = $(document.body);
 
-$('form').each(function() {
-  var $form = $(this);
-  var $formValid = $('#form-valid');
-  $form.on(Formation.getValidityChangedEventName(), function() {
-    if (parseInt($form.attr('data-fv-valid')) === 1) {
-      $formValid.html('FORM VALID');
-      $body.removeClass('invalid').addClass('valid');
+var formValid = document.getElementById('form-valid');
+Array.from(document.getElementsByTagName('form')).forEach(function(form) {
+  form.addEventListener(Formation.getValidityChangedEventName(), function() {
+    if (parseInt(form.getAttribute('data-fv-valid')) === 1) {
+      formValid.innherHTML = 'FORM VALID';
+      document.body.classList.remove('invalid');
+      document.body.classList.add('valid');
     }
     else {
-      $formValid.html('FORM NOT VALID');
-      $body.removeClass('valid').addClass('invalid');
+      formValid.innherHTML = 'FORM NOT VALID';
+      document.body.classList.remove('valid');
+      document.body.classList.add('invalid');
     }
   });
-  Formation.findRequiredFields($form).add(Formation.findOptionalFields($form))
-    .on(Formation.getValidityChangedEventName(), function() {
-      var $this = $(this);
-      if (parseInt($this.attr('data-fv-valid')) === 1) {
-        $this.closest('.rule-example').removeClass('invalid').addClass('valid');
-        $this.next('div.status').html('FIELD VALID');
-      }
-      else {
-        $this.closest('.rule-example').removeClass('valid').addClass('invalid');
-        $this.next('div.status').html('FIELD NOT VALID');
-      }
+
+  Array
+    .from(Formation.findRequiredFields(form))
+    .concat(Array.from(Formation.findOptionalFields(form)))
+    .forEach(function(field) {
+      field.addEventListener(Formation.getValidityChangedEventName(), function(event) {
+        var ruleExampleContainer = Formation.closest(event.target, '.rule-example');
+
+        var elementToCheck = Formation.getCheckboxOrRadioContainer(event.target);
+        if (elementToCheck === null) {
+          elementToCheck = event.target;
+        }
+        if (parseInt(elementToCheck.getAttribute('data-fv-valid')) === 1) {
+          ruleExampleContainer.classList.remove('invalid');
+          ruleExampleContainer.classList.add('valid');
+          elementToCheck.nextSibling.innerHTML = 'FIELD VALID';
+        }
+        else {
+          ruleExampleContainer.classList.remove('valid');
+          ruleExampleContainer.classList.add('invalid');
+          elementToCheck.nextSibling.innerHTML = 'FIELD INVALID';
+        }
+      });
+
+      var statusDiv = document.createElement('div');
+      statusDiv.classList.add('status')
+      field.insertAdjacentElement('afterend', statusDiv);
     })
-    .after($('<div></div>').addClass('status'));
 });

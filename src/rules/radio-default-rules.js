@@ -8,7 +8,7 @@ const stampit = require('stampit');
 /**
  * Used for processing a set of `Formation.rule` objects against `input:radio` elements.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.radioDefaultRules
@@ -26,17 +26,17 @@ const radioDefaultRulesStamp = stampit()
      * @memberOf    {Formation.radioDefaultRules}
      * @mixes       {Formation.radioDefaultRules}
      *
-     * @param       {jQuery}        $radio          The `radio` element upon which to apply the rule. Required.
+     * @param       {Element}       radio           The `radio` element upon which to apply the rule. Required.
      * @param       {String}        attribute       The data attribute which may contain additional data. Required.
      *
      * @returns     {Boolean}
      */
-    dataFvDefault($radio, attribute) {
-      const $checkedRadios = this
-        .getAllCheckboxesOrRadiosByName($radio)
-        .filter(':checked');
+    dataFvDefault(radio, attribute) {
+      const checkedRadios = this
+        .getAllCheckboxesOrRadiosByName(radio)
+        .filter(r => r.checked);
 
-      return $checkedRadios.length == 1;
+      return (checkedRadios.length == 1);
     }
   })
   .init(function() {
@@ -53,7 +53,7 @@ const radioDefaultRulesStamp = stampit()
     let __rules = [
       ruleStamp({
         name : 'default',
-        callback : ($radio, attribute) => this.dataFvDefault($radio, attribute)
+        callback : (radio, attribute) => this.dataFvDefault(radio, attribute)
       })
     ];
 
@@ -65,9 +65,7 @@ const radioDefaultRulesStamp = stampit()
      *
      * @returns     {Array}     __rules     The default rules we've defined.
      */
-    this.getRules = () => {
-      return __rules;
-    };
+    this.getRules = () => __rules;
 
     /**
      * Return the DOM element that the `formation` rule attributes and validity flag
@@ -78,13 +76,11 @@ const radioDefaultRulesStamp = stampit()
      * @access      public
      * @memberOf    {Formation.radioDefaultRules}
      *
-     * @param       {jQuery}    $element      The element to check. Required.
+     * @param       {Element}     element      The element to check. Required.
      *
-     * @returns     {jQuery}
+     * @returns     {Element|null}
      */
-    this.getAttributeOwner = ($element) => {
-      return this.getCheckboxOrRadioContainer($element);
-    };
+    this.getAttributeOwner = element => this.getCheckboxOrRadioContainer(element);
   });
 
 module.exports = ruleSetStamp.compose(radioDefaultRulesStamp);

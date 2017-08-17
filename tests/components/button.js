@@ -1,8 +1,6 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
@@ -11,171 +9,143 @@ const nodeEventEmitterStamp = require('../../src/utilities/node-event-emitter-st
 
 describe('Objects created using the `buttonComponentStamp`', function() {
   describe('`exists()`', function() {
-    describe('the `$button` property is null', function() {
+    describe('the `button` property is null', function() {
       it('should return false', function() {
-        let buttonComponent = buttonComponentStamp();
+        const buttonComponent = buttonComponentStamp();
 
-        assert.isFalse(buttonComponent.exists());
+        assert.equal(buttonComponent.exists(), false);
       });
     });
-    describe('the `$button` property is set to an empty jQuery object', function() {
-      it('should return false', function() {
-        let buttonComponent = buttonComponentStamp({$button : $()});
-
-        assert.isFalse(buttonComponent.exists());
-      });
-    });
-    describe('the `$button` property is set', function() {
+    describe('the `button` property is set', function() {
       it('should return true', function() {
-        let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
+        const buttonComponent = buttonComponentStamp({button : document.createElement('button')});
 
-        assert.isTrue(buttonComponent.exists());
+        assert.equal(buttonComponent.exists(), true);
       });
     });
   });
 
   describe('`isSubmitting()`', function() {
-    let buttonComponent;
-    let buttonComponentMock;
-    let $fnMock;
-    beforeEach(function() {
-      buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
-      buttonComponentMock = sinon.mock(buttonComponent);
-      $fnMock = sinon.mock($.fn);
-    });
-    afterEach(function() {$fnMock.restore();});
-    describe('the `$button` doesnt exist', function() {
+    describe('the `button` doesnt exist', function() {
       it('should return false', function() {
-        buttonComponentMock.expects('exists').once().returns(false);
-        assert.isFalse(buttonComponent.isSubmitting());
-
-        buttonComponentMock.verify();
+        const buttonComponent = buttonComponentStamp();
+        assert.equal(buttonComponent.isSubmitting(), false);
       });
     });
-    describe('the `$button` exists but the `data-submitting` flag is undefined', function() {
+    describe('the `button` exists but the `data-submitting` flag is undefined', function() {
       it('should return false', function() {
-        buttonComponentMock.expects('exists').once().returns(true);
-        $fnMock.expects('attr').once().withArgs('data-fv-submitting').returns(undefined);
-        assert.isFalse(buttonComponent.isSubmitting());
-
-        buttonComponentMock.verify();
-        $fnMock.verify();
+        const buttonComponent = buttonComponentStamp({button : document.createElement('button')});
+        assert.equal(buttonComponent.isSubmitting(), false);
       });
     });
-    describe('the `$button` exists, the `data-submitting` flag is defined, and set to `1`', function() {
+    describe('the `button` exists, the `data-fv-submitting` flag is defined, and set to `1`', function() {
       it('should return true', function() {
-        buttonComponentMock.expects('exists').once().returns(true);
-        $fnMock.expects('attr').twice().withArgs('data-fv-submitting').returns('1');
-        assert.isTrue(buttonComponent.isSubmitting());
-
-        buttonComponentMock.verify();
-        $fnMock.verify();
+        const button = document.createElement('button');
+        button.setAttribute('data-fv-submitting', 1);
+        const buttonComponent = buttonComponentStamp({button});
+        assert.equal(buttonComponent.isSubmitting(), true);
       });
     });
   });
 
   describe('`setEnabled()`', function() {
-    it('enable or disable the `$button` based on the `enable` param', function() {
-      let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
-      let buttonComponentMock = sinon.mock(buttonComponent);
-      buttonComponentMock.expects('enableOrDisableElement')
-        .once().withArgs(buttonComponent.$button, true).returns(true);
-
+    it('enable or disable the `button` based on the `enable` param', function() {
+      const buttonComponent = buttonComponentStamp({button : document.createElement('button')});
       assert.equal(buttonComponent.setEnabled(true), buttonComponent);
+      assert.equal(buttonComponent.button.hasAttribute('disabled'), false);
+      assert.equal(buttonComponent.button.classList.contains('disabled'), false);
 
-      buttonComponentMock.verify();
+      buttonComponent.setEnabled(false);
+      assert.equal(buttonComponent.button.getAttribute('disabled'), 'disabled');
+      assert.equal(buttonComponent.button.classList.contains('disabled'), true);
     });
   });
 
   describe('`setSubmitting()`', function() {
-    it('set the $button to a submitting state when the param is true', function() {
-      let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
-      let $fnMock = sinon.mock($.fn);
-
-      $fnMock.expects('attr').once().withArgs('data-fv-submitting', 1).returns(buttonComponent.$button);
-      //$fnMock.expects('button').once().withArgs('loading').returns(buttonComponent.$button);
+    it('set the button to a submitting state when the param is true', function() {
+      const buttonComponent = buttonComponentStamp({button : document.createElement('button')});
       assert.equal(buttonComponent.setSubmitting(true), buttonComponent);
-
-      $fnMock.verify();
+      assert.equal(buttonComponent.isSubmitting(), true);
     });
-    it('removes the submitting state of the $button when the param is false', function() {
-      let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
-      let $fnMock = sinon.mock($.fn);
-
-      $fnMock.expects('removeAttr').once().withArgs('data-fv-submitting').returns(buttonComponent.$button);
-      //$fnMock.expects('button').once().withArgs('loading').returns(buttonComponent.$button);
+    it('removes the submitting state of the button when the param is false', function() {
+      const buttonComponent = buttonComponentStamp({button : document.createElement('button')});
       assert.equal(buttonComponent.setSubmitting(false), buttonComponent);
-
-      $fnMock.verify();
+      assert.equal(buttonComponent.isSubmitting(), false);
     });
   });
 
   describe('`addHandleFormSubmitListener()`', function() {
     it('adds a node event that will listen for a form submit event and handle it', function() {
-      let nodeEvents = nodeEventEmitterStamp();
-      let nodeEventsMock = sinon.mock(nodeEvents);
-      let buttonComponent = buttonComponentStamp({$button : $('<button></button>'), nodeEvents: nodeEvents});
+      const nodeEvents = nodeEventEmitterStamp();
+      const buttonComponent = buttonComponentStamp({button : document.createElement('button'), nodeEvents});
+      const buttonComponentMock = sinon.mock(buttonComponent);
+      buttonComponentMock.expects('handleFormSubmitEvent').once();
 
-      nodeEventsMock.expects('on').once().withArgs('formationFormSubmit', sinon.match.func);
-      nodeEventsMock.expects('getNodeFormSubmitEvent').once().returns('formationFormSubmit');
       assert.equal(buttonComponent.addHandleFormSubmitListener(), buttonComponent);
+      nodeEvents.emit(nodeEvents.getNodeFormSubmitEvent());
 
-      nodeEventsMock.verify();
+      buttonComponentMock.verify();
     });
   });
 
   describe('`handleFormSubmitEvent()`', function() {
     describe('the button does not exist', function() {
       it('does nothing', function () {
-        let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
-        let buttonComponentMock = sinon.mock(buttonComponent);
+        const buttonComponent = buttonComponentStamp({});
+        const buttonComponentMock = sinon.mock(buttonComponent);
 
-        buttonComponentMock.expects('log').once().withArgs('handleFormSubmitEvent() called for ');
-        buttonComponentMock.expects('exists').once().returns(false);
-        buttonComponent.handleFormSubmitEvent($.Event());
+        buttonComponentMock.expects('log').once().withArgs('handleFormSubmitEvent() called for undefined');
+        buttonComponentMock.expects('setEnabled').never();
+        buttonComponentMock.expects('setSubmitting').never();
 
+        buttonComponent.handleFormSubmitEvent(document.createEvent('Event'));
         buttonComponentMock.verify();
       });
     });
     describe('the button exists', function() {
-      it('disables the $button, sets it to submitting state, and triggers the blur event', function () {
-        let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
-        let buttonComponentMock = sinon.mock(buttonComponent);
-        let $fnMock = sinon.mock($.fn);
+      it('disables the button, sets it to submitting state, and triggers the blur event', function () {
+        const buttonBlurEventHandler = e => { e.target.setAttribute('triggered', true); };
 
-        buttonComponentMock.expects('log')
-          .once().withArgs('handleFormSubmitEvent() called for ' + buttonComponent.$button.selector);
-        buttonComponentMock.expects('exists').once().returns(true);
-        buttonComponentMock.expects('setEnabled').once().withArgs(false).returns(buttonComponent);
-        buttonComponentMock.expects('setSubmitting').once().withArgs(true).returns(buttonComponent);
-        buttonComponentMock.expects('getBlurEventName').once().returns('blur.formation');
-        $fnMock.expects('trigger').once().withArgs('blur.formation');
-        buttonComponent.handleFormSubmitEvent($.Event());
+        const button = document.createElement('button');
+        const buttonComponent = buttonComponentStamp({button});
+        buttonComponent.button.addEventListener(buttonComponent.getBlurEventName(), buttonBlurEventHandler);
+        const buttonComponentMock = sinon.mock(buttonComponent);
 
+        buttonComponentMock.expects('log').once().withArgs('handleFormSubmitEvent() called for [object HTMLButtonElement]');
+
+        buttonComponent.handleFormSubmitEvent(document.createEvent('Event'));
+        assert.equal(buttonComponent.isSubmitting(), true);
+        assert.equal(button.getAttribute('disabled'), 'disabled');
+        assert.equal(button.classList.contains('disabled'), true);
+        assert.equal(button.hasAttribute('triggered'), true);
         buttonComponentMock.verify();
-        $fnMock.verify();
+
+        buttonComponent.button.removeEventListener(buttonComponent.getBlurEventName(), buttonBlurEventHandler);
       });
     });
   });
 
   describe('`setLoadingHTML()`', function() {
-    describe('the `$button` property is null', function() {
+    describe('the `button` property is null', function() {
       it('throws an exception', function() {
         let buttonComponent = buttonComponentStamp();
 
         assert.throws(
           () => { buttonComponent.setLoadingHTML(); },
           Error,
-          "Cannot read property 'attr' of null"
+          "Cannot read property 'setAttribute' of null"
         );
       });
     });
-    describe('the `$button` property is set', function() {
+    describe('the `button` property is set', function() {
       it('sets the loading text data attribute with the constructed text', function() {
-        let buttonComponent = buttonComponentStamp({$button : $('<button></button>')});
+        let buttonComponent = buttonComponentStamp({button: document.createElement('button')});
 
         assert.equal(buttonComponent.setLoadingHTML(), buttonComponent);
-        assert.equal(buttonComponent.$button.attr(buttonComponent.loadingTextDataKey), '<span class="glyphicon glyphicon-repeat spinning"></span> loading');
+        assert.equal(
+          buttonComponent.button.getAttribute(buttonComponent.loadingTextDataKey),
+          '<span class="glyphicon glyphicon-repeat spinning"></span> loading'
+        );
       });
     });
   });

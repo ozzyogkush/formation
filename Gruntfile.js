@@ -56,10 +56,9 @@ module.exports = function(grunt) {
           ),
           new webpack.optimize.UglifyJsPlugin({
             mangle: {
-              except: ['jQuery', '$', 'exports', 'require', 'Formation']
+              except: ['exports', 'require', 'Formation']
             }
-          }),
-          new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.min.js')
+          })
         ]
       }
     },
@@ -79,9 +78,9 @@ module.exports = function(grunt) {
       coverage : {
         src:['<%= paths.jsTestSrc %>/**/*.js'],
         options: {
-          coverageFolder: 'test-results',
+          coverageFolder: '<%= paths.jsTestResultsSrc %>',
           nodeExec: isWindows ? require.resolve('./node_modules/.bin/babel-node.cmd') : require.resolve('./node_modules/.bin/babel-node'),
-          scriptPath: require.resolve('isparta/bin/isparta'),
+          scriptPath: require.resolve('isparta/lib/cli'),
           mochaOptions: ['--compilers', 'js:babel-register', '--require', 'jsdom-global/register'],
           reportFormats: ['lcov', 'html']
         }
@@ -90,7 +89,7 @@ module.exports = function(grunt) {
     istanbul_check_coverage : { // jshint ignore:line
       default : {
         options: {
-          coverageFolder: 'test-results'
+          coverageFolder: '<%= paths.jsTestResultsSrc %>'
         }
       }
     },

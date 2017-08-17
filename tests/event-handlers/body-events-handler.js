@@ -1,174 +1,192 @@
 'use strict';
 
 const stampit = require('stampit');
-const $ = require('jquery');
-
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
-const keyCodes = require('../../src/utilities/key-code-set');
 const bodyEventsHandlerStamp = require('../../src/event-handlers/body-events-handler');
 const formComponentStamp = require('../../src/components/form');
 
 describe('Objects created using the `bodyEventsHandlerStamp`', function() {
-  let bodyEventsHandler;
-  beforeEach(function() {
-    bodyEventsHandler = bodyEventsHandlerStamp();
-  });
-
-  describe('`addDefaultEventHandlers()`', function() {
-    describe('when the `$body` object is null', function() {
-      it('should throw an Error', function() {
-        assert.throws(() => bodyEventsHandler.addDefaultEventHandlers(), Error);
-      });
-    });
-
-    describe('when the `$body` object is set', function() {
-      it('should set the body keypress and keyup event handlers', function() {
-        let $body = $('<body></body>');
-        let $bodyMock = sinon.mock($body);
-        bodyEventsHandler = bodyEventsHandlerStamp({$body : $body});
-        let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
-
-        // See http://stackoverflow.com/questions/38387222/mocking-a-method-which-is-called-using-an-arrow-function-as-a-parameter
-        $bodyMock.expects('on').once()
-          .withArgs('keypress.formation', sinon.match.func).returns($body);
-        $bodyMock.expects('on').once()
-          .withArgs('keyup.formation', sinon.match.func).returns($body);
-
-        bodyEventsHandlerMock.expects('setEventsInitialized').once().withArgs(true).returns(bodyEventsHandler);
-
-        // Call the SUT
-        assert.equal(bodyEventsHandler.addDefaultEventHandlers(), bodyEventsHandler);
-
-        $bodyMock.verify();
-        bodyEventsHandlerMock.verify();
-      });
-    });
-  });
-
   describe('`bodyKeyPressHandler()`', function() {
     describe('when the key press event is not from the ENTER button', function() {
       it('should allow the keypress event to continue', function() {
-        let event = {target : $(), which : keyCodes.LEFT};
-        assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
+        let allowedToContinue = null;
+        const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+        const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
+
+        document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+        const target = document.createElement('span');
+        document.body.appendChild(target);
+
+        const keyPressEvent = new KeyboardEvent(
+          bodyEventsHandler.getKeyPressEventName(),
+          { bubbles: true, 'key': 'left-arrow' }
+        );
+        target.dispatchEvent(keyPressEvent);
+
+        assert.equal(allowedToContinue, true);
+
+        document.body.removeChild(target);
+        document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
       });
     });
     describe('when the key press event is from the ENTER button', function() {
-      let $fnMock;
-      let $Mock;
-      beforeEach(function() {
-        $fnMock = sinon.mock($.fn);
-        $Mock = sinon.mock($);
-      });
-      afterEach(function() {
-        $fnMock.restore();
-        $Mock.restore();
-      });
       describe('when the target element is not an `input` node', function() {
         it('should allow the keypress event to continue', function() {
-          let event = {target: $('<div></div>').get(0), which: keyCodes.ENTER};
+          let allowedToContinue = null;
+          const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+          const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
 
-          $fnMock.expects('prop').once().withArgs('tagName').returns('div');
+          document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+          const target = document.createElement('span');
+          document.body.appendChild(target);
 
-          assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
+          const keyPressEvent = new KeyboardEvent(
+            bodyEventsHandler.getKeyPressEventName(),
+            { bubbles: true, 'key': 'enter' }
+          );
+          target.dispatchEvent(keyPressEvent);
 
-          $fnMock.verify();
+          assert.equal(allowedToContinue, true);
+
+          document.body.removeChild(target);
+          document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
         });
       });
       describe('when the target element is an `input` node', function() {
         describe('when the input is a radio', function() {
           it('should allow the keypress event to continue', function() {
-            let event = {target: $('<input type="radio" />').get(0), which: keyCodes.ENTER};
+            let allowedToContinue = null;
+            const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+            const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
 
-            $Mock.expects('inArray').once().withArgs('radio', ['radio', 'checkbox']).returns(0);
-            $fnMock.expects('prop').once().withArgs('tagName').returns('input');
-            $fnMock.expects('prop').once().withArgs('type').returns('radio');
+            document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+            const target = document.createElement('input');
+            target.setAttribute('type', 'radio');
+            document.body.appendChild(target);
 
-            assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
+            const keyPressEvent = new KeyboardEvent(
+              bodyEventsHandler.getKeyPressEventName(),
+              { bubbles: true, 'key': 'enter' }
+            );
+            target.dispatchEvent(keyPressEvent);
 
-            $fnMock.verify();
-            $Mock.verify();
+            assert.equal(allowedToContinue, true);
+
+            document.body.removeChild(target);
+            document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
           });
         });
         describe('when the input is a checkbox', function() {
           it('should allow the keypress event to continue', function() {
-            let event = {target: $('<input type="checkbox" />').get(0), which: keyCodes.ENTER};
+            let allowedToContinue = null;
+            const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+            const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
 
-            $Mock.expects('inArray').once().withArgs('checkbox', ['radio', 'checkbox']).returns(1);
-            $fnMock.expects('prop').once().withArgs('tagName').returns('input');
-            $fnMock.expects('prop').once().withArgs('type').returns('checkbox');
+            document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+            const target = document.createElement('input');
+            target.setAttribute('type', 'checkbox');
+            document.body.appendChild(target);
 
-            assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
+            const keyPressEvent = new KeyboardEvent(
+              bodyEventsHandler.getKeyPressEventName(),
+              { bubbles: true, 'key': 'enter' }
+            );
+            target.dispatchEvent(keyPressEvent);
 
-            $fnMock.verify();
-            $Mock.verify();
+            assert.equal(allowedToContinue, true);
+
+            document.body.removeChild(target);
+            document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
           });
         });
         describe('when the input is neither a radio nor a checkbox', function() {
           describe('when the Formation `formComponent` is null', function() {
             it('should allow the keypress event to continue', function() {
-              let event = {target: $('<input type="text" />').get(0), which: keyCodes.ENTER};
+              let allowedToContinue = null;
+              const bodyEventsHandler = bodyEventsHandlerStamp({
+                body : document.body,
+                getFormComponentOfCurrentElement: e => null
+              });
+              const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
 
-              $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
-              $fnMock.expects('prop').once().withArgs('tagName').returns('input');
-              $fnMock.expects('prop').once().withArgs('type').returns('text');
+              document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+              const target = document.createElement('input');
+              target.setAttribute('type', 'text');
+              document.body.appendChild(target);
 
-              bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
-              let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+              const keyPressEvent = new KeyboardEvent(
+                bodyEventsHandler.getKeyPressEventName(),
+                { bubbles: true, 'key': 'enter' }
+              );
+              target.dispatchEvent(keyPressEvent);
 
-              bodyEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($(event.target)).returns(null);
-              assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
+              assert.equal(allowedToContinue, true);
 
-              bodyEventsHandlerMock.verify();
-              $fnMock.verify();
-              $Mock.verify();
+              document.body.removeChild(target);
+              document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
             });
           });
           describe('when the input is inside a Formation `form`', function() {
-            let $form;
-            let event;
-            let formComponent;
-            let formComponentMock;
-            let bodyEventsHandlerMock;
-            beforeEach(function() {
-              bodyEventsHandler = bodyEventsHandlerStamp({formationSelector : '[data-formation="1"]'});
-              bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
-              formComponent = formComponentStamp();
-              formComponentMock = sinon.mock(formComponent);
-              $form = $('<form data-formation="1"></form>').data(bodyEventsHandler.formationDataKey, formComponent);
-              event = {target: $('<input type="text" />').get(0), which: keyCodes.ENTER};
-            });
             describe('when the Form decides the key press event should progress', function() {
               it('should return true', function() {
-                $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
-                $fnMock.expects('prop').once().withArgs('tagName').returns('input');
-                $fnMock.expects('prop').once().withArgs('type').returns('text');
-                bodyEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($(event.target)).returns(formComponent);
+                let allowedToContinue = null;
+                const formComponent = formComponentStamp();
+                const formComponentMock = sinon.mock(formComponent);
+                const bodyEventsHandler = bodyEventsHandlerStamp({
+                  body : document.body,
+                  getFormComponentOfCurrentElement: e => formComponent
+                });
+                const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
+
+                document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+                const target = document.createElement('input');
+                target.setAttribute('type', 'text');
+                document.body.appendChild(target);
+
+                const keyPressEvent = new KeyboardEvent(
+                  bodyEventsHandler.getKeyPressEventName(),
+                  { bubbles: true, 'key': 'enter' }
+                );
                 formComponentMock.expects('shouldBodyKeyPressEventsProgress').once().returns(true);
+                target.dispatchEvent(keyPressEvent);
 
-                assert.isTrue(bodyEventsHandler.bodyKeyPressHandler(event));
-
-                $fnMock.verify();
-                $Mock.verify();
-                bodyEventsHandlerMock.verify();
+                assert.equal(allowedToContinue, true);
                 formComponentMock.verify();
+
+                document.body.removeChild(target);
+                document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
               });
             });
             describe('when the Form decides the key press event should not progress', function() {
               it('should return false', function() {
-                $Mock.expects('inArray').once().withArgs('text', ['radio', 'checkbox']).returns(-1);
-                $fnMock.expects('prop').once().withArgs('tagName').returns('input');
-                $fnMock.expects('prop').once().withArgs('type').returns('text');
-                bodyEventsHandlerMock.expects('getFormComponentOfCurrentElement').once().withArgs($(event.target)).returns(formComponent);
+                let allowedToContinue = null;
+                const formComponent = formComponentStamp();
+                const formComponentMock = sinon.mock(formComponent);
+                const bodyEventsHandler = bodyEventsHandlerStamp({
+                  body : document.body,
+                  getFormComponentOfCurrentElement: e => formComponent
+                });
+                const testHandler = e => { allowedToContinue = bodyEventsHandler.bodyKeyPressHandler(e); };
                 formComponentMock.expects('shouldBodyKeyPressEventsProgress').once().returns(false);
 
-                assert.isFalse(bodyEventsHandler.bodyKeyPressHandler(event));
+                document.body.addEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
+                const target = document.createElement('input');
+                target.setAttribute('type', 'text');
+                document.body.appendChild(target);
 
-                $fnMock.verify();
-                $Mock.verify();
-                bodyEventsHandlerMock.verify();
+                const keyPressEvent = new KeyboardEvent(
+                  bodyEventsHandler.getKeyPressEventName(),
+                  { bubbles: true, 'key': 'enter' }
+                );
+                target.dispatchEvent(keyPressEvent);
+
+                assert.equal(allowedToContinue, false);
                 formComponentMock.verify();
+
+                document.body.removeChild(target);
+                document.body.removeEventListener(bodyEventsHandler.getKeyPressEventName(), testHandler);
               });
             });
           });
@@ -177,27 +195,104 @@ describe('Objects created using the `bodyEventsHandlerStamp`', function() {
     });
   });
   describe('`bodyKeyUpHandler()`', function() {
-    it('returns false when the key is not space or enter', function() {
-      let event = {target: $(), which: keyCodes.LEFT};
-      assert.isFalse(bodyEventsHandler.bodyKeyUpHandler(event));
-    });
-    it('returns true when the key is space or enter', function() {
-      let event = {target: $(), which: keyCodes.SPACE};
-      let $fnMock = sinon.mock($.fn);
-      let bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+    it('does nothing when the event key is not a space or enter button', function() {
+      const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+      const bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+      const target = document.createElement('input');
+      const targetMock = sinon.mock(target);
 
-      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget')
-        .once().withArgs($(event.target)).returns(false);
-      $fnMock.expects('trigger').never();
-      assert.equal(bodyEventsHandler.bodyKeyUpHandler(event), null);
+      const testHandler = e => { bodyEventsHandler.bodyKeyUpHandler(e); };
+      document.body.appendChild(target);
+      document.body.addEventListener(bodyEventsHandler.getKeyUpEventName(), testHandler);
 
-      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget')
-        .once().withArgs($(event.target)).returns(true);
-      $fnMock.expects('trigger').once().withArgs('click').returns($(event.target));
-      assert.equal(bodyEventsHandler.bodyKeyUpHandler(event), null);
+      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget').never();
+      targetMock.expects('click').never();
+
+      const keyUpEvent = new KeyboardEvent(bodyEventsHandler.getKeyUpEventName(), { bubbles: true, 'key': 'tab' });
+      target.dispatchEvent(keyUpEvent);
 
       bodyEventsHandlerMock.verify();
-      $fnMock.verify();
+      targetMock.verify();
+
+      document.body.removeChild(target);
+      document.body.removeEventListener(bodyEventsHandler.getKeyUpEventName(), testHandler);
+    });
+
+    it('does nothing when the event key is a space or enter button but not on a custom bootstrap radio/checkbox', function() {
+      const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+      const bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+      const target = document.createElement('input');
+      const targetMock = sinon.mock(target);
+
+      const testHandler = e => { bodyEventsHandler.bodyKeyUpHandler(e); };
+      document.body.appendChild(target);
+      document.body.addEventListener(bodyEventsHandler.getKeyUpEventName(), testHandler);
+
+      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget').once().withArgs(target).returns(false);
+      targetMock.expects('click').never();
+
+      const keyUpEvent = new KeyboardEvent(bodyEventsHandler.getKeyUpEventName(), { bubbles: true, 'key': 'space' });
+      target.dispatchEvent(keyUpEvent);
+
+      bodyEventsHandlerMock.verify();
+      targetMock.verify();
+
+      document.body.removeChild(target);
+      document.body.removeEventListener(bodyEventsHandler.getKeyUpEventName(), testHandler);
+    });
+
+    it('triggers the click event on the event target when the key is a space or enter on a custom bootstrap radio/checkbox', function() {
+      const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+      const bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+      const target = document.createElement('input');
+      const targetMock = sinon.mock(target);
+
+      const testHandler = e => { bodyEventsHandler.bodyKeyUpHandler(e); };
+      document.body.appendChild(target);
+      document.body.addEventListener(bodyEventsHandler.getKeyUpEventName(), testHandler);
+
+      bodyEventsHandlerMock.expects('elementIsCustomRadioOrCheckboxWidget').once().withArgs(target).returns(true);
+      targetMock.expects('click').once();
+
+      const keyUpEvent = new KeyboardEvent(bodyEventsHandler.getKeyUpEventName(), { bubbles: true, 'key': 'enter' });
+      target.dispatchEvent(keyUpEvent);
+
+      bodyEventsHandlerMock.verify();
+      targetMock.verify();
+
+      document.body.removeChild(target);
+      document.body.removeEventListener(bodyEventsHandler.getKeyUpEventName(), testHandler);
+    });
+  });
+
+  // These have to go last because `addDefaultEventHandlers()` adds handlers that would make it hard to test
+  describe('`addDefaultEventHandlers()`', function() {
+    describe('when the `body` object is null', function() {
+      it('should throw an Error', function() {
+        const bodyEventsHandler = bodyEventsHandlerStamp({});
+        assert.throws(() => bodyEventsHandler.addDefaultEventHandlers(), Error);
+      });
+    });
+
+    describe('when the `body` object is set', function() {
+      it('should set the body keypress and keyup event handlers', function() {
+        const bodyEventsHandler = bodyEventsHandlerStamp({body : document.body});
+        const bodyEventsHandlerMock = sinon.mock(bodyEventsHandler);
+
+        bodyEventsHandlerMock.expects('bodyKeyPressHandler').once();
+        bodyEventsHandlerMock.expects('bodyKeyUpHandler').once();
+
+        assert.equal(bodyEventsHandler.addDefaultEventHandlers(), bodyEventsHandler);
+        const keyPressEvent = document.createEvent('KeyboardEvent');
+        keyPressEvent.initEvent(bodyEventsHandler.getKeyPressEventName());
+        document.body.dispatchEvent(keyPressEvent);
+
+        const keyUpEvent = document.createEvent('KeyboardEvent');
+        keyUpEvent.initEvent(bodyEventsHandler.getKeyUpEventName());
+        document.body.dispatchEvent(keyUpEvent);
+
+        bodyEventsHandlerMock.verify();
+      });
     });
   });
 });

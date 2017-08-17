@@ -1,6 +1,5 @@
 'use strict';
 
-const $ = require('jquery');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
@@ -8,51 +7,43 @@ const radioDefaultRulesStamp = require('../../src/rules/radio-default-rules');
 
 describe('Objects created using the `radioDefaultRulesStamp`', function() {
   let radioRulesSet;
-  let radioRulesSetMock;
   beforeEach(function() {
     radioRulesSet = radioDefaultRulesStamp();
-    radioRulesSetMock = sinon.mock(radioRulesSet);
   });
   describe('`dataFvDefault()`', function() {
     describe('checks that at least one is checked', function() {
       describe('when it is', function() {
-        it('returns true', function () {
-          let $radio = $('<input type="radio" name="test" id="test1" value="1" checked="checked" />');
-          let $radioMock = sinon.mock($radio);
+        it('returns true', function() {
+          const radio = document.createElement('input');
+          radio.setAttribute('type', 'radio');
+          radio.setAttribute('name', 'testcb');
+          radio.setAttribute('checked', 'checked');
+          radio.checked = 1;
+          const form = document.createElement('form');
+          form.setAttribute('data-formation', 1);
+          form.appendChild(radio);
 
-          radioRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs($radio)
-            .returns($radio);
-          $radioMock.expects('filter').once().withArgs(':checked').returns($radio);
-          assert.isTrue(radioRulesSet.dataFvDefault($radio, 'data-fv-default'));
-
-          $radioMock.verify();
-          radioRulesSetMock.verify();
+          assert.equal(radioRulesSet.dataFvDefault(radio, 'data-fv-default'), true);
         });
       });
       describe('when it is not', function() {
-        it('returns false', function () {
-          let $radio = $('<input type="radio" name="test" id="test1" value="1" />');
-          let $radioMock = sinon.mock($radio);
+        it('returns false', function() {
+          const radio = document.createElement('input');
+          radio.setAttribute('type', 'radio');
+          radio.setAttribute('name', 'testcb');
+          const form = document.createElement('form');
+          form.setAttribute('data-formation', 1);
+          form.appendChild(radio);
 
-          radioRulesSetMock.expects('getAllCheckboxesOrRadiosByName')
-            .once().withArgs($radio)
-            .returns($radio);
-          $radioMock.expects('filter').once().withArgs(':checked').returns($());
-          assert.isFalse(radioRulesSet.dataFvDefault($radio, 'data-fv-default'));
-
-          $radioMock.verify();
-          radioRulesSetMock.verify();
+          assert.equal(radioRulesSet.dataFvDefault(radio, 'data-fv-default'), false);
         });
       });
     });
   });
 
   describe('`getRules()`', function() {
-    let $radio;
     let radioRules;
     beforeEach(function() {
-      $radio = $('<input type="radio" name="test" id="test1" value="1" checked="checked" />');
       radioRules = radioRulesSet.getRules();
     });
     it('should return 1 rule', function() {
@@ -61,27 +52,39 @@ describe('Objects created using the `radioDefaultRulesStamp`', function() {
 
     describe('the first rule', function() {
       it('should call `dataFvDefault()`', function() {
-        radioRulesSetMock.expects('dataFvDefault').once().withArgs($radio, 'data-fv-default').returns(true);
-        assert.isTrue(radioRules[0].callback($radio, 'data-fv-default'));
+        const radio = document.createElement('input');
+        radio.setAttribute('type', 'radio');
+        radio.setAttribute('name', 'testcb');
+        radio.setAttribute('checked', 'checked');
+        radio.checked = 1;
+        const form = document.createElement('form');
+        form.setAttribute('data-formation', 1);
+        form.appendChild(radio);
 
-        radioRulesSetMock.verify();
+        assert.equal(radioRules[0].callback(radio, 'data-fv-default'), true);
       });
     });
   });
 
   describe('`getAttributeOwner()`', function() {
-    let $radio;
-    beforeEach(function() {
-      $radio = $('<input type="radio" name="test" id="test1" value="1" checked="checked" />');
-    });
-
     it('should return the value returned from `getCheckboxOrRadioContainer()`', function() {
-      radioRulesSetMock.expects('getCheckboxOrRadioContainer')
-        .once().withArgs($radio)
-        .returns($radio);
-      assert.equal(radioRulesSet.getAttributeOwner($radio), $radio);
+      const radio = document.createElement('input');
+      radio.setAttribute('type', 'radio');
+      radio.setAttribute('name', 'testcb');
+      radio.setAttribute('checked', 'checked');
+      radio.checked = 1;
 
-      radioRulesSetMock.verify();
+      assert.equal(radioRulesSet.getAttributeOwner(radio), null);
+
+      const radioContainer = document.createElement('div');
+      radioContainer.setAttribute('data-fv-group-container', 'testcb');
+      const form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
+
+      radioContainer.appendChild(radio);
+      form.appendChild(radioContainer);
+
+      assert.equal(radioRulesSet.getAttributeOwner(radio), radioContainer);
     });
   });
 });

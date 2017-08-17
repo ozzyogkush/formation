@@ -7,12 +7,11 @@ const formEventsHandlerStamp = require('./event-handlers/form-events-handler');
 const ruleStamp = require('./rules/rule');
 
 const stampit = require('stampit');
-const $ = require('jquery');
 
 /**
  * This stamp lets you initialize Formation, and turn debug on or off.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formation
@@ -79,16 +78,16 @@ const formationStamp = stampit()
 
       // First find out which forms should be initialized.
       this.detectForms();
-
-      if (this.get$forms().length === 0) {
+      if (this.getForms().size === 0) {
         this.info('No Formation forms present, exiting.');
         return this;
       }
 
-      let bodyEventsHandler = bodyEventsHandlerStamp({
-        $body: $(document.body),
+      const bodyEventsHandler = bodyEventsHandlerStamp({
+        body: document.body,
+        formationDataAttrKey: this.formationDataAttrKey,
         nodeEvents : this.nodeEvents,
-        formationSelector: this.getFormationSelector()
+        getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
       });
       this.initBodyEvents(bodyEventsHandler);
       this.initForms();
@@ -104,21 +103,20 @@ const formationStamp = stampit()
      * @memberOf    {Formation.formation}
      * @mixes       {Formation.formation}
      *
-     * @param       {jQuery}                  $form         The jQuery extended `form` element to be initialized. Required.
+     * @param       {Element}                 form          The `form` element to be initialized. Required.
      *
      * @returns     {Formation.formation}     this
      */
-    initForm($form) {
+    initForm(form) {
       try {
-        // Set up the Form but only if it has the proper DOM.
-        let formationComponent = this.createFormationComponent();
-        const $singleForm = $form.eq(0);
+        if (! this.getForms().has(form) || this.getForms().get(form) === null) {
+          // Set up the Form but only if it has the proper DOM.
+          const formationComponent = this.createFormationComponent();
 
-        formationComponent.initForm($singleForm);
-        formationComponent.initFormEvents();
+          formationComponent.initForm(form);
+          formationComponent.initFormEvents();
 
-        if (! this.get$forms().has($form.get(0))) {
-          this.get$forms().add($singleForm);
+          this.getForms().set(form, formationComponent);
         }
       }
       catch (exception) {
@@ -140,8 +138,9 @@ const formationStamp = stampit()
      */
     createFormationComponent() {
       return formEventsHandlerStamp({
-        formationSelector: this.getFormationSelector(),
-        nodeEvents : this.nodeEvents
+        formationDataAttrKey: this.formationDataAttrKey,
+        nodeEvents : this.nodeEvents,
+        getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
       }).initLogging(this.getLogConsole());
     },
 
@@ -157,19 +156,6 @@ const formationStamp = stampit()
      */
     createFormationRule(name, callback) {
       return ruleStamp({name: name, callback: callback});
-    },
-
-    /**
-     * Construct a CSS selector used to find Formation forms.
-     *
-     * @access      public
-     * @memberOf    {Formation.formation}
-     * @mixes       {Formation.formation}
-     *
-     * @returns     {String}
-     */
-    getFormationSelector() {
-      return `[${this.formationDataAttrKey}="1"]`;
     },
 
     /**
@@ -191,7 +177,7 @@ const formationStamp = stampit()
       if (typeof elementType !== 'string') {
         throw TypeError('Expected `elementType` param to be a `String`, was a `' + typeof elementType + '`.');
       }
-      if ($.inArray(elementType, this.getSupportedElementTypes()) === -1) {
+      if (this.getSupportedElementTypes().indexOf(elementType) === -1) {
         throw TypeError('Specified `elementType` `' + elementType + '` is not supported.');
       }
       if (typeof ruleName !== 'string') {
@@ -201,14 +187,17 @@ const formationStamp = stampit()
         throw TypeError('Expected `ruleCallbackMethod` param to be a `Function`, was a `' + typeof ruleCallbackMethod + '`.');
       }
 
-      // Add the new DOMREADY event.
-      $(document).ready(() => {
-        this.get$forms().each((index, form) => {
-          const $form = $(form);
+      const registerRuleFunc = () => {
+        this.getForms().forEach(formComponent => {
           const rule = this.createFormationRule(ruleName, ruleCallbackMethod);
-          this.getFormComponentOfCurrentElement($form).registerRule(elementType, rule);
+          formComponent.registerRule(elementType, rule);
         });
-      });
+        // Remove the DOMContentLoaded event.
+        document.removeEventListener('DOMContentLoaded', registerRuleFunc);
+      };
+
+      // Add the new DOMContentLoaded event.
+      document.addEventListener('DOMContentLoaded', registerRuleFunc);
 
       return this;
     }
@@ -248,7 +237,7 @@ const formationStamp = stampit()
      *
      * @returns     {Formation.formation}   this            Return the instance of the generated object so we can chain methods.
      */
-    this.setDebug = (newVal) => {
+    this.setDebug = newVal => {
       const callStackCurrent = 'Formation.formation.setDebug';
       if (typeof newVal !== 'boolean') {
         throw new TypeError(callStackCurrent + '() - Expected `newVal` param to be a Boolean, but is `' + typeof(newVal) + '`.');
@@ -263,30 +252,48 @@ const formationStamp = stampit()
     };
 
     /**
-     * A set of jQuery extended `form` elements to be managed by Formation.
+     * A map of `form` elements with their respective FormComponents to be managed by Formation.
      *
      * @access      private
-     * @type        jQuery
+     * @type        Map
      * @memberOf    {Formation.formation}
-     * @default     $()
      */
-    let __$forms = $();
+    const __forms = new Map();
 
     /**
-     * Return the value of the private `__$forms` object.
+     * Return the value of the private `__forms` object.
      *
      * @access      public
      * @memberOf    {Formation.formation}
      *
-     * @returns     {jQuery}        __$forms           A set of jQuery extended `form` elements to be managed by Formation.
+     * @returns     {Map}       __forms           A map of `form` elements with their related FormComponents to be managed by Formation.
      */
-    this.get$forms = () => {
-      return __$forms;
+    this.getForms = () => __forms;
+
+    /**
+     * Find the `formComponent` for the `form` element in which the supplied `element` resides.
+     *
+     * @access      public
+     * @memberOf    {Formation.formation}
+     * @mixes       {Formation.formation}
+     *
+     * @param       {Element}                         element             The DOM element for which to find the `formComponent` instance. Required.
+     *
+     * @returns     {Formation.formComponent|null}                        The `formComponent` if it is there, or null otherwise.
+     */
+    this.getFormComponentOfCurrentElement = element => {
+      const currentForm = this.findCurrentFormByTarget(element);
+      //console.log(currentForm);
+      if (currentForm === null) { return null; }
+
+      if (! this.getForms().has(currentForm)) { return null; }
+
+      return this.getForms().get(currentForm);
     };
 
     /**
      * Find all the `form` elements in the DOM that are to be managed/validated by Formation, and set the private
-     * `$forms` property.
+     * `forms` property.
      *
      * @access      public
      * @memberOf    {Formation.formation}
@@ -294,30 +301,33 @@ const formationStamp = stampit()
      * @returns     {Formation.formation}  this            Return the instance of the generated object so we can chain methods.
      */
     this.detectForms = () => {
-      __$forms = $('form').filter(this.formFilter);
+      const forms = Array.from(document.getElementsByTagName('form')).filter(this.formFilter);
+      forms.forEach(form => {
+        if (! __forms.has(form)) {
+          __forms.set(form, null);
+        }
+      });
 
       // So we can chain methods.
       return this;
     };
 
     /**
-     * Helper function to filter a jQuery set to return only forms to be managed
+     * Helper function to filter an array of form elements to return only forms to be managed
      * by Formation.
      *
      * @access      public
      * @memberOf    {Formation.formation}
      *
-     * @param       {int}           index         The index of the element in the jQuery set.
-     * @param       {jQuery}        element       The DOM element to check.
+     * @param       {Element}       form          The DOM form element to check.
      *
      * @returns     {Boolean}
      */
-    this.formFilter = (index, element) => {
-      let $element = $(element);
+    this.formFilter = form => {
       return (
-        $element.prop('tagName').toLowerCase() == 'form' &&
-        $element.attr(this.formationDataAttrKey) !== undefined &&
-        parseInt($element.attr(this.formationDataAttrKey)) == 1
+        form.tagName.toLowerCase() === 'form' &&
+        form.hasAttribute(this.formationDataAttrKey) &&
+        parseInt(form.getAttribute(this.formationDataAttrKey)) === 1
       );
     };
 
@@ -345,9 +355,7 @@ const formationStamp = stampit()
      *
      * @returns     {Array}       __supportedElementTypes         Types of elements supported by Formation.
      */
-    this.getSupportedElementTypes = () => {
-      return __supportedElementTypes;
-    };
+    this.getSupportedElementTypes = () => __supportedElementTypes;
 
     /**
      * Object composed of a {bodyEventsHandlerStamp} which handles body events.
@@ -398,10 +406,8 @@ const formationStamp = stampit()
      */
     this.initForms = () => {
       // Set up the individual forms.
-      __$forms.each((index, form) => {
-        let $form = $(form);
-
-        this.initForm($form);
+      __forms.forEach((formComponent, form) => {
+        this.initForm(form);
       });
 
       return this;

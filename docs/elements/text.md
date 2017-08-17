@@ -38,7 +38,6 @@ description: Supported rules and basic example of text-based form inputs
 
 ```html
 <head>
-  <script type="text/javascript" src="vendor.min.js"></script>
   <script type="text/javascript" src="formation.min.js"></script>
 </head>
 <body>

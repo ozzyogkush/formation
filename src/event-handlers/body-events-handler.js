@@ -3,14 +3,12 @@
 const consoleLoggerStamp = require('../logging/console');
 const domNavigationStamp = require('../utilities/dom-navigation');
 const eventDefinitionsStamp = require('./event-definitions-stamp');
-const keyCodes = require('../utilities/key-code-set');
 const stampit = require('stampit');
-const $ = require('jquery');
 
 /**
  * Provide an interface for managing body events.
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.bodyEventsHandler
@@ -24,14 +22,14 @@ const bodyEventsHandlerStamp = stampit()
   .refs({
 
     /**
-     * The jQuery extended `body` element.
+     * The `body` element.
      *
      * @access      public
-     * @type        {jQuery}
+     * @type        {Element}
      * @memberOf    {Formation.bodyEventsHandler}
      * @default     null
      */
-    $body : null,
+    body : null,
 
     /**
      * A singleton passed along so we have some semblance of
@@ -42,7 +40,17 @@ const bodyEventsHandlerStamp = stampit()
      * @memberOf    {Formation.bodyEventsHandler}
      * @default     null
      */
-    nodeEvents : null
+    nodeEvents : null,
+
+    /**
+     * A method for retrieving the formComponent of an element.
+     *
+     * @access      public
+     * @type        {function}
+     * @memberOf    {Formation.bodyEventsHandler}
+     * @default     null
+     */
+    getFormComponentOfCurrentElement : null
   })
   .methods({
 
@@ -57,9 +65,8 @@ const bodyEventsHandlerStamp = stampit()
      * @returns     {Formation.bodyEventsHandler}
      */
     addDefaultEventHandlers() {
-      this.$body
-        .on(this.getKeyPressEventName(), (event) => this.bodyKeyPressHandler(event))
-        .on(this.getKeyUpEventName(), (event) => this.bodyKeyUpHandler(event));
+      this.body.addEventListener(this.getKeyPressEventName(), event => this.bodyKeyPressHandler(event));
+      this.body.addEventListener(this.getKeyUpEventName(), event => this.bodyKeyUpHandler(event));
 
       this.setEventsInitialized(true);
 
@@ -76,28 +83,24 @@ const bodyEventsHandlerStamp = stampit()
      * @memberOf    {Formation.bodyEventsHandler}
      * @mixes       {Formation.bodyEventsHandler}
      *
-     * @param       {jQuery.Event}        event       jQuery `keypress` event object. Required.
+     * @param       {KeyboardEvent}       event       The `keypress` event object. Required.
      *
-     * @returns     {Boolean}             allowKeyEventToProgress
+     * @returns     {Boolean}
      */
     bodyKeyPressHandler(event) {
-      const $target = $(event.target);
-      let userPressedEnterInInputField = (
-        event.which === keyCodes.ENTER &&
-        $target.prop('tagName').toLowerCase() === 'input' &&
-        $.inArray($target.prop('type'), ['radio', 'checkbox']) === -1
+      const userPressedEnterInInputField = (
+        event.key === 'enter' &&
+        event.target.tagName.toLowerCase() === 'input' &&
+        ['radio', 'checkbox'].indexOf(event.target.getAttribute('type')) === -1
       );
 
-      let allowKeyEventToProgress = true;
-
       if (userPressedEnterInInputField) {
-        let formComponent = this.getFormComponentOfCurrentElement($target);
-        if (formComponent !== null) {
-          allowKeyEventToProgress = formComponent.shouldBodyKeyPressEventsProgress();
-        }
+        const formComponent = this.getFormComponentOfCurrentElement(event.target);
+
+        return (formComponent === null ? true : formComponent.shouldBodyKeyPressEventsProgress());
       }
 
-      return allowKeyEventToProgress;
+      return true;
     },
 
     /**
@@ -112,15 +115,12 @@ const bodyEventsHandlerStamp = stampit()
      * @memberOf    {Formation.bodyEventsHandler}
      * @mixes       {Formation.bodyEventsHandler}
      *
-     * @param       {jQuery.Event}        event       jQuery `keyup` event object. Required.
+     * @param       {KeyboardEvent}       event       The `keyup` event object. Required.
      */
     bodyKeyUpHandler(event) {
-      if ($.inArray(event.which, [keyCodes.ENTER, keyCodes.SPACE]) === -1) {
-        return false;
-      }
-      let $target = $(event.target);
-      if (this.elementIsCustomRadioOrCheckboxWidget($target)) {
-        $target.trigger('click');
+      if (['enter', 'space'].indexOf(event.key) !== -1 &&
+          this.elementIsCustomRadioOrCheckboxWidget(event.target)) {
+        event.target.click();
       }
     }
   });

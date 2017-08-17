@@ -9,7 +9,7 @@ const stampit = require('stampit');
 /**
  * Provides an interface for form button elements (`button`, `input:submit`, etc).
  *
- * @copyright     Copyright (c) 2016, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.buttonComponent
@@ -23,14 +23,14 @@ const buttonComponentStamp = stampit()
   .refs({
 
     /**
-     * The jQuery `button` (or `input` equivalent) this component will manage.
+     * The `button` (or `input` equivalent) this component will manage.
      *
      * @access      public
-     * @type        {jQuery}
+     * @type        {Element}
      * @memberOf    {Formation.buttonComponent}
      * @default     null
      */
-    $button : null,
+    button : null,
 
     /**
      * A singleton passed along so we have some semblance of
@@ -66,7 +66,7 @@ const buttonComponentStamp = stampit()
   .methods({
 
     /**
-     * Check whether the `$button` represents a non-empty jQuery object.
+     * Check whether the `button` represents a non-null Element object.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
@@ -75,11 +75,11 @@ const buttonComponentStamp = stampit()
      * @returns     {Boolean}
      */
     exists() {
-      return (this.$button !== null && this.$button.length > 0);
+      return (this.button !== null);
     },
 
     /**
-     * Check whether the `$button` is currently in a 'submitting' state.
+     * Check whether the `button` is currently in a 'submitting' state.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
@@ -90,49 +90,48 @@ const buttonComponentStamp = stampit()
     isSubmitting() {
       const isSubmitting = (
         this.exists() &&
-        this.$button.attr(this.submittingStateDataKey) !== undefined &&
-        parseInt(this.$button.attr(this.submittingStateDataKey)) === 1
+        this.button.hasAttribute(this.submittingStateDataKey) &&
+        parseInt(this.button.getAttribute(this.submittingStateDataKey)) === 1
       );
 
       return isSubmitting;
     },
 
     /**
-     * Will enable or disable the `$button` based on the `enable` param.
+     * Will enable or disable the `button` based on the `enable` param.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
      * @mixes       {Formation.buttonComponent}
      *
-     * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `$button`. Required.
+     * @param       {Boolean}       enable          Whether to enable (true) or disable (false) the `button`. Required.
      *
      * @returns     {Formation.buttonComponent}
      */
     setEnabled(enable) {
-      this.enableOrDisableElement(this.$button, enable);
+      this.enableOrDisableElement(this.button, enable);
 
       return this;
     },
 
     /**
-     * Will set the `$button` to a `submitting` state or undo it depending on
+     * Will set the `button` to a `submitting` state or undo it depending on
      * the `submitting` param.
      *
      * @access      public
      * @memberOf    {Formation.buttonComponent}
      * @mixes       {Formation.buttonComponent}
      *
-     * @param       {Boolean}       submitting      Whether to set the `$button` to a submitting state (true) or not (false). Required.
+     * @param       {Boolean}       submitting      Whether to set the `button` to a submitting state (true) or not (false). Required.
      *
      * @returns     {Formation.buttonComponent}
      */
     setSubmitting(submitting) {
-      // TODO - the `button()` calls will throw an error until we get Bootstrap into the mix.
       if (submitting) {
-        this.$button.attr(this.submittingStateDataKey, 1);//.button('loading');
+        this.button.setAttribute(this.submittingStateDataKey, 1);
       }
       else {
-        this.$button.removeAttr(this.submittingStateDataKey);//.button('reset');
+        this.button.removeAttribute(this.submittingStateDataKey);
       }
 
       return this;
@@ -148,7 +147,7 @@ const buttonComponentStamp = stampit()
      * @returns     {Formation.buttonComponent}
      */
     addHandleFormSubmitListener() {
-      this.nodeEvents.on(this.nodeEvents.getNodeFormSubmitEvent(), (event) => this.handleFormSubmitEvent(event));
+      this.nodeEvents.on(this.nodeEvents.getNodeFormSubmitEvent(), event => this.handleFormSubmitEvent(event));
 
       return this;
     },
@@ -162,14 +161,15 @@ const buttonComponentStamp = stampit()
      * @memberOf    {Formation.buttonComponent}
      * @mixes       {Formation.buttonComponent}
      *
-     * @param       {jQuery.Event}        event       jQuery `submit` event object. Required.
+     * @param       {Event}         event       The `submit` event object. Required.
      */
     handleFormSubmitEvent(event) {
-      this.log('handleFormSubmitEvent() called for ' + this.$button.selector);
+      this.log(`handleFormSubmitEvent() called for ${this.exists() ? this.button.toString() : 'undefined'}`);
       if (this.exists()) {
         this.setEnabled(false).setSubmitting(true);
 
-        this.$button.trigger(this.getBlurEventName());
+        const blurEvent = new CustomEvent(this.getBlurEventName(), { bubbles: true, cancelable: true });
+        this.button.dispatchEvent(blurEvent);
       }
     }
   })
@@ -208,7 +208,7 @@ const buttonComponentStamp = stampit()
      * @returns     {Formation.buttonComponent}
      */
     this.setLoadingHTML = () => {
-      this.$button.attr(this.loadingTextDataKey, getButtonLoadingTextWithSpinnerHTML());
+      this.button.setAttribute(this.loadingTextDataKey, getButtonLoadingTextWithSpinnerHTML());
 
       return this;
     };

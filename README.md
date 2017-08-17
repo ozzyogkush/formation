@@ -1,6 +1,6 @@
 # Formation
 
-[![1.1.1](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
+[![2.0.0](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
 
 A JavaScript library for websites to make form validation easy.
 
