@@ -1,5 +1,6 @@
 ---
 title: Formation - Contributing to Open Source Project
+description: Contributing to the Formation form validation library open-source project
 ---
 
 # Contributing to Formation

@@ -1,6 +1,6 @@
 ---
-title: Formation - Supported Checkbox Input Rules
-description: Supported rules and basic example of checkbox form inputs
+title: Formation | Supported Checkbox Input Rules
+description: Supported rules and basic example of checkbox form inputs for Formation form validation library
 ---
 
 # Supported Element Types:
@@ -41,6 +41,7 @@ description: Supported rules and basic example of checkbox form inputs
       <label for="optionsToCheck5">5: <input type="checkbox" name="optionsToCheck" id="optionsToCheck5"></label>
       <label for="optionsToCheck6">6: <input type="checkbox" name="optionsToCheck" id="optionsToCheck6"></label>
     </div>
+    
     <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
   </form>
 </body>

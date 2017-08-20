@@ -1,5 +1,6 @@
 ---
-title: Formation - Advanced Usage
+title: Formation | Advanced Usage
+description: Advanced usage, custom rules and detecting events for Formation form validation library
 ---
 
 # Custom Rules

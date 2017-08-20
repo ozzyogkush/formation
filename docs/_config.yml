@@ -1,7 +1,21 @@
-theme: jekyll-theme-modernist
+theme: jekyll-theme-midnight
+excerpt_separator: <!--end-excerpt-->
 
-title: Formation - a JavaScript Form Validation Library
-description: DRY - Easy form validation by specifying rules for the inputs on your form
+title: Formation | A rule-based JavaScript Form Validation Library
+description: Rule-based, cross-browser, client side HTML form validation library written in JavaScript
+author:
+ name: Derek Rosenzweig
+ twitter: ozzyogkush
+
+# Jekyll-SEO-tag front matter
+twitter:
+  username: ozzyogkush
+social:
+  name: Derek Rosenzweig
+  links:
+    - https://twitter.com/ozzyogkush
+    - https://github.com/ozzyogkush
+    - https://www.linkedin.com/in/derek-rosenzweig-80571693/
 
 timezone: 'UTC'
 exclude:

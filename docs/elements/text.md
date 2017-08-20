@@ -1,6 +1,6 @@
 ---
-title: Formation - Supported Text Input Rules
-description: Supported rules and basic example of text-based form inputs
+title: Formation | Supported Text Input Rules
+description: Supported rules and basic example of text-based form inputs for Formation form validation library
 ---
 
 # Supported Element Types:
@@ -24,13 +24,13 @@ description: Supported rules and basic example of text-based form inputs
   - `format` : `string` - The trimmed value must match the specified format
     - Valid formats:
 
-            zip5
-            zip4
-            zip
-            email
-            phone
-            phone-multi
-            REGEX
+            "zip5" : Must be 5 numbers
+            "zip4" : Must be 4 numbers
+            "zip" : Must be 5 numbers, or in the format xxxxx-xxxx  
+            "email" : Must be an email address
+            "phone" : Must match the format (xxx) xxx-xxxx
+            "phone-multi" : Must match the phone format, or xxxxxxxxxx, or xxx-xxx-xxxx
+            "REGEX" : You supply the regex. Be careful about proper escaping!
 
   - `match-field` : `string` - ID of another `text` element. The trimmed value must match the trimmed value of the other element
 
@@ -43,7 +43,8 @@ description: Supported rules and basic example of text-based form inputs
 <body>
   <form data-formation="1">
     <input type="text" name="name" id="name" data-fv-required="1" data-fv-min-length="5" data-fv-max-length="15" />
-    <input type="text" name="email" id="email" data-fv-required="1" data-fv-format="email" />
+    <input type="text" name="phone" id="phone" data-fv-required="1" data-fv-format="phone" />
+    
     <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
   </form>
 </body>
