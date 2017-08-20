@@ -1,6 +1,6 @@
 ---
-title: Formation - Supported Radio Input Rules
-description: Supported rules and basic example of radio form inputs
+title: Formation | Supported Radio Input Rules
+description: Supported rules and basic example of radio form inputs for Formation form validation library
 ---
 
 # Supported Element Types:
@@ -36,6 +36,7 @@ description: Supported rules and basic example of radio form inputs
       <label for="oneToChoose2">2: <input type="radio" name="oneToChoose" id="oneToChoose2"></label>
       <label for="oneToChoose3">3: <input type="radio" name="oneToChoose" id="oneToChoose3"></label>
     </div>
+    
     <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
   </form>
 </body>

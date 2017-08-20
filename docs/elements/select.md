@@ -1,6 +1,6 @@
 ---
-title: Formation - Supported Select Input Rules
-description: Supported rules and basic example of select form inputs
+title: Formation | Supported Select Input Rules
+description: Supported rules and basic example of select form inputs for Formation form validation library
 ---
 
 # Supported Element Types:
@@ -30,6 +30,7 @@ description: Supported rules and basic example of select form inputs
       <option value="2">Good</option>
       <option value="3">Values</option>
     </select>
+    
     <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
   </form>
 </body>

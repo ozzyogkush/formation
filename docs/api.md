@@ -1,5 +1,6 @@
 ---
-title: Formation - Public API Methods
+title: Formation | Public API Methods
+description: API methods for Formation form validation library
 ---
 
 # Formation API:
