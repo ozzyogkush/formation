@@ -23,7 +23,21 @@ description: Supported rules and basic example of radio form inputs for Formatio
 - **radio** (See [`./src/rules/radio-default-rules.js`](https://github.com/ozzyogkush/formation/blob/master/src/rules/radio-default-rules.js))
   - `default` : At least one radio button in the set must be checked
 
-# Basic Example:
+# Other Options:
+
+## Linked Input
+
+The linked input option allows the user to link the visibility and validation checking of a separate element with the checked state
+ of a single radio element. To use, add the attribute `data-fv-linked-input` to the radio element. Its value should be the ID of the element that
+ you want to manage. This can be useful when you only care about another input element when the user indicates a specific option.
+ 
+>_Note: The linked input may be part of a form group which contains other elements that need to be shown or hidden along 
+> with the linked element. If that's the case, the 'hidden' class only applies to the form group. If that's not the case,
+>the linked element itself applies the 'hidden' class. (See [`domNavigationStamp.getLinkedElement()`](https://github.com/ozzyogkush/formation/blob/master/src/utilities/dom-navigation.js#L385))._
+
+# Example:
+
+See a [live example](../examples/radio-inputs).
 
 ```html
 <head>
@@ -31,15 +45,37 @@ description: Supported rules and basic example of radio form inputs for Formatio
 </head>
 <body>
   <form data-formation="1">
-    <div data-fv-required="1" data-fv-group-container="oneToChoose">
-      <label for="oneToChoose1">1: <input type="radio" name="oneToChoose" id="oneToChoose1"></label>
-      <label for="oneToChoose2">2: <input type="radio" name="oneToChoose" id="oneToChoose2"></label>
-      <label for="oneToChoose3">3: <input type="radio" name="oneToChoose" id="oneToChoose3"></label>
+    <div
+      data-fv-required="1" 
+      data-fv-group-container="favoriteLanguage">
+      <h2>Favorite Language:</h2>
+      <label for="javascript">
+        JavaScript: <input type="radio" name="favoriteLanguage" id="javascript" value="javascript">
+      </label>
+      <label for="c++">
+        C++: <input type="radio" name="favoriteLanguage" id="c++" value="c++">
+      </label>
+      <label for="ruby">
+        Ruby: <input type="radio" name="favoriteLanguage" id="ruby" value="ruby">
+      </label>
+      <label for="other">
+        Other (please specify): <input type="radio" data-fv-linked-input="otherLanguage" name="favoriteLanguage" id="other" value="other">
+        <div class="form-group hidden">
+          Other Language: 
+          <input
+            type="text"
+            id="otherLanguage"
+            data-fv-required="1"
+            class="disabled"
+            disabled="disabled" />
+        </div>
+      </label>
     </div>
     
-    <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
+    <button 
+      type="submit" 
+      data-fv-form-submit="1" 
+      disabled="disabled">Submit</button>
   </form>
 </body>
 ```
-
-See a [live example](../examples/radio-inputs).

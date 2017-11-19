@@ -19,8 +19,8 @@ description: Supported rules and basic example of text-based form inputs for For
 
 - **text** (See [`./src/rules/text-default-rules.js`](https://github.com/ozzyogkush/formation/blob/master/src/rules/text-default-rules.js))
   - `default` : The trimmed value must not be empty
-  - `min-length` : `integer` - The trimmed value must be <= the value specified
-  - `max-length` : `integer` - The trimmed value must be >= the value specified
+  - `min-length` : `integer` - The trimmed value must be >= the value specified
+  - `max-length` : `integer` - The trimmed value must be <= the value specified
   - `format` : `string` - The trimmed value must match the specified format
     - Valid formats:
 
@@ -34,7 +34,9 @@ description: Supported rules and basic example of text-based form inputs for For
 
   - `match-field` : `string` - ID of another `text` element. The trimmed value must match the trimmed value of the other element
 
-# Basic Example:
+# Example:
+
+See a [live example](../examples/text-inputs). 
 
 ```html
 <head>
@@ -42,12 +44,24 @@ description: Supported rules and basic example of text-based form inputs for For
 </head>
 <body>
   <form data-formation="1">
-    <input type="text" name="name" id="name" data-fv-required="1" data-fv-min-length="5" data-fv-max-length="15" />
-    <input type="text" name="phone" id="phone" data-fv-required="1" data-fv-format="phone" />
+    <input 
+      type="text" 
+      name="name" 
+      id="name" 
+      data-fv-required="1" 
+      data-fv-min-length="5"
+      data-fv-max-length="15" />
+    <input 
+      type="text" 
+      name="phone" 
+      id="phone" 
+      data-fv-required="1" 
+      data-fv-format="phone" />
     
-    <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
+    <button 
+      type="submit" 
+      data-fv-form-submit="1" 
+      disabled="disabled">Submit</button>
   </form>
 </body>
 ```
-
-See a [live example](../examples/text-inputs). 

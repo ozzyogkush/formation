@@ -1,13 +1,12 @@
 {
   "name": "js-formation",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Rule-based, cross-browser, client side HTML form validation library written in JavaScript",
   "author": "Derek Rosenzweig <derek.rosenzweig@gmail.com>",
   "repository": "https://github.com/ozzyogkush/formation.git",
   "main": "dist/formation.min.js",
   "license": "MIT",
   "dependencies": {
-    "grunt": "^1.0.1",
     "stampit": "^2.1.1"
   },
   "devDependencies": {
@@ -18,12 +17,13 @@
     "babel-register": "^6.24.1",
     "chai": "^4.1.1",
     "expose-loader": "^0.7.1",
+    "grunt": "^1.0.1",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-istanbul": "^5.0.1",
     "grunt-mocha-test": "^0.12.7",
-    "grunt-webpack": "^1.0.11",
+    "grunt-webpack": "^3.0.2",
     "isparta": "^4.0.0",
     "istanbul": "=0.4.4",
     "jsdom": "^11.1.0",
@@ -31,8 +31,8 @@
     "mocha": "^3.5.0",
     "sinon": "^3.2.0",
     "sinon-chai": "^2.12.0",
-    "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
   },
   "bugs": {
     "url": "https://github.com/ozzyogkush/formation/issues"

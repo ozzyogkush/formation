@@ -48,12 +48,15 @@
         <ul>
           <li>data-fv-required = 1</li>
         </ul>
-        <input
-          type="text"
-          id="linkedElement"
-          data-fv-required="1"
-          class="hidden disabled"
-          disabled="disabled" />
+        <div class="form-group hidden">
+          A hidden input in a `.form-group`:
+          <input
+            type="text"
+            id="linkedElement"
+            data-fv-required="1"
+            class="disabled"
+            disabled="disabled" />
+        </div>
       </div>
 
       <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>

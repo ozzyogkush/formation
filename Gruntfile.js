@@ -48,12 +48,10 @@ module.exports = function(grunt) {
           filename: 'formation.min.js'
         },
         plugins : [
-          new webpack.BannerPlugin(
-            '<%= pkg.description %>\r\nVersion <%= pkg.version %>\r\nAuthor: <%= pkg.author %>\r\nBuilt <%= grunt.template.today("yyyy-mm-dd HH:MM") %>',
-            {
-              entryOnly : true
-            }
-          ),
+          new webpack.BannerPlugin({
+            banner: '<%= pkg.description %>\r\nVersion <%= pkg.version %>\r\nAuthor: <%= pkg.author %>\r\nBuilt <%= grunt.template.today("yyyy-mm-dd HH:MM") %>',
+            entryOnly : true
+          }),
           new webpack.optimize.UglifyJsPlugin({
             mangle: {
               except: ['exports', 'require', 'Formation']

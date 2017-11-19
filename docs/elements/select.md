@@ -16,7 +16,9 @@ description: Supported rules and basic example of select form inputs for Formati
 - **select** (See [`./src/rules/select-default-rules.js`](https://github.com/ozzyogkush/formation/blob/master/src/rules/select-default-rules.js))
   - `default` : The trimmed value of the selected option must not be empty
 
-# Basic Example:
+# Example:
+
+See a [live example](../examples/select-boxes).
 
 ```html
 <head>
@@ -31,9 +33,10 @@ description: Supported rules and basic example of select form inputs for Formati
       <option value="3">Values</option>
     </select>
     
-    <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
+    <button 
+      type="submit" 
+      data-fv-form-submit="1" 
+      disabled="disabled">Submit</button>
   </form>
 </body>
 ```
-
-See a [live example](../examples/select-boxes).
