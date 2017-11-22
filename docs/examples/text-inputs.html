@@ -164,6 +164,22 @@
                   data-fv-at-least-n-capitals="5"></textarea>
       </div>
 
+      <div class="rule-example">
+        <label for="textTest10">
+          <h4>Rules:</h4>
+          <ul>
+            <li>data-fv-required = 1</li>
+            <li>data-fv-format = /^(\w{3}) (\d*)$/</li>
+          </ul>
+        </label>
+        <input
+          type="text"
+          name="textTest10"
+          id="textTest10"
+          data-fv-required="1"
+          data-fv-format="/^(\w{3}) (\d*)$/" />
+      </div>
+
       <h3>Submit button: will only be enabled when all required fields/groups are considered valid</h3>
       <div class="submit">
         <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
