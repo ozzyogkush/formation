@@ -1,5 +1,9 @@
 # Formation Changelog
 
+## 2.0.4
+
+- Add missing `keywords` property to `package.json` so it can be found easier through searches.
+
 ## 2.0.3
 
 - Move from `npm` to `yarn`, update some dependencies.
