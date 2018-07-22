@@ -9,9 +9,10 @@ description: Contributing to the Formation form validation library open-source p
 
 - [`Git`](http://git-scm.com/) - for version control (I recommend using the [SourceTree](https://www.atlassian.com/software/sourcetree/overview) program by Atlassian, as it rules)
 - [`NodeJS`](https://nodejs.org) - required for development and release builds (v6.3 or higher)
+- [`yarn`](https://yarnpkg.com/) - a better package manager than npm
 - [`Grunt`](http://gruntjs.com) - to run tests and create builds.
 
-After installing NodeJS (and its package manager NPM), run `npm install` to install dependencies.
+After installing NodeJS (and its package manager yarn), run `yarn install` to install dependencies.
 
 ## Workflow
 
@@ -22,7 +23,7 @@ tests must also be updated for any changes to existing features.
 1. Fork your own copy of the the [`Formation`](https://github.com/ozzyogkush/formation) repository to your GitHub account
 1. Checkout the `master` branch in your fork and pull the latest changes from upstream [`master`](https://github.com/ozzyogkush/formation)
 1. Create a new branch from master
-1. Run `npm install` to add all dependencies
+1. Run `yarn install` to add all dependencies
 1. Add your changes and unit tests
 1. Update Documentation
 1. Open a terminal to your project folder

@@ -1,6 +1,6 @@
 # Formation
 
-[![2.0.2](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
+[![2.0.3](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
 
 A rule-based, cross-browser compatible library for websites to make HTML form validation easy. To use it, simply include  
  one of the dist JavaScript files in the `head` section or after the closing `body` tag of your webpage, and add a few   
@@ -8,9 +8,13 @@ A rule-based, cross-browser compatible library for websites to make HTML form va
 
 ## Installation
 
-Install from NPM:
+Install with `npm`:
 
     npm install --save js-formation
+
+Install with `yarn`:
+
+    yarn add --save js-formation
 
 ## Example
 

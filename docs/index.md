@@ -10,9 +10,15 @@ A rule-based, cross-browser compatible library for websites to make HTML form va
 
 ## Installation
 
-On NPM the package name is [`js-formation`](https://www.npmjs.com/package/js-formation). To install for your current project: 
+On NPM the package name is [`js-formation`](https://www.npmjs.com/package/js-formation). To install for your current project:
+
+With `npm`:
 
     npm install --save js-formation
+
+With `yarn`:
+
+    yarn add --save js-formation
 
 Latest builds also available on GitHub at https://github.com/ozzyogkush/formation/tree/master/dist.
 
