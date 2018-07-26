@@ -8,13 +8,11 @@
   "license": "MIT",
   "keywords": [
     "client",
-    "client side",
     "dom",
-    "dom manipulation",
+    "form",
     "forms",
-    "form validation",
-    "form validators",
     "html",
+    "manipulation",
     "rules",
     "validation",
     "validators"

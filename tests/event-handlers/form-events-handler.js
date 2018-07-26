@@ -30,100 +30,88 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
   });
 
   describe('`checkFormValidityHandler()`', function() {
-    describe('nothing should happen', function() {
-      it('when the submit button cannot be found for the form', function() {
-        const button = buttonComponentStamp({ button: document.createElement('button')});
-        const buttonMock = sinon.mock(button);
-        const formEventsHandlerMock = sinon.mock(formEventsHandler);
-
-        buttonMock.expects('isSubmitting').never();
-        buttonMock.expects('exists').never();
-        formEventsHandlerMock.expects('getRequiredFields').never();
-        formEventsHandlerMock.expects('getForm').never();
-
-        formEvent.initEvent('check-form-validity', true, true);
-        assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
-
-        formEventsHandlerMock.verify();
-        buttonMock.verify();
-      });
-      it('when continue button is already in a `submitting` state', function() {
-        const button = buttonComponentStamp({ button: document.createElement('button')});
-        button.setEnabled(false);
-        button.setSubmitting(true);
-        const formEventsHandlerMock = sinon.mock(formEventsHandler);
-
-        formEventsHandlerMock.expects('getRequiredFields').never();
-        formEventsHandlerMock.expects('getForm').never();
-
-        formEvent.initEvent('check-form-validity', true, true);
-        assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
-
-        formEventsHandlerMock.verify();
+    let formEventsHandlerMock;
+    let form;
+    let visibleRequired;
+    beforeEach(function() {
+      formEventsHandlerMock = sinon.mock(formEventsHandler);
+      form = document.createElement('form');
+      form.setAttribute('data-formation', 1);
+      visibleRequired = [
+        document.createElement('input'),
+        document.createElement('select'),
+        document.createElement('textarea')
+      ];
+      visibleRequired.forEach(vr => {
+        vr.setAttribute('data-fv-required', 1);
+        form.appendChild(vr);
       });
     });
-    describe('something should happen', function() {
-      let formEventsHandlerMock;
-      let form;
-      let visibleRequired;
+    describe('when a submit button is included', function() {
       let submitButton;
+      let formMock;
       beforeEach(function() {
-        formEventsHandlerMock = sinon.mock(formEventsHandler);
-        form = document.createElement('form');
-        form.setAttribute('data-formation', 1);
-        visibleRequired = [
-          document.createElement('input'),
-          document.createElement('select'),
-          document.createElement('textarea')
-        ];
-        visibleRequired.forEach(vr => {
-          vr.setAttribute('data-fv-required', 1);
-          form.appendChild(vr);
-        });
         submitButton = document.createElement('button');
         submitButton.setAttribute('data-fv-form-submit', 1);
         form.appendChild(submitButton);
+        formEventsHandler.initForm(form);
+        formMock = sinon.mock(form);
       });
-      describe('when not all elements are valid', function() {
-        it('disables the `submit` button and triggers a `set-validation-flag` event with a `validAfterRuleCheck` = false', function() {
-          let validAfterRuleCheck = null;
-          visibleRequired[0].setAttribute('type', 'text');
-          form.addEventListener('set-validation-flag', e => {
-            validAfterRuleCheck = e.detail.validAfterRuleCheck;
-          });
-          formEventsHandler.initForm(form);
-          visibleRequired[0].setAttribute('data-fv-valid', 1);
+      describe('it is already in a `submitting` state', function() {
+        it('nothing happens', function() {
+          formEventsHandler.getSubmitButton().setEnabled(false);
+          formEventsHandler.getSubmitButton().setSubmitting(true);
+
+          formMock.expects('dispatchEvent').never();
+
+          formEvent.initEvent('check-form-validity', true, true);
+          assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
+
+          formEventsHandlerMock.verify();
+          formMock.verify();
+        });
+      });
+      describe('it is not already in a `submitting` state', function() {
+        it('sets the enabled flag of the button and dispatches the `set-validation-flag` event', function() {
           formEventsHandler.getSubmitButton().setEnabled(true);
           formEventsHandler.getSubmitButton().setSubmitting(false);
-          formEvent.initEvent('check-form-validity', true, true);
+          const submitButtonMock = sinon.mock(formEventsHandler.getSubmitButton());
 
+          formMock.expects('dispatchEvent').once();
+          submitButtonMock.expects('setEnabled').once().withArgs(sinon.match.bool);
+
+          formEvent.initEvent('check-form-validity', true, true);
+          assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
+
+          formMock.verify();
+          submitButtonMock.verify();
+        });
+      });
+    });
+    describe('triggers a `set-validation-flag` event', function() {
+      let validAfterRuleCheck;
+      beforeEach(function() {
+        visibleRequired[0].setAttribute('type', 'text');
+        form.addEventListener('set-validation-flag', e => { validAfterRuleCheck = e.detail.validAfterRuleCheck; });
+        visibleRequired[0].setAttribute('data-fv-valid', 1);
+        formEventsHandler.initForm(form);
+        formEvent.initEvent('check-form-validity', true, true);
+      });
+      describe('when not all elements are valid', function() {
+        it('with a `validAfterRuleCheck` = false', function() {
           formEventsHandlerMock.expects('getForm').once().returns(form);
           assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
           assert.equal(validAfterRuleCheck, false);
-          assert.equal(formEventsHandler.getSubmitButton().button.getAttribute('disabled'), 'disabled');
-          assert.equal(formEventsHandler.getSubmitButton().button.classList.contains('disabled'), true);
 
           formEventsHandlerMock.verify();
         });
       });
       describe('when all elements are valid', function() {
-        it('enables the `submit` button and triggers a `set-validation-flag` event with a `validAfterRuleCheck` = true', function() {
-          let validAfterRuleCheck = null;
-          visibleRequired[0].setAttribute('type', 'text');
-          form.addEventListener('set-validation-flag', e => {
-            validAfterRuleCheck = e.detail.validAfterRuleCheck;
-          });
-          formEventsHandler.initForm(form);
+        it('with a `validAfterRuleCheck` = true', function() {
           visibleRequired.forEach(vr => { vr.setAttribute('data-fv-valid', 1); });
-          formEventsHandler.getSubmitButton().setEnabled(false);
-          formEventsHandler.getSubmitButton().setSubmitting(false);
-          formEvent.initEvent('check-form-validity', true, true);
-
           formEventsHandlerMock.expects('getForm').once().returns(form);
           assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
           assert.equal(validAfterRuleCheck, true);
-          assert.equal(formEventsHandler.getSubmitButton().button.hasAttribute('disabled'), false);
-          assert.equal(formEventsHandler.getSubmitButton().button.classList.contains('disabled'), false);
 
           formEventsHandlerMock.verify();
         });
@@ -483,6 +471,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         formContainer.appendChild(form);
 
         const formEventsHandlerMock = sinon.mock(formEventsHandler);
+        formEventsHandlerMock.expects('getRequiredFields').atLeast(1).returns([input]);
         formEventsHandlerMock.expects('getForm').atLeast(1).returns(form);
         formEventsHandlerMock.expects('warn').never();
 

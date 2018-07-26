@@ -326,13 +326,16 @@ const formComponentStamp = stampit()
      * @memberOf    {Formation.formComponent}
      */
     const __initFormButtons = () => {
-      __submitButton = buttonComponentStamp({
-        button : this.findSubmitButton(__form)[0],
-        loadingText : 'Submitting, please wait...',
-        nodeEvents : this.nodeEvents
-      }).initLogging(this.getLogConsole())
-        .addHandleFormSubmitListener()
-        .setLoadingHTML();
+      const button = this.findSubmitButton(__form);
+      if (button.length) {
+        __submitButton = buttonComponentStamp({
+          button : button[0],
+          loadingText : 'Submitting, please wait...',
+          nodeEvents : this.nodeEvents
+        }).initLogging(this.getLogConsole())
+          .addHandleFormSubmitListener()
+          .setLoadingHTML();
+      }
     };
 
     /**

@@ -71,8 +71,12 @@ const formEventsHandlerStamp = stampit()
      * to the user. This is generally because an optional field toggles it, and thus
      * only needs to be filled out when the user takes action to show it.
      *
-     * If all necessary fields are valid, this will enable the submit button specified
-     * for the current form. Otherwise, the submit button is disabled.
+     * Dispatches a `set-validation-flag` event with the result.
+     *
+     * If there is a submit button specified for the current form that is already submitting,
+     * we don't want to repeat this action so we do nothing. If it is not already submitting,
+     * and all necessary fields are valid, this will enable the submit button. Otherwise, the
+     * submit button is disabled.
      *
      * The `this` object is expected to refer to an instance of this class.
      *
@@ -84,17 +88,15 @@ const formEventsHandlerStamp = stampit()
      */
     checkFormValidityHandler(event) {
       const submitButton = this.getSubmitButton();
-      if (submitButton === null || ! submitButton.exists()) {
-        return;
-      }
-
-      if (submitButton.isSubmitting()) {
-        // It's already submitting, don't change the state of the button.
+      const processSubmitButton = (submitButton !== null && submitButton.exists());
+      if (processSubmitButton && submitButton.isSubmitting()) {
+        // We have a submit button and it's already submitting,
+        // don't dispatch the validity event or change the state of the button.
         return;
       }
 
       // Get the list of required, enabled, and visible fields.
-      let visibleRequiredFields = this.getRequiredFields().filter(this.visibleEnabledFilter);
+      const visibleRequiredFields = this.getRequiredFields().filter(this.visibleEnabledFilter);
 
       // Grab the list of valid visible required fields.
       const validRequiredFields = visibleRequiredFields.filter(e => e.matches(`[${this.validAttrKey}="1"]`));
@@ -102,7 +104,9 @@ const formEventsHandlerStamp = stampit()
       // Everything is basically valid if all required fields are valid...
       const validAfterRuleCheck = (visibleRequiredFields.length === validRequiredFields.length);
 
-      submitButton.setEnabled(validAfterRuleCheck);
+      if (processSubmitButton) {
+        submitButton.setEnabled(validAfterRuleCheck);
+      }
 
       const setValidationFlagEvent = new CustomEvent(
         this.getSetValidationFlagEventName(),
