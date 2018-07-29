@@ -8,7 +8,7 @@ const stampit = require('stampit');
 /**
  * Used for processing a set of `Formation.rule` objects against `input:checkbox` elements.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.checkboxDefaultRules

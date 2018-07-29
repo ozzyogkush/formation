@@ -13,7 +13,7 @@ const stampit = require('stampit');
 /**
  * Provides an interface for form button elements (`button`, `input:submit`, etc).
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formComponent

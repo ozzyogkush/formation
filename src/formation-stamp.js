@@ -11,7 +11,7 @@ const stampit = require('stampit');
 /**
  * This stamp lets you initialize Formation, and turn debug on or off.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formation
