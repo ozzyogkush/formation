@@ -551,7 +551,7 @@ var stampit = __webpack_require__(0);
 /**
  * Formation-specific DOM navigation and modification.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.domNavigation
@@ -1314,7 +1314,7 @@ var stampit = __webpack_require__(0);
 /**
  * Provides an interface for defining Formation DOM events. 
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.eventDefinitions
@@ -1662,7 +1662,7 @@ var stampit = __webpack_require__(0);
  * Defines a rule, which contains a name used to identify when it's used,
  * and a callback function to process the rule against an element.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.rule
@@ -1758,7 +1758,7 @@ var stampit = __webpack_require__(0);
 /**
  * Used for processing a set of `Formation.rule` objects against form DOM elements.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.ruleSet
@@ -2604,7 +2604,7 @@ document.addEventListener('DOMContentLoaded', function() { Formation.readyDocume
 /**
  * Formation!
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @module        Formation
@@ -4625,7 +4625,7 @@ var stampit = __webpack_require__(0);
 /**
  * This stamp lets you initialize Formation, and turn debug on or off.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formation
@@ -4699,8 +4699,7 @@ var formationStamp = stampit().refs({
     var bodyEventsHandler = bodyEventsHandlerStamp({
       body: document.body,
       formationDataAttrKey: this.formationDataAttrKey,
-      nodeEvents: this.nodeEvents,
-      getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
+      nodeEvents: this.nodeEvents
     });
     this.initBodyEvents(bodyEventsHandler);
     this.initForms();
@@ -4727,8 +4726,7 @@ var formationStamp = stampit().refs({
         // Set up the Form but only if it has the proper DOM.
         var formationComponent = this.createFormationComponent();
 
-        formationComponent.initForm(form);
-        formationComponent.initFormEvents();
+        formationComponent.initFormComponent(form);
 
         this.getForms().set(form, formationComponent);
       }
@@ -4903,7 +4901,6 @@ var formationStamp = stampit().refs({
    */
   this.getFormComponentOfCurrentElement = function (element) {
     var currentForm = _this2.findCurrentFormByTarget(element);
-    //console.log(currentForm);
     if (currentForm === null) {
       return null;
     }
@@ -5050,7 +5047,7 @@ var stampit = __webpack_require__(0);
 /**
  * Provide an interface for managing body events.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.bodyEventsHandler
@@ -5081,22 +5078,11 @@ var bodyEventsHandlerStamp = stampit().refs({
    * @memberOf    {Formation.bodyEventsHandler}
    * @default     null
    */
-  nodeEvents: null,
-
-  /**
-   * A method for retrieving the formComponent of an element.
-   *
-   * @access      public
-   * @type        {function}
-   * @memberOf    {Formation.bodyEventsHandler}
-   * @default     null
-   */
-  getFormComponentOfCurrentElement: null
+  nodeEvents: null
 }).methods({
 
   /**
-   * Adds a default event handler for both the `keypress` and `keyup` events
-   * and sets the initialized flag to be `true`.
+   * Adds a default event handler the `keyup` events and sets the initialized flag to be `true`.
    *
    * @access      public
    * @memberOf    {Formation.bodyEventsHandler}
@@ -5107,9 +5093,6 @@ var bodyEventsHandlerStamp = stampit().refs({
   addDefaultEventHandlers: function addDefaultEventHandlers() {
     var _this = this;
 
-    this.body.addEventListener(this.getKeyPressEventName(), function (event) {
-      return _this.bodyKeyPressHandler(event);
-    });
     this.body.addEventListener(this.getKeyUpEventName(), function (event) {
       return _this.bodyKeyUpHandler(event);
     });
@@ -5117,33 +5100,6 @@ var bodyEventsHandlerStamp = stampit().refs({
     this.setEventsInitialized(true);
 
     return this;
-  },
-
-
-  /**
-   * When the user presses the ENTER key inside an `input` element of a Formation `form`,
-   * return whether the `formComponent` should allow the body key press event to progress.
-   *
-   * The `this` object is expected to refer to an instance of this class.
-   *
-   * @access      public
-   * @memberOf    {Formation.bodyEventsHandler}
-   * @mixes       {Formation.bodyEventsHandler}
-   *
-   * @param       {KeyboardEvent}       event       The `keypress` event object. Required.
-   *
-   * @returns     {Boolean}
-   */
-  bodyKeyPressHandler: function bodyKeyPressHandler(event) {
-    var userPressedEnterInInputField = event.key === 'enter' && event.target.tagName.toLowerCase() === 'input' && ['radio', 'checkbox'].indexOf(event.target.getAttribute('type')) === -1;
-
-    if (userPressedEnterInInputField) {
-      var formComponent = this.getFormComponentOfCurrentElement(event.target);
-
-      return formComponent === null ? true : formComponent.shouldBodyKeyPressEventsProgress();
-    }
-
-    return true;
   },
 
 
@@ -5187,7 +5143,7 @@ var stampit = __webpack_require__(0);
 /**
  * Provides an interface for managing form element events
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formEventsHandler
@@ -5209,7 +5165,8 @@ var formEventsHandlerStamp = stampit().refs({
    * @memberOf    {Formation.formEventsHandler}
    * @default     null
    */
-  nodeEvents: null,
+  nodeEvents: null
+}).methods({
 
   /**
    * A method for retrieving the formComponent of an element.
@@ -5217,10 +5174,14 @@ var formEventsHandlerStamp = stampit().refs({
    * @access      public
    * @type        {function}
    * @memberOf    {Formation.formEventsHandler}
-   * @default     null
+   * @mixes       {Formation.formEventsHandler}
+   *
+   * @returns     {Formation.formEventsHandler}
    */
-  getFormComponentOfCurrentElement: null
-}).methods({
+  getFormComponentOfCurrentElement: function getFormComponentOfCurrentElement() {
+    return this;
+  },
+
 
   /**
    * Emit a node event when the form is submitted.
@@ -5247,8 +5208,12 @@ var formEventsHandlerStamp = stampit().refs({
    * to the user. This is generally because an optional field toggles it, and thus
    * only needs to be filled out when the user takes action to show it.
    *
-   * If all necessary fields are valid, this will enable the submit button specified
-   * for the current form. Otherwise, the submit button is disabled.
+   * Dispatches a `set-validation-flag` event with the result.
+   *
+   * If there is a submit button specified for the current form that is already submitting,
+   * we don't want to repeat this action so we do nothing. If it is not already submitting,
+   * and all necessary fields are valid, this will enable the submit button. Otherwise, the
+   * submit button is disabled.
    *
    * The `this` object is expected to refer to an instance of this class.
    *
@@ -5262,12 +5227,10 @@ var formEventsHandlerStamp = stampit().refs({
     var _this = this;
 
     var submitButton = this.getSubmitButton();
-    if (submitButton === null || !submitButton.exists()) {
-      return;
-    }
-
-    if (submitButton.isSubmitting()) {
-      // It's already submitting, don't change the state of the button.
+    var processSubmitButton = submitButton !== null && submitButton.exists();
+    if (processSubmitButton && submitButton.isSubmitting()) {
+      // We have a submit button and it's already submitting,
+      // don't dispatch the validity event or change the state of the button.
       return;
     }
 
@@ -5282,7 +5245,9 @@ var formEventsHandlerStamp = stampit().refs({
     // Everything is basically valid if all required fields are valid...
     var validAfterRuleCheck = visibleRequiredFields.length === validRequiredFields.length;
 
-    submitButton.setEnabled(validAfterRuleCheck);
+    if (processSubmitButton) {
+      submitButton.setEnabled(validAfterRuleCheck);
+    }
 
     var setValidationFlagEvent = new CustomEvent(this.getSetValidationFlagEventName(), { bubbles: true, cancelable: true, detail: { validAfterRuleCheck: validAfterRuleCheck } });
     this.getForm().dispatchEvent(setValidationFlagEvent);
@@ -5645,21 +5610,23 @@ var formEventsHandlerStamp = stampit().refs({
   this.formEventsAlreadyInitialized = __formEventsAlreadyInitialized;
 
   /**
-   * Add the default event handlers for a form's various input element,
-   * iff that has not already taken place.
+   * Initializes the `Formation.formComponent` and then adds the default event handlers
+   * for a form's various input element, iff that has not already taken place.
    *
    * @access      public
    * @memberOf    {Formation.formEventsHandler}
    *
+   * @param       {Element}         form      The `form` element to be initialized and event handlers added. Required.
+   *
    * @returns     {Formation.formEventsHandler}
    */
-  this.initFormEvents = function () {
+  this.initFormComponent = function (form) {
     if (__formEventsAlreadyInitialized()) {
       _this5.warn('Form events previously initialized for this form, skipping.');
       return _this5;
     }
 
-    _this5.initLogging(_this5.getLogConsole()).addDefaultEventHandlers().triggerValidationCheck();
+    _this5.initLogging(_this5.getLogConsole()).initForm(form).addDefaultEventHandlers().triggerValidationCheck();
 
     return _this5;
   };
@@ -5710,10 +5677,11 @@ var formEventsHandlerStamp = stampit().refs({
     }).join(joinStr) + ', textarea';
 
     // Add normal form and element listeners
-    _this5.getForm().addEventListener('submit', function (event) {
+    var currentForm = _this5.getForm();
+    currentForm.addEventListener('submit', function (event) {
       return _this5.formSubmitHandler(event);
     });
-    _this5.getForm().addEventListener(_this5.getChangeEventName(), function (event) {
+    currentForm.addEventListener(_this5.getChangeEventName(), function (event) {
       var target = event.target;
       if (target.tagName.toLowerCase() === 'input' && target.getAttribute('type') === 'checkbox') {
         _this5.checkBoxChangeHandler(event);
@@ -5725,39 +5693,41 @@ var formEventsHandlerStamp = stampit().refs({
         _this5.selectChangeHandler(event);
       }
     });
-    _this5.getForm().addEventListener(_this5.getKeyUpEventName(), function (event) {
+    currentForm.addEventListener(_this5.getKeyUpEventName(), function (event) {
       if (['input', 'textarea'].indexOf(event.target.tagName.toLowerCase()) !== -1) {
         _this5.inputTextareaKeyUpHandler(event);
       }
     });
-    _this5.getForm().addEventListener(_this5.getFocusEventName(), function (event) {
+    currentForm.addEventListener(_this5.getFocusEventName(), function (event) {
       if (event.target.matches(allInputElementsSelector)) {
         _this5.inputFocusHandler(event);
       }
     });
 
     // Add event listeners for detecting validation events and setting the validation flag
-    _this5.getForm().addEventListener(_this5.getValidationEventName(), function (event) {
+    currentForm.addEventListener(_this5.getValidationEventName(), function (event) {
       if (event.target.matches(allInputElementsSelector)) {
         _this5.inputElementValidationHandler(event);
       }
     });
-    _this5.getForm().addEventListener(_this5.getCheckFormValidityEventName(), function (event) {
+    currentForm.addEventListener(_this5.getCheckFormValidityEventName(), function (event) {
       return _this5.checkFormValidityHandler(event);
     });
-    _this5.getForm().addEventListener(_this5.getSetValidationFlagEventName(), function (event) {
-      if (event.target === _this5.getForm() || event.target.matches(allInputElementsSelector)) {
+    currentForm.addEventListener(_this5.getSetValidationFlagEventName(), function (event) {
+      if (event.target === currentForm || event.target.matches(allInputElementsSelector)) {
         _this5.setValidationFlagHandler(event);
       }
     });
 
-    var mouseMoveTouchEvents = [_this5.getMouseEnterEventName(), _this5.getMouseLeaveEventName(), _this5.getTouchStartEventName()];
-
-    mouseMoveTouchEvents.forEach(function (mte) {
-      _this5.getForm().parentNode.addEventListener(mte, function (event) {
-        return _this5.validateFormFields(event);
+    var currentFormParent = currentForm.parentNode;
+    if (currentFormParent) {
+      var mouseMoveTouchEvents = [_this5.getMouseEnterEventName(), _this5.getMouseLeaveEventName(), _this5.getTouchStartEventName()];
+      mouseMoveTouchEvents.forEach(function (mte) {
+        currentFormParent.addEventListener(mte, function (event) {
+          return _this5.validateFormFields(event);
+        });
       });
-    });
+    }
 
     _this5.setEventsInitialized(true);
 
@@ -5787,7 +5757,7 @@ var stampit = __webpack_require__(0);
 /**
  * Provides an interface for form button elements (`button`, `input:submit`, etc).
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formComponent
@@ -5807,7 +5777,8 @@ var formComponentStamp = stampit().refs({
    * @memberOf    {Formation.formComponent}
    * @default     null
    */
-  nodeEvents: null,
+  nodeEvents: null
+}).methods({
 
   /**
    * A method for retrieving the formComponent of an element.
@@ -5815,25 +5786,12 @@ var formComponentStamp = stampit().refs({
    * @access      public
    * @type        {function}
    * @memberOf    {Formation.formComponent}
-   * @default     null
-   */
-  getFormComponentOfCurrentElement: null
-}).methods({
-
-  /**
-   * Checks whether the Formation body keypress event should progress. If
-   * there is a submit button registered to the form, then we allow it;
-   * otherwise we do not.
-   *
-   * @access      public
-   * @memberOf    {Formation.formComponent}
    * @mixes       {Formation.formComponent}
    *
-   * @returns     {Boolean}       allowKeyEventToProgress
+   * @returns     {Formation.formComponent}
    */
-  shouldBodyKeyPressEventsProgress: function shouldBodyKeyPressEventsProgress() {
-    var allowKeyEventToProgress = this.getSubmitButton() !== null && this.getSubmitButton().exists();
-    return allowKeyEventToProgress;
+  getFormComponentOfCurrentElement: function getFormComponentOfCurrentElement() {
+    return this;
   },
 
 
@@ -5891,6 +5849,15 @@ var formComponentStamp = stampit().refs({
    */
   this.getForm = function () {
     return __form;
+  };
+
+  /**
+   * Returns whether the current form is in a valid state.
+   *
+   * @returns {boolean}
+   */
+  this.isFormValid = function () {
+    return _this.getForm() && parseInt(_this.getForm().getAttribute(_this.validAttrKey)) === 1;
   };
 
   /**
@@ -6102,11 +6069,14 @@ var formComponentStamp = stampit().refs({
    * @memberOf    {Formation.formComponent}
    */
   var __initFormButtons = function __initFormButtons() {
-    __submitButton = buttonComponentStamp({
-      button: _this.findSubmitButton(__form)[0],
-      loadingText: 'Submitting, please wait...',
-      nodeEvents: _this.nodeEvents
-    }).initLogging(_this.getLogConsole()).addHandleFormSubmitListener().setLoadingHTML();
+    var button = _this.findSubmitButton(__form);
+    if (button.length) {
+      __submitButton = buttonComponentStamp({
+        button: button[0],
+        loadingText: 'Submitting, please wait...',
+        nodeEvents: _this.nodeEvents
+      }).initLogging(_this.getLogConsole()).addHandleFormSubmitListener().setLoadingHTML();
+    }
   };
 
   /**
@@ -6211,7 +6181,7 @@ var stampit = __webpack_require__(0);
 /**
  * Provides an interface for form button elements (`button`, `input:submit`, etc).
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.buttonComponent
@@ -6435,7 +6405,7 @@ var stampit = __webpack_require__(0);
 /**
  * Used for processing a set of `Formation.rule` objects against `input:checkbox` elements.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.checkboxDefaultRules
@@ -6703,7 +6673,7 @@ var stampit = __webpack_require__(0);
 /**
  * Used for processing a set of `Formation.rule` objects against `input:radio` elements.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.radioDefaultRules
@@ -6798,7 +6768,7 @@ var stampit = __webpack_require__(0);
 /**
  * Used for processing a set of `Formation.rule` objects against `select` elements.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.selectDefaultRules
@@ -6873,7 +6843,7 @@ var stampit = __webpack_require__(0);
 /**
  * Used for processing a set of `Formation.rule` objects against `select` elements.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.textDefaultRules

@@ -1,6 +1,5 @@
 'use strict';
 
-const stampit = require('stampit');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
@@ -15,42 +14,6 @@ describe('Objects created using the `formComponentStamp`', function() {
   beforeEach(function() {
     formComponent = formComponentStamp({ nodeEvents : eventEmitterStamp() });
     formComponentMock = sinon.mock(formComponent);
-  });
-
-  describe('`shouldBodyKeyPressEventsProgress()`', function() {
-    describe('the submit button is null', function() {
-      it('should return false', function() {
-        formComponentMock.expects('getSubmitButton').once().returns(null);
-        assert.isFalse(formComponent.shouldBodyKeyPressEventsProgress());
-        formComponentMock.verify();
-      });
-    });
-    describe('the submit button is not null but is not linked to a DOM element', function() {
-      it('should return false', function() {
-        let submitButton = {exists : function(){}};
-        let mockSubmitBtn = sinon.mock(submitButton);
-
-        formComponentMock.expects('getSubmitButton').twice().returns(submitButton);
-        mockSubmitBtn.expects('exists').once().returns(false);
-        assert.isFalse(formComponent.shouldBodyKeyPressEventsProgress());
-
-        formComponentMock.verify();
-        mockSubmitBtn.verify();
-      });
-    });
-    describe('the submit button is not null and is linked to a DOM element', function() {
-      it('should return true', function() {
-        let submitButton = {exists : function(){}};
-        let mockSubmitBtn = sinon.mock(submitButton);
-
-        formComponentMock.expects('getSubmitButton').twice().returns(submitButton);
-        mockSubmitBtn.expects('exists').once().returns(true);
-        assert.isTrue(formComponent.shouldBodyKeyPressEventsProgress());
-
-        formComponentMock.verify();
-        mockSubmitBtn.verify();
-      });
-    });
   });
 
   describe('`registerRule()`', function() {

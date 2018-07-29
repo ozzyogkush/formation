@@ -25,12 +25,11 @@ Latest builds also available on GitHub at https://github.com/ozzyogkush/formatio
 ## Usage
 
 1. Include `dist/formation.js` or `dist/formation.min.js` in your DOM (or import/require the module in your asset pipeline)
-1. For each form you wish to have Formation validate:
-  - add the `data-formation="1"` attribute
-  - add a submit button with a `data-fv-submit="1"` attribute, and a `disabled="disabled"` attribute
+1. For each form you wish to have Formation validate, simply add the `data-formation="1"` attribute
+    - _Optionally:_ add a `submit` button/input with `data-fv-submit="1"` and `disabled="disabled"` attributes
 1. For each form input element that is required, add the `data-fv-required="1"` attribute and the validation rules
 1. For each form input element that is optional, add the `data-fv-optional="1"` attribute
-1. Add any validation change event handlers required (advanced)
+1. Add any custom [validation change event handlers](advanced)
 
 Formation will handle the rest! Form elements will become valid or invalid during user interaction based on the supplied 
  rules. When all required fields are valid, it will enable the `submit` button and let the user proceed.
@@ -95,6 +94,10 @@ Formation will handle the rest! Form elements will become valid or invalid durin
       <option value="420lbs">420 lbs.</option>
     </select>
     
+    <!--
+        Optional submit button that toggles on/off 
+        depending on form validity state.
+    -->
     <button 
       type="submit"
       data-fv-form-submit="1"

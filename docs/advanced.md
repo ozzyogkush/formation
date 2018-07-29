@@ -26,7 +26,6 @@ Example `at-least-n-capitals`:
            data-fv-min-length="5" 
            data-fv-max-length="15"
            data-fv-at-least-n-capitals="5" />
-    <button type="submit" data-fv-form-submit="1" disabled="disabled">Submit</button>
   </form>
 </body>
 <script type="text/javascript">
@@ -62,17 +61,5 @@ Array.from(document.getElementsByTagName('form')).forEach(function(form) {
         // ... Do stuff when an individual required/optional form element's validity has changed
       });
     })
-});
-
-$('form[data-formation="1"]').each(function() {
-  $form.on(Formation.getValidityChangedEventName(), function() {
-    // ... Do stuff when the FORM's validity has changed
-  });
-  Formation
-    .findRequiredFields($form)
-    .add(Formation.findOptionalFields($form))
-    .on(Formation.getValidityChangedEventName(), function() {
-      // ... Do stuff when an individual required/optional form element's validity has changed
-    });
 });
 ```

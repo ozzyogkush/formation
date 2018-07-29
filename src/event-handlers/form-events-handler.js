@@ -10,7 +10,7 @@ const stampit = require('stampit');
 /**
  * Provides an interface for managing form element events
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.formEventsHandler
@@ -34,6 +34,8 @@ const formEventsHandlerStamp = stampit()
      * @default     null
      */
     nodeEvents : null,
+  })
+  .methods({
 
     /**
      * A method for retrieving the formComponent of an element.
@@ -41,11 +43,11 @@ const formEventsHandlerStamp = stampit()
      * @access      public
      * @type        {function}
      * @memberOf    {Formation.formEventsHandler}
-     * @default     null
+     * @mixes       {Formation.formEventsHandler}
+     *
+     * @returns     {Formation.formEventsHandler}
      */
-    getFormComponentOfCurrentElement : null
-  })
-  .methods({
+    getFormComponentOfCurrentElement() { return this; },
 
     /**
      * Emit a node event when the form is submitted.
@@ -71,8 +73,12 @@ const formEventsHandlerStamp = stampit()
      * to the user. This is generally because an optional field toggles it, and thus
      * only needs to be filled out when the user takes action to show it.
      *
-     * If all necessary fields are valid, this will enable the submit button specified
-     * for the current form. Otherwise, the submit button is disabled.
+     * Dispatches a `set-validation-flag` event with the result.
+     *
+     * If there is a submit button specified for the current form that is already submitting,
+     * we don't want to repeat this action so we do nothing. If it is not already submitting,
+     * and all necessary fields are valid, this will enable the submit button. Otherwise, the
+     * submit button is disabled.
      *
      * The `this` object is expected to refer to an instance of this class.
      *
@@ -84,17 +90,15 @@ const formEventsHandlerStamp = stampit()
      */
     checkFormValidityHandler(event) {
       const submitButton = this.getSubmitButton();
-      if (submitButton === null || ! submitButton.exists()) {
-        return;
-      }
-
-      if (submitButton.isSubmitting()) {
-        // It's already submitting, don't change the state of the button.
+      const processSubmitButton = (submitButton !== null && submitButton.exists());
+      if (processSubmitButton && submitButton.isSubmitting()) {
+        // We have a submit button and it's already submitting,
+        // don't dispatch the validity event or change the state of the button.
         return;
       }
 
       // Get the list of required, enabled, and visible fields.
-      let visibleRequiredFields = this.getRequiredFields().filter(this.visibleEnabledFilter);
+      const visibleRequiredFields = this.getRequiredFields().filter(this.visibleEnabledFilter);
 
       // Grab the list of valid visible required fields.
       const validRequiredFields = visibleRequiredFields.filter(e => e.matches(`[${this.validAttrKey}="1"]`));
@@ -102,7 +106,9 @@ const formEventsHandlerStamp = stampit()
       // Everything is basically valid if all required fields are valid...
       const validAfterRuleCheck = (visibleRequiredFields.length === validRequiredFields.length);
 
-      submitButton.setEnabled(validAfterRuleCheck);
+      if (processSubmitButton) {
+        submitButton.setEnabled(validAfterRuleCheck);
+      }
 
       const setValidationFlagEvent = new CustomEvent(
         this.getSetValidationFlagEventName(),
@@ -466,15 +472,17 @@ const formEventsHandlerStamp = stampit()
     this.formEventsAlreadyInitialized = __formEventsAlreadyInitialized;
 
     /**
-     * Add the default event handlers for a form's various input element,
-     * iff that has not already taken place.
+     * Initializes the `Formation.formComponent` and then adds the default event handlers
+     * for a form's various input element, iff that has not already taken place.
      *
      * @access      public
      * @memberOf    {Formation.formEventsHandler}
      *
+     * @param       {Element}         form      The `form` element to be initialized and event handlers added. Required.
+     *
      * @returns     {Formation.formEventsHandler}
      */
-    this.initFormEvents = () => {
+    this.initFormComponent = form => {
       if (__formEventsAlreadyInitialized()) {
         this.warn('Form events previously initialized for this form, skipping.');
         return this;
@@ -482,6 +490,7 @@ const formEventsHandlerStamp = stampit()
 
       this
         .initLogging(this.getLogConsole())
+        .initForm(form)
         .addDefaultEventHandlers()
         .triggerValidationCheck();
 
@@ -534,8 +543,9 @@ const formEventsHandlerStamp = stampit()
           .join(joinStr) + `, textarea`;
 
       // Add normal form and element listeners
-      this.getForm().addEventListener('submit', event => this.formSubmitHandler(event));
-      this.getForm().addEventListener(this.getChangeEventName(), event => {
+      const currentForm = this.getForm();
+      currentForm.addEventListener('submit', event => this.formSubmitHandler(event));
+      currentForm.addEventListener(this.getChangeEventName(), event => {
         const target = event.target;
         if (target.tagName.toLowerCase() === 'input' && target.getAttribute('type') === 'checkbox') {
           this.checkBoxChangeHandler(event);
@@ -550,39 +560,41 @@ const formEventsHandlerStamp = stampit()
           this.selectChangeHandler(event);
         }
       });
-      this.getForm().addEventListener(this.getKeyUpEventName(), event => {
+      currentForm.addEventListener(this.getKeyUpEventName(), event => {
         if (['input', 'textarea'].indexOf(event.target.tagName.toLowerCase()) !== -1) {
           this.inputTextareaKeyUpHandler(event);
         }
       });
-      this.getForm().addEventListener(this.getFocusEventName(), event => {
+      currentForm.addEventListener(this.getFocusEventName(), event => {
         if (event.target.matches(allInputElementsSelector)) {
           this.inputFocusHandler(event);
         }
       });
 
       // Add event listeners for detecting validation events and setting the validation flag
-      this.getForm().addEventListener(this.getValidationEventName(), event => {
+      currentForm.addEventListener(this.getValidationEventName(), event => {
         if (event.target.matches(allInputElementsSelector)) {
           this.inputElementValidationHandler(event);
         }
       });
-      this.getForm().addEventListener(this.getCheckFormValidityEventName(), event => this.checkFormValidityHandler(event));
-      this.getForm().addEventListener(this.getSetValidationFlagEventName(), event => {
-        if (event.target === this.getForm() || event.target.matches(allInputElementsSelector)) {
+      currentForm.addEventListener(this.getCheckFormValidityEventName(), event => this.checkFormValidityHandler(event));
+      currentForm.addEventListener(this.getSetValidationFlagEventName(), event => {
+        if (event.target === currentForm || event.target.matches(allInputElementsSelector)) {
           this.setValidationFlagHandler(event);
         }
       });
 
-      const mouseMoveTouchEvents = [
-        this.getMouseEnterEventName(),
-        this.getMouseLeaveEventName(),
-        this.getTouchStartEventName()
-      ];
-
-      mouseMoveTouchEvents.forEach(mte => {
-        this.getForm().parentNode.addEventListener(mte, event => this.validateFormFields(event));
-      });
+      const currentFormParent = currentForm.parentNode;
+      if (currentFormParent) {
+        const mouseMoveTouchEvents = [
+          this.getMouseEnterEventName(),
+          this.getMouseLeaveEventName(),
+          this.getTouchStartEventName()
+        ];
+        mouseMoveTouchEvents.forEach(mte => {
+          currentFormParent.addEventListener(mte, event => this.validateFormFields(event));
+        });
+      }
 
       this.setEventsInitialized(true);
 

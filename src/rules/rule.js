@@ -6,7 +6,7 @@ const stampit = require('stampit');
  * Defines a rule, which contains a name used to identify when it's used,
  * and a callback function to process the rule against an element.
  *
- * @copyright     Copyright (c) 2016 - 2017, Derek Rosenzweig
+ * @copyright     Copyright (c) 2016 - 2018, Derek Rosenzweig
  * @author        Derek Rosenzweig <derek.rosenzweig@gmail.com>
  * @package       Formation
  * @namespace     Formation.rule
