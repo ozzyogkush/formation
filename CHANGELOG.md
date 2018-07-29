@@ -1,5 +1,10 @@
 # Formation Changelog
 
+## 2.1.0
+
+- Upgrade to Webpack 4.
+- Including a managed `submit` button in each form is now _optional_.
+
 ## 2.0.4
 
 - Add missing `keywords` property to `package.json` so it can be found easier through searches.

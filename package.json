@@ -1,6 +1,6 @@
 {
   "name": "js-formation",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Rule-based, cross-browser, client side HTML form validation library written in JavaScript",
   "author": "Derek Rosenzweig <derek.rosenzweig@gmail.com>",
   "repository": "https://github.com/ozzyogkush/formation.git",
