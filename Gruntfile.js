@@ -11,11 +11,12 @@ const isWindows = os.type().toLowerCase().match(/windows/);
  */
 module.exports = function(grunt) {
   // Project configuration.
-  const defaultWebpackConfig = require('./webpack.config.js');
+  const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
   const webpack = require('webpack');
-
+  const defaultWebpackConfig = require('./webpack.config.js');
+  const pkg = grunt.file.readJSON('package.json');
   grunt.initConfig({
-    pkg : grunt.file.readJSON('package.json'),
+    pkg,
 
     paths : {
       docs : 'docs',
@@ -42,21 +43,28 @@ module.exports = function(grunt) {
 
     webpack : {
       options : defaultWebpackConfig,
-      dev : {},
+      dev : {
+        devtool: 'source-map',
+        mode: 'development',
+      },
       build : {
+        mode: 'production',
         output: {
           filename: 'formation.min.js'
         },
+        optimization: {
+          minimizer: [
+            new UglifyJsPlugin({
+              parallel: true,
+              sourceMap: true,
+            })
+          ]
+        },
         plugins : [
           new webpack.BannerPlugin({
-            banner: '<%= pkg.description %>\r\nVersion <%= pkg.version %>\r\nAuthor: <%= pkg.author %>\r\nBuilt <%= grunt.template.today("yyyy-mm-dd HH:MM") %>',
+            banner: `Package: ${pkg.name}\r\n${pkg.description}\r\nVersion: ${pkg.version}\r\nAuthor: ${pkg.author}\r\nBuilt: ${grunt.template.today('yyyy-mm-dd HH:MM')}`,
             entryOnly : true
           }),
-          new webpack.optimize.UglifyJsPlugin({
-            mangle: {
-              except: ['exports', 'require', 'Formation']
-            }
-          })
         ]
       }
     },

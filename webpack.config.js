@@ -11,12 +11,12 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'formation.js'
+    filename: 'formation.js',
+    library: 'Formation',
   },
   module : {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
-      { test: require.resolve('./src/formation'), use: [{ loader: 'expose-loader', options: 'Formation' }] }
     ]
   }
 };
