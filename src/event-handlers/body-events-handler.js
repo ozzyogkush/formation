@@ -41,22 +41,11 @@ const bodyEventsHandlerStamp = stampit()
      * @default     null
      */
     nodeEvents : null,
-
-    /**
-     * A method for retrieving the formComponent of an element.
-     *
-     * @access      public
-     * @type        {function}
-     * @memberOf    {Formation.bodyEventsHandler}
-     * @default     null
-     */
-    getFormComponentOfCurrentElement : null
   })
   .methods({
 
     /**
-     * Adds a default event handler for both the `keypress` and `keyup` events
-     * and sets the initialized flag to be `true`.
+     * Adds a default event handler the `keyup` events and sets the initialized flag to be `true`.
      *
      * @access      public
      * @memberOf    {Formation.bodyEventsHandler}
@@ -65,42 +54,11 @@ const bodyEventsHandlerStamp = stampit()
      * @returns     {Formation.bodyEventsHandler}
      */
     addDefaultEventHandlers() {
-      this.body.addEventListener(this.getKeyPressEventName(), event => this.bodyKeyPressHandler(event));
       this.body.addEventListener(this.getKeyUpEventName(), event => this.bodyKeyUpHandler(event));
 
       this.setEventsInitialized(true);
 
       return this;
-    },
-
-    /**
-     * When the user presses the ENTER key inside an `input` element of a Formation `form`,
-     * return whether the `formComponent` should allow the body key press event to progress.
-     *
-     * The `this` object is expected to refer to an instance of this class.
-     *
-     * @access      public
-     * @memberOf    {Formation.bodyEventsHandler}
-     * @mixes       {Formation.bodyEventsHandler}
-     *
-     * @param       {KeyboardEvent}       event       The `keypress` event object. Required.
-     *
-     * @returns     {Boolean}
-     */
-    bodyKeyPressHandler(event) {
-      const userPressedEnterInInputField = (
-        event.key === 'enter' &&
-        event.target.tagName.toLowerCase() === 'input' &&
-        ['radio', 'checkbox'].indexOf(event.target.getAttribute('type')) === -1
-      );
-
-      if (userPressedEnterInInputField) {
-        const formComponent = this.getFormComponentOfCurrentElement(event.target);
-
-        return (formComponent === null ? true : formComponent.shouldBodyKeyPressEventsProgress());
-      }
-
-      return true;
     },
 
     /**

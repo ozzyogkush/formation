@@ -86,8 +86,7 @@ const formationStamp = stampit()
       const bodyEventsHandler = bodyEventsHandlerStamp({
         body: document.body,
         formationDataAttrKey: this.formationDataAttrKey,
-        nodeEvents : this.nodeEvents,
-        getFormComponentOfCurrentElement: this.getFormComponentOfCurrentElement
+        nodeEvents : this.nodeEvents
       });
       this.initBodyEvents(bodyEventsHandler);
       this.initForms();
@@ -113,8 +112,7 @@ const formationStamp = stampit()
           // Set up the Form but only if it has the proper DOM.
           const formationComponent = this.createFormationComponent();
 
-          formationComponent.initForm(form);
-          formationComponent.initFormEvents();
+          formationComponent.initFormComponent(form);
 
           this.getForms().set(form, formationComponent);
         }
@@ -222,9 +220,7 @@ const formationStamp = stampit()
      *
      * @returns     {Boolean}        debug           Flag indicating whether we're turning debug on or off.
      */
-    this.getDebug = () => {
-      return debug;
-    };
+    this.getDebug = () => debug;
 
     /**
      * Set the private `debug` flag on the Formation object.
@@ -283,7 +279,6 @@ const formationStamp = stampit()
      */
     this.getFormComponentOfCurrentElement = element => {
       const currentForm = this.findCurrentFormByTarget(element);
-      //console.log(currentForm);
       if (currentForm === null) { return null; }
 
       if (! this.getForms().has(currentForm)) { return null; }

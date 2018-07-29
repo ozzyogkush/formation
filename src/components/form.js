@@ -35,6 +35,8 @@ const formComponentStamp = stampit()
      * @default     null
      */
     nodeEvents : null,
+  })
+  .methods({
 
     /**
      * A method for retrieving the formComponent of an element.
@@ -42,28 +44,12 @@ const formComponentStamp = stampit()
      * @access      public
      * @type        {function}
      * @memberOf    {Formation.formComponent}
-     * @default     null
-     */
-    getFormComponentOfCurrentElement : null
-  })
-  .methods({
-
-    /**
-     * Checks whether the Formation body keypress event should progress. If
-     * there is a submit button registered to the form, then we allow it;
-     * otherwise we do not.
-     *
-     * @access      public
-     * @memberOf    {Formation.formComponent}
      * @mixes       {Formation.formComponent}
      *
-     * @returns     {Boolean}       allowKeyEventToProgress
+     * @returns     {Formation.formComponent}
      */
-    shouldBodyKeyPressEventsProgress() {
-      const allowKeyEventToProgress = (
-        this.getSubmitButton() !== null && this.getSubmitButton().exists()
-      );
-      return allowKeyEventToProgress;
+    getFormComponentOfCurrentElement() {
+      return this;
     },
 
     /**
@@ -116,9 +102,14 @@ const formComponentStamp = stampit()
      *
      * @returns     {Element}     __form
      */
-    this.getForm = () => {
-      return __form;
-    };
+    this.getForm = () => __form;
+
+    /**
+     * Returns whether the current form is in a valid state.
+     *
+     * @returns {boolean}
+     */
+    this.isFormValid = () => (this.getForm() && parseInt(this.getForm().getAttribute(this.validAttrKey)) === 1);
 
     /**
      * The initialization status.
@@ -139,9 +130,7 @@ const formComponentStamp = stampit()
      *
      * @returns     {boolean}       __initialized
      */
-    this.initialized = () => {
-      return __initialized;
-    };
+    this.initialized = () => __initialized;
 
     /**
      * Checks whether this instance has been initialized, or if there is a `formComponent` attached to

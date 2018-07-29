@@ -1,10 +1,8 @@
 'use strict';
 
-const stampit = require('stampit');
 const assert = require('chai').assert;
 const sinon = require('sinon');
 
-const buttonComponentStamp = require('../../src/components/button');
 const eventEmitterEventsStamp = require('../../src/utilities/node-event-emitter-stamp');
 const formEventsHandlerStamp = require('../../src/event-handlers/form-events-handler');
 const ruleSetStamp = require('../../src/rules/rule-set');
@@ -54,8 +52,8 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         submitButton = document.createElement('button');
         submitButton.setAttribute('data-fv-form-submit', 1);
         form.appendChild(submitButton);
-        formEventsHandler.initForm(form);
         formMock = sinon.mock(form);
+        formEventsHandler.initFormComponent(form);
       });
       describe('it is already in a `submitting` state', function() {
         it('nothing happens', function() {
@@ -83,6 +81,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
           formEvent.initEvent('check-form-validity', true, true);
           assert.equal(formEventsHandler.checkFormValidityHandler(formEvent), undefined);
 
+          formEventsHandlerMock.verify();
           formMock.verify();
           submitButtonMock.verify();
         });
@@ -94,7 +93,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         visibleRequired[0].setAttribute('type', 'text');
         form.addEventListener('set-validation-flag', e => { validAfterRuleCheck = e.detail.validAfterRuleCheck; });
         visibleRequired[0].setAttribute('data-fv-valid', 1);
-        formEventsHandler.initForm(form);
+        formEventsHandler.initFormComponent(form);
         formEvent.initEvent('check-form-validity', true, true);
       });
       describe('when not all elements are valid', function() {
@@ -441,7 +440,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
     });
   });
 
-  describe('`initFormEvents()`', function() {
+  describe('`initFormComponent()`', function() {
     describe('it is already initialized', function() {
       it('sees that it already initialized and returns', function() {
         const form = document.createElement('form');
@@ -451,7 +450,7 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         formEventsHandler.setEventsInitialized(true);
         formEventsHandlerMock.expects('warn').once().withArgs('Form events previously initialized for this form, skipping.');
 
-        assert.equal(formEventsHandler.initFormEvents(), formEventsHandler);
+        assert.equal(formEventsHandler.initFormComponent(form), formEventsHandler);
 
         formEventsHandlerMock.verify();
       });
@@ -470,16 +469,10 @@ describe('Objects created using the `formEventsHandlerStamp`', function() {
         form.appendChild(input);
         formContainer.appendChild(form);
 
-        const formEventsHandlerMock = sinon.mock(formEventsHandler);
-        formEventsHandlerMock.expects('getRequiredFields').atLeast(1).returns([input]);
-        formEventsHandlerMock.expects('getForm').atLeast(1).returns(form);
-        formEventsHandlerMock.expects('warn').never();
-
-        assert.equal(formEventsHandler.initFormEvents(), formEventsHandler);
+        assert.equal(formEventsHandler.getEventsInitialized(), false);
+        assert.equal(formEventsHandler.initFormComponent(form), formEventsHandler);
         assert.equal(formEventsHandler.getEventsInitialized(), true);
         assert.equal(validationHandlerEventTriggered, true);
-
-        formEventsHandlerMock.verify();
       });
     });
   });
