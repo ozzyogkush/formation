@@ -1,6 +1,6 @@
 {
   "name": "js-formation",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Rule-based, cross-browser, client side HTML form validation library written in JavaScript",
   "author": "Derek Rosenzweig <derek.rosenzweig@gmail.com>",
   "repository": "https://github.com/ozzyogkush/formation.git",
@@ -34,7 +34,7 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-istanbul": "^5.0.1",
     "grunt-mocha-test": "^0.12.7",
-    "grunt-webpack": "^3.1.2",
+    "grunt-webpack": "^3.1.3",
     "isparta": "^4.0.0",
     "istanbul": "=0.4.4",
     "jsdom": "^11.1.0",
@@ -44,7 +44,7 @@
     "sinon-chai": "^2.12.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.16.3",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^3.1.14"
   },
   "bugs": {
     "url": "https://github.com/ozzyogkush/formation/issues"

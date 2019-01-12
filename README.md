@@ -1,27 +1,61 @@
 # Formation
 
-[![2.0.3](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
+[![2.1.1](https://badge.fury.io/js/js-formation.svg)](https://www.npmjs.com/package/js-formation)
 
-A rule-based, cross-browser compatible library for websites to make HTML form validation easy. To use it, simply include  
- one of the dist JavaScript files in the `head` section or after the closing `body` tag of your webpage, and add a few   
- DOM `data-` attributes to your HTML forms and their input elements.
+## About
+
+A rule-based, cross-browser compatible library for websites to make HTML form validation easy.
+
+### Documentation
+
+Visit http://ozzyogkush.github.io/formation for full documentation and advanced usage. For project history, see [CHANGELOG.md](https://github.com/ozzyogkush/formation/blob/master/CHANGELOG.md). 
 
 ## Installation
 
-Install with `npm`:
+Install with `npm` or `yarn` (the package name is [`js-formation`](https://www.npmjs.com/package/js-formation)):
 
     npm install --save js-formation
+    yarn add js-formation
 
-Install with `yarn`:
+Latest builds also available on [GitHub](https://github.com/ozzyogkush/formation/tree/master/dist).
 
-    yarn add --save js-formation
+### Usage
 
-## Example
+#### The JavaScript
+
+Modern way: add it to your existing project and build process using `import` or `require`:
+
+```ecmascript 6
+import Formation from 'js-formation';
+// OR
+const Formation = require('js-formation');
+
+// At this point, your forms should be initialized and you can interact with Formation.
+
+// EG: enable debug mode:
+Formation.setDebug(true);
+
+// EG: Add a custom rule (see advanced usage in the documentation)
+Formation.registerRule('text', 'at-least-n-capitals', (element, attribute) => {
+    const n = element.getAttribute(attribute);
+    const capitals = element.value.match(/([A-Z])/g);
+    return capitals !== null && capitals.length >= n;
+});
+```
+
+The old way: directly include one of the dist JavaScript files in the `head` section or after the closing `body` tag of your webpage.
 
 ```html
 <head>
   <script type="text/javascript" src="formation.min.js"></script>
 </head>
+```
+
+#### The DOM
+
+Add the `data-` attributes to your HTML forms and their input elements to specify which rules are to be included.
+
+```html
 <body>
   <form data-formation="1">
     <input
@@ -76,6 +110,10 @@ Install with `yarn`:
       <option value="420lbs">420 lbs.</option>
     </select>
     
+    <!--
+        Optional submit button that toggles on/off 
+        depending on form validity state.
+    -->
     <button 
       type="submit"
       data-fv-form-submit="1"
@@ -83,10 +121,6 @@ Install with `yarn`:
   </form>
 </body>
 ```
-
-### Documentation
-
-Visit http://ozzyogkush.github.io/formation for full documentation and advanced usage. For project history, see [CHANGELOG.md](https://github.com/ozzyogkush/formation/blob/master/CHANGELOG.md).
 
 ## License
 

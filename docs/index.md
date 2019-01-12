@@ -4,28 +4,58 @@ description: A rule-based, cross-browser compatible library for websites to make
 
 # Formation
 
-A rule-based, cross-browser compatible library for websites to make HTML form validation easy. To use it, simply include  
- one of the dist JavaScript files in the `head` section or after the closing `body` tag of your webpage, and add a few   
- DOM `data-` attributes to your HTML forms and their input elements.
+## About
+
+A rule-based, cross-browser compatible library for websites to make HTML form validation easy.
+
+Follow the author, [Derek Rosenzweig, on Twitter](https://twitter.com/ozzyogkush), for updates.
 
 ## Installation
 
-On NPM the package name is [`js-formation`](https://www.npmjs.com/package/js-formation). To install for your current project:
-
-With `npm`:
+Install with `npm` or `yarn` (the package name is [`js-formation`](https://www.npmjs.com/package/js-formation)):
 
     npm install --save js-formation
+    yarn add js-formation
 
-With `yarn`:
+Latest builds also available on [GitHub](https://github.com/ozzyogkush/formation/tree/master/dist).
 
-    yarn add --save js-formation
+### Usage
 
-Latest builds also available on GitHub at https://github.com/ozzyogkush/formation/tree/master/dist.
+#### The JavaScript
 
-## Usage
+Modern way: add it to your existing project and build process using `import` or `require`:
 
-1. Include `dist/formation.js` or `dist/formation.min.js` in your DOM (or import/require the module in your asset pipeline)
-1. For each form you wish to have Formation validate, simply add the `data-formation="1"` attribute
+```ecmascript 6
+import Formation from 'js-formation';
+// OR
+const Formation = require('js-formation');
+
+// At this point, your forms should be initialized and you can interact with Formation.
+
+// EG: enable debug mode:
+Formation.setDebug(true);
+
+// EG: Add a custom rule (see advanced usage in the documentation)
+Formation.registerRule('text', 'at-least-n-capitals', (element, attribute) => {
+    const n = element.getAttribute(attribute);
+    const capitals = element.value.match(/([A-Z])/g);
+    return capitals !== null && capitals.length >= n;
+});
+```
+
+The old way: directly include one of the dist JavaScript files in the `head` section or after the closing `body` tag of your webpage.
+
+```html
+<head>
+  <script type="text/javascript" src="formation.min.js"></script>
+</head>
+```
+
+#### The DOM
+
+Add the `data-` attributes to your HTML forms and their input elements to specify which rules are to be included.
+
+1. For each form you wish to have Formation validate, add the `data-formation="1"` attribute
     - _Optionally:_ add a `submit` button/input with `data-fv-submit="1"` and `disabled="disabled"` attributes
 1. For each form input element that is required, add the `data-fv-required="1"` attribute and the validation rules
 1. For each form input element that is optional, add the `data-fv-optional="1"` attribute
@@ -34,12 +64,7 @@ Latest builds also available on GitHub at https://github.com/ozzyogkush/formatio
 Formation will handle the rest! Form elements will become valid or invalid during user interaction based on the supplied 
  rules. When all required fields are valid, it will enable the `submit` button and let the user proceed.
 
-### Example
-
 ```html
-<head>
-  <script type="text/javascript" src="formation.min.js"></script>
-</head>
 <body>
   <form data-formation="1">
     <input

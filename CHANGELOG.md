@@ -1,5 +1,10 @@
 # Formation Changelog
 
+## 2.1.1
+
+- Improve README and documentation
+- Update `grunt-webpack` and `webpack-dev-server` devDependencies
+
 ## 2.1.0
 
 - Upgrade to Webpack 4.
