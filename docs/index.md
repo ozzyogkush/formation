@@ -25,7 +25,7 @@ Latest builds also available on [GitHub](https://github.com/ozzyogkush/formation
 
 Modern way: add it to your existing project and build process using `import` or `require`:
 
-```ecmascript 6
+```javascript
 import Formation from 'js-formation';
 // OR
 const Formation = require('js-formation');
